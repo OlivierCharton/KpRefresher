@@ -1,0 +1,21 @@
+{
+  "name": "KpRefresher",
+  "version": "0.3.0",
+  "namespace": "kprefresher",
+  "package": "KpRefresher.dll",
+  "manifest_version": 1,
+  "description": "A module to auto-refresh your kp.",
+  "dependencies": {
+    "bh.blishhud": ">=1.0.0"
+  },
+  "url": "https://github.com/OlivierCharton/KpRefresher",
+  "contributors": [
+    {
+      "name": "Japyx",
+      "username": "Japyx.3265"
+    }
+  ],
+  "directories": [],
+  "actions": [],
+  "enabled_without_gw2": false
+}
