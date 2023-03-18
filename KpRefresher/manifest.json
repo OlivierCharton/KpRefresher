@@ -20,7 +20,11 @@
   "enabled_without_gw2": false,
   "api_permissions": {
     "account": {
-      "optional": true,
+      "optional": false,
+      "details": "Needed to check for completed events."
+    },
+    "progression": {
+      "optional": false,
       "details": "Needed to check for completed events."
     }
   }

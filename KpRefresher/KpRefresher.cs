@@ -4,6 +4,9 @@ using Blish_HUD.Modules;
 using Blish_HUD.Modules.Managers;
 using Blish_HUD.Settings;
 using Blish_HUD.Settings.UI.Views;
+using Flurl.Http;
+using Gw2Sharp.WebApi.Http;
+using Gw2Sharp.WebApi.V2.Models;
 using KpRefresher.Domain;
 using KpRefresher.UI.Views;
 using Microsoft.Xna.Framework;
@@ -24,12 +27,19 @@ namespace KpRefresher
     public class KpRefresher : Module
     {
         private static readonly Logger Logger = Logger.GetLogger<KpRefresher>();
+        private FlurlClient _flurlClient;
+
         private bool _isFirstLoad = true;
         private int _mapId { get; set; }
         private List<int> _raidMapIds { get; set; }
         private List<int> _strikeMapIds { get; set; }
+        private static List<string> _raidBossNames;
         private bool _playerWasInRaid { get; set; }
         private bool _playerWasInStrike { get; set; }
+        private List<string> _baseRaidClears { get; set; }
+
+        private int _numberOfRefreshTry;
+
 
 
         public static ModuleSettings ModuleSettings { get; private set; }
@@ -51,12 +61,22 @@ namespace KpRefresher
             KpRefresherInstance = this;
         }
 
+        protected IFlurlClient GetFlurlClient()
+        {
+            if (this._flurlClient == null)
+            {
+                this._flurlClient = new FlurlClient();
+                //this._flurlClient.WithHeader("User-Agent", $"{this.Name} {this.Version}");
+            }
+
+            return this._flurlClient;
+        }
+
         // Define the settings you would like to use in your module.  Settings are persistent
         // between updates to both Blish HUD and your module.
         protected override void DefineSettings(SettingCollection settings)
         {
             ModuleSettings = new ModuleSettings(settings);
-
         }
 
         // Allows your module to perform any initialization it needs before starting to run.
@@ -64,6 +84,8 @@ namespace KpRefresher
         // and render loop, so be sure to not do anything here that takes too long.
         protected override void Initialize()
         {
+            Gw2ApiManager.SubtokenUpdated += OnApiSubTokenUpdated;
+
             _raidMapIds = Enum.GetValues(typeof(RaidMap))
                             .Cast<RaidMap>()
                             .Select(m => (int)m)
@@ -73,12 +95,38 @@ namespace KpRefresher
                             .Cast<StrikeMap>()
                             .Select(m => (int)m)
                             .ToList();
+
+            _raidBossNames = new List<string>() { "sabetha", "matthias", "xera", "deimos", "voice_in_the_void", "qadim", "qadim_the_peerless" };
+        }
+
+        private async void OnApiSubTokenUpdated(object sender, ValueEventArgs<IEnumerable<TokenPermission>> e)
+        {
+            _baseRaidClears = await GetRaidClears();
+        }
+
+        private async Task<List<string>> GetRaidClears()
+        {
+            if (Gw2ApiManager.HasPermissions(Gw2ApiManager.Permissions) == false)
+            {
+                ScreenNotification.ShowNotification("Les permissions ne sont pas encore chargées", ScreenNotification.NotificationType.Warning);
+                return null;
+            }
+
+            try
+            {
+                var data = await Gw2ApiManager.Gw2ApiClient.V2.Account.Raids.GetAsync();
+                return data?.ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error while getting raid clears : {ex.Message}");
+                return null;
+            }
         }
 
         protected override async Task LoadAsync()
         {
-            var t = await Gw2ApiManager.Gw2ApiClient.V2.Raids.AllAsync();
-            //var f = await Gw2ApiManager.Gw2ApiClient.V
+            _baseRaidClears = await GetRaidClears();
 
             GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
 
@@ -91,7 +139,8 @@ namespace KpRefresher
                 new Rectangle(40, 26, 913, 691),
                 new Rectangle(70, 71, 839, 605),
                 _cornerIconTexture,
-                ModuleSettings);
+                ModuleSettings,
+                Gw2ApiManager);
         }
 
         private async void CurrentMap_MapChanged(object sender, ValueEventArgs<int> e)
@@ -120,12 +169,14 @@ namespace KpRefresher
                 {
                     _playerWasInRaid = false;
                     ScreenNotification.ShowNotification("Sortie du mode raid !", ScreenNotification.NotificationType.Warning);
+                    _numberOfRefreshTry = 15;
 
                 }
                 else if (_playerWasInStrike)
                 {
                     _playerWasInStrike = false;
                     ScreenNotification.ShowNotification("Sortie du mode mission d'attaque !", ScreenNotification.NotificationType.Warning);
+                    _numberOfRefreshTry = 15;
                 }
             }
         }
@@ -153,13 +204,81 @@ namespace KpRefresher
             };
 
             _cornerIconContextMenu = new ContextMenuStrip();
-            _cornerIconContextMenu.AddMenuItem("Scan KP now");
+
+            var refeshKpMenuItem = new ContextMenuStripItem("Scan KP now");
+            refeshKpMenuItem.Click += (s, e) =>
+            {
+                KpMe();
+            };
+
+            _cornerIconContextMenu.AddMenuItem(refeshKpMenuItem);
             _cornerIcon.Menu = _cornerIconContextMenu;
         }
 
         protected override void Update(GameTime gameTime)
         {
             _runningTime += gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (_runningTime > 60000)
+            {
+                _runningTime -= 60000;
+
+                if (_numberOfRefreshTry > 0)
+                {
+                    CheckRaidClears();
+                }
+            }
+        }
+
+        private async void CheckRaidClears()
+        {
+            bool hasNewClear = false;
+            var clears = await GetRaidClears();
+
+            //Detects if we have a new final boss clear
+            foreach (var bossName in _raidBossNames)
+            {
+                if (!_baseRaidClears.Contains(bossName) && clears.Contains(bossName))
+                {
+                    hasNewClear = true;
+                    break;
+                }
+            }
+
+            if (hasNewClear)
+            {
+                //Calls Kp.Me to refresh kp
+                var kpRefreshed = await KpMe();
+                _baseRaidClears = clears;
+                _numberOfRefreshTry = 0;
+            }
+            else
+            {
+                _numberOfRefreshTry -= 1;
+            }
+        }
+
+        private async Task<bool> KpMe()
+        {
+            if (string.IsNullOrWhiteSpace(ModuleSettings.KpMeId.Value))
+                ScreenNotification.ShowNotification("L'id Kp.Me n'est pas défini !", ScreenNotification.NotificationType.Error);
+
+            var url = $"https://killproof.me/proof/{ModuleSettings.KpMeId.Value}/refresh";
+
+            var client = GetFlurlClient();
+            var response = await client.Request(url).GetAsync();
+
+            if (response != null)
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    return true;
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
+                    return true;
+
+            }
+
+            return false;
+
         }
 
         // For a good module experience, your module should clean up ANY and ALL entities
@@ -167,6 +286,7 @@ namespace KpRefresher
         // Be sure to remove any tabs added to the Director window, CornerIcons, etc.
         protected override void Unload()
         {
+            Gw2ApiManager.SubtokenUpdated -= OnApiSubTokenUpdated;
             GameService.Gw2Mumble.CurrentMap.MapChanged -= this.CurrentMap_MapChanged;
 
             _cornerIcon?.Dispose();
