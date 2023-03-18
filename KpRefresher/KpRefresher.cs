@@ -3,11 +3,13 @@ using Blish_HUD.Controls;
 using Blish_HUD.Modules;
 using Blish_HUD.Modules.Managers;
 using Blish_HUD.Settings;
+using Blish_HUD.Settings.UI.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.ComponentModel.Composition;
 using System.Linq.Expressions;
+using System.Runtime;
 using System.Threading.Tasks;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
@@ -18,6 +20,7 @@ namespace KpRefresher
     public class KpRefresher : Module
     {
         private static readonly Logger Logger = Logger.GetLogger<KpRefresher>();
+        public ModuleSettings ModuleSettings { get; private set; }
 
         #region Service Managers
 
@@ -40,17 +43,8 @@ namespace KpRefresher
         // between updates to both Blish HUD and your module.
         protected override void DefineSettings(SettingCollection settings)
         {
-            settings.DefineSetting(
-                "ExampleSetting",
-                "This is the default value of the setting",
-                () => "Display name of setting",
-                () => "Tooltip text of setting");
-
-            _stringExampleSetting = settings.DefineSetting(
-                "kpId",
-                "",
-                () => "This is an string setting (textbox)",
-                () => "Settings can be many different types");
+            ModuleSettings = new ModuleSettings(settings);
+            
         }
 
         // Allows your module to perform any initialization it needs before starting to run.
@@ -105,7 +99,7 @@ namespace KpRefresher
                 Location = new Point(label.Right + 5, label.Top)
             };
 
-            //textBox.EnterPressed += SaveKpId;
+            textBox.EnterPressed += SaveKpId;
 
             // show blish hud overlay settings content inside the window
             //_exampleWindow.Show(new OverlaySettingsView());
@@ -116,10 +110,13 @@ namespace KpRefresher
             ScreenNotification.ShowNotification("Changement de carte !", ScreenNotification.NotificationType.Warning);
         }
 
-        //private void SaveKpId(EventHandler<EventArgs<string>> e)
-        //{
+        private void SaveKpId(object s, EventArgs e)
+        {
+            var scopeTextBox = s as TextBox;
+            var value = scopeTextBox.Text;
 
-        //}
+            _settingsKpId.Value = value;
+        }
 
         protected override void OnModuleLoaded(EventArgs e)
         {
@@ -173,7 +170,7 @@ namespace KpRefresher
         }
 
         internal static KpRefresher KpRefresherInstance;
-        private SettingEntry<string> _stringExampleSetting;
+        private SettingEntry<string> _settingsKpId;
         private Texture2D _windowBackgroundTexture;
         private Texture2D _cornerIconTexture;
         private CornerIcon _cornerIcon;
