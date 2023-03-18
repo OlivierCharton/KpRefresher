@@ -1,7 +1,7 @@
 {
   "name": "KpRefresher",
   "version": "0.3.0",
-  "namespace": "kprefresher",
+  "namespace": "japyx.kprefresher",
   "package": "KpRefresher.dll",
   "manifest_version": 1,
   "description": "A module to auto-refresh your kp.",
@@ -17,5 +17,11 @@
   ],
   "directories": [],
   "actions": [],
-  "enabled_without_gw2": false
+  "enabled_without_gw2": false,
+  "api_permissions": {
+    "account": {
+      "optional": true,
+      "details": "Needed to check for completed events."
+    }
+  }
 }

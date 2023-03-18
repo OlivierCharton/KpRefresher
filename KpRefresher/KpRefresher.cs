@@ -4,10 +4,14 @@ using Blish_HUD.Modules;
 using Blish_HUD.Modules.Managers;
 using Blish_HUD.Settings;
 using Blish_HUD.Settings.UI.Views;
+using KpRefresher.Domain;
+using KpRefresher.UI.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime;
 using System.Threading.Tasks;
@@ -20,7 +24,15 @@ namespace KpRefresher
     public class KpRefresher : Module
     {
         private static readonly Logger Logger = Logger.GetLogger<KpRefresher>();
-        public ModuleSettings ModuleSettings { get; private set; }
+        private bool _isFirstLoad = true;
+        private int _mapId { get; set; }
+        private List<int> _raidMapIds { get; set; }
+        private List<int> _strikeMapIds { get; set; }
+        private bool _playerWasInRaid { get; set; }
+        private bool _playerWasInStrike { get; set; }
+
+
+        public static ModuleSettings ModuleSettings { get; private set; }
 
         #region Service Managers
 
@@ -44,7 +56,7 @@ namespace KpRefresher
         protected override void DefineSettings(SettingCollection settings)
         {
             ModuleSettings = new ModuleSettings(settings);
-            
+
         }
 
         // Allows your module to perform any initialization it needs before starting to run.
@@ -52,70 +64,70 @@ namespace KpRefresher
         // and render loop, so be sure to not do anything here that takes too long.
         protected override void Initialize()
         {
+            _raidMapIds = Enum.GetValues(typeof(RaidMap))
+                            .Cast<RaidMap>()
+                            .Select(m => (int)m)
+                            .ToList();
+
+            _strikeMapIds = Enum.GetValues(typeof(StrikeMap))
+                            .Cast<StrikeMap>()
+                            .Select(m => (int)m)
+                            .ToList();
         }
 
         protected override async Task LoadAsync()
         {
-            GameService.Gw2Mumble.CurrentMap.MapChanged += this.CurrentMap_MapChanged;
+            var t = await Gw2ApiManager.Gw2ApiClient.V2.Raids.AllAsync();
+            //var f = await Gw2ApiManager.Gw2ApiClient.V
+
+            GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
 
             // Load content from the ref directory in the module.bhm automatically with the ContentsManager
             _cornerIconTexture = ContentsManager.GetTexture("killproof_logo_dark.png");
             _windowBackgroundTexture = ContentsManager.GetTexture("155985.png");
 
-            // show a window with gw2 window style.
-            _exampleWindow = new StandardWindow(
+            _mainWindow = new KpRefresherWindow(
                 _windowBackgroundTexture,
                 new Rectangle(40, 26, 913, 691),
-                new Rectangle(70, 71, 839, 605))
-            {
-                Parent = GameService.Graphics.SpriteScreen,
-                Title = "Kp Refresher",
-                Emblem = _cornerIconTexture,
-                Location = new Point(300, 300),
-                SavesPosition = true,
-                Id = $"{nameof(KpRefresher)}_My_Unique_ID_123"
-            };
-
-            var pannel = new Panel()
-            {
-                ShowBorder = true,
-                Title = "Configuration",
-                WidthSizingMode = SizingMode.Fill,
-                HeightSizingMode = SizingMode.AutoSize,
-                Location = new Point(0, 0),
-                Parent = _exampleWindow,
-            };
-
-            var label = new Label()
-            {
-                Text = "Identifiant kp.me : ",
-                Parent = pannel,
-                AutoSizeWidth= true
-            };
-
-            var textBox = new TextBox()
-            {
-                Parent = pannel,
-                Location = new Point(label.Right + 5, label.Top)
-            };
-
-            textBox.EnterPressed += SaveKpId;
-
-            // show blish hud overlay settings content inside the window
-            //_exampleWindow.Show(new OverlaySettingsView());
+                new Rectangle(70, 71, 839, 605),
+                _cornerIconTexture,
+                ModuleSettings);
         }
 
         private async void CurrentMap_MapChanged(object sender, ValueEventArgs<int> e)
         {
-            ScreenNotification.ShowNotification("Changement de carte !", ScreenNotification.NotificationType.Warning);
-        }
+            _mapId = GameService.Gw2Mumble.CurrentMap.Id;
 
-        private void SaveKpId(object s, EventArgs e)
-        {
-            var scopeTextBox = s as TextBox;
-            var value = scopeTextBox.Text;
+            if (_isFirstLoad)
+            {
+                _isFirstLoad = false;
+                return;
+            }
 
-            _settingsKpId.Value = value;
+            if (_raidMapIds.Contains(_mapId))
+            {
+                ScreenNotification.ShowNotification("Vous êtes en raid !", ScreenNotification.NotificationType.Warning);
+                _playerWasInRaid = true;
+            }
+            else if (_strikeMapIds.Contains(_mapId))
+            {
+                ScreenNotification.ShowNotification("Vous êtes en mission d'attaque !", ScreenNotification.NotificationType.Warning);
+                _playerWasInStrike = true;
+            }
+            else
+            {
+                if (_playerWasInRaid)
+                {
+                    _playerWasInRaid = false;
+                    ScreenNotification.ShowNotification("Sortie du mode raid !", ScreenNotification.NotificationType.Warning);
+
+                }
+                else if (_playerWasInStrike)
+                {
+                    _playerWasInStrike = false;
+                    ScreenNotification.ShowNotification("Sortie du mode mission d'attaque !", ScreenNotification.NotificationType.Warning);
+                }
+            }
         }
 
         protected override void OnModuleLoaded(EventArgs e)
@@ -137,7 +149,7 @@ namespace KpRefresher
 
             _cornerIcon.Click += delegate
             {
-                _exampleWindow.ToggleWindow();
+                _mainWindow.ToggleWindow();
             };
 
             _cornerIconContextMenu = new ContextMenuStrip();
@@ -159,7 +171,7 @@ namespace KpRefresher
 
             _cornerIcon?.Dispose();
             _cornerIconContextMenu?.Dispose();
-            _exampleWindow?.Dispose();
+            _mainWindow?.Dispose();
             _windowBackgroundTexture?.Dispose();
             _cornerIconTexture?.Dispose();
 
@@ -170,12 +182,11 @@ namespace KpRefresher
         }
 
         internal static KpRefresher KpRefresherInstance;
-        private SettingEntry<string> _settingsKpId;
         private Texture2D _windowBackgroundTexture;
         private Texture2D _cornerIconTexture;
         private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
         private double _runningTime;
-        private StandardWindow _exampleWindow;
+        private KpRefresherWindow _mainWindow;
     }
 }
