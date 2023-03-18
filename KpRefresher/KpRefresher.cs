@@ -3,11 +3,8 @@ using Blish_HUD.Controls;
 using Blish_HUD.Modules;
 using Blish_HUD.Modules.Managers;
 using Blish_HUD.Settings;
-using Blish_HUD.Settings.UI.Views;
-using Flurl.Http;
-using Gw2Sharp.WebApi.Http;
 using Gw2Sharp.WebApi.V2.Models;
-using KpRefresher.Domain;
+using KpRefresher.Services;
 using KpRefresher.UI.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,10 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime;
 using System.Threading.Tasks;
-using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace KpRefresher
@@ -27,22 +21,19 @@ namespace KpRefresher
     public class KpRefresher : Module
     {
         private static readonly Logger Logger = Logger.GetLogger<KpRefresher>();
-        private FlurlClient _flurlClient;
 
-        private bool _isFirstLoad = true;
-        private int _mapId { get; set; }
-        private List<int> _raidMapIds { get; set; }
-        private List<int> _strikeMapIds { get; set; }
-        private static List<string> _raidBossNames;
-        private bool _playerWasInRaid { get; set; }
-        private bool _playerWasInStrike { get; set; }
-        private List<string> _baseRaidClears { get; set; }
+        //FEATURE CHANGE MAP
+        //private bool _isFirstLoad = true;
+        //private int _mapId { get; set; }
+        //private List<int> _raidMapIds { get; set; }
+        //private List<int> _strikeMapIds { get; set; }
+        //private bool _playerWasInRaid { get; set; }
+        //private bool _playerWasInStrike { get; set; }
 
-        private int _numberOfRefreshTry;
-
-
+        private const int _delayBetweenKpRefresh = 5 * 60 * 1000;
 
         public static ModuleSettings ModuleSettings { get; private set; }
+        public static RaidService RaidService { get; private set; }
 
         #region Service Managers
 
@@ -61,17 +52,6 @@ namespace KpRefresher
             KpRefresherInstance = this;
         }
 
-        protected IFlurlClient GetFlurlClient()
-        {
-            if (this._flurlClient == null)
-            {
-                this._flurlClient = new FlurlClient();
-                //this._flurlClient.WithHeader("User-Agent", $"{this.Name} {this.Version}");
-            }
-
-            return this._flurlClient;
-        }
-
         // Define the settings you would like to use in your module.  Settings are persistent
         // between updates to both Blish HUD and your module.
         protected override void DefineSettings(SettingCollection settings)
@@ -84,31 +64,32 @@ namespace KpRefresher
         // and render loop, so be sure to not do anything here that takes too long.
         protected override void Initialize()
         {
+            RaidService = new RaidService(ModuleSettings, Gw2ApiManager, Logger);
+
             Gw2ApiManager.SubtokenUpdated += OnApiSubTokenUpdated;
 
-            _raidMapIds = Enum.GetValues(typeof(RaidMap))
-                            .Cast<RaidMap>()
-                            .Select(m => (int)m)
-                            .ToList();
+            //FEATURE CHANGE MAP
+            //_raidMapIds = Enum.GetValues(typeof(RaidMap))
+            //                .Cast<RaidMap>()
+            //                .Select(m => (int)m)
+            //                .ToList();
 
-            _strikeMapIds = Enum.GetValues(typeof(StrikeMap))
-                            .Cast<StrikeMap>()
-                            .Select(m => (int)m)
-                            .ToList();
-
-            _raidBossNames = new List<string>() { "sabetha", "matthias", "xera", "deimos", "voice_in_the_void", "qadim", "qadim_the_peerless" };
+            //_strikeMapIds = Enum.GetValues(typeof(StrikeMap))
+            //                .Cast<StrikeMap>()
+            //                .Select(m => (int)m)
+            //                .ToList();
         }
 
         private async void OnApiSubTokenUpdated(object sender, ValueEventArgs<IEnumerable<TokenPermission>> e)
         {
-            _baseRaidClears = await GetRaidClears();
+            await RaidService.InitBaseRaidClears();
         }
 
         private async Task<List<string>> GetRaidClears()
         {
             if (Gw2ApiManager.HasPermissions(Gw2ApiManager.Permissions) == false)
             {
-                ScreenNotification.ShowNotification("Les permissions ne sont pas encore chargées", ScreenNotification.NotificationType.Warning);
+                Logger.Warn("Les permissions ne sont pas encore chargées");
                 return null;
             }
 
@@ -126,9 +107,10 @@ namespace KpRefresher
 
         protected override async Task LoadAsync()
         {
-            _baseRaidClears = await GetRaidClears();
+            await RaidService.InitBaseRaidClears();
 
-            GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
+            //FEATURE CHANGE MAP
+            //GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
 
             // Load content from the ref directory in the module.bhm automatically with the ContentsManager
             _cornerIconTexture = ContentsManager.GetTexture("killproof_logo_dark.png");
@@ -140,46 +122,47 @@ namespace KpRefresher
                 new Rectangle(70, 71, 839, 605),
                 _cornerIconTexture,
                 ModuleSettings,
-                Gw2ApiManager);
+                RaidService);
         }
 
-        private async void CurrentMap_MapChanged(object sender, ValueEventArgs<int> e)
-        {
-            _mapId = GameService.Gw2Mumble.CurrentMap.Id;
+        //FEATURE CHANGE MAP
+        //private async void CurrentMap_MapChanged(object sender, ValueEventArgs<int> e)
+        //{
+        //    _mapId = GameService.Gw2Mumble.CurrentMap.Id;
 
-            if (_isFirstLoad)
-            {
-                _isFirstLoad = false;
-                return;
-            }
+        //    if (_isFirstLoad)
+        //    {
+        //        _isFirstLoad = false;
+        //        return;
+        //    }
 
-            if (_raidMapIds.Contains(_mapId))
-            {
-                ScreenNotification.ShowNotification("Vous êtes en raid !", ScreenNotification.NotificationType.Warning);
-                _playerWasInRaid = true;
-            }
-            else if (_strikeMapIds.Contains(_mapId))
-            {
-                ScreenNotification.ShowNotification("Vous êtes en mission d'attaque !", ScreenNotification.NotificationType.Warning);
-                _playerWasInStrike = true;
-            }
-            else
-            {
-                if (_playerWasInRaid)
-                {
-                    _playerWasInRaid = false;
-                    ScreenNotification.ShowNotification("Sortie du mode raid !", ScreenNotification.NotificationType.Warning);
-                    _numberOfRefreshTry = 15;
+        //    if (_raidMapIds.Contains(_mapId))
+        //    {
+        //        ScreenNotification.ShowNotification("Vous êtes en raid !", ScreenNotification.NotificationType.Warning);
+        //        _playerWasInRaid = true;
+        //    }
+        //    else if (_strikeMapIds.Contains(_mapId))
+        //    {
+        //        ScreenNotification.ShowNotification("Vous êtes en mission d'attaque !", ScreenNotification.NotificationType.Warning);
+        //        _playerWasInStrike = true;
+        //    }
+        //    else
+        //    {
+        //        if (_playerWasInRaid)
+        //        {
+        //            _playerWasInRaid = false;
+        //            ScreenNotification.ShowNotification("Sortie du mode raid !", ScreenNotification.NotificationType.Warning);
+        //            _numberOfRefreshTry = 15;
 
-                }
-                else if (_playerWasInStrike)
-                {
-                    _playerWasInStrike = false;
-                    ScreenNotification.ShowNotification("Sortie du mode mission d'attaque !", ScreenNotification.NotificationType.Warning);
-                    _numberOfRefreshTry = 15;
-                }
-            }
-        }
+        //        }
+        //        else if (_playerWasInStrike)
+        //        {
+        //            _playerWasInStrike = false;
+        //            ScreenNotification.ShowNotification("Sortie du mode mission d'attaque !", ScreenNotification.NotificationType.Warning);
+        //            _numberOfRefreshTry = 15;
+        //        }
+        //    }
+        //}
 
         protected override void OnModuleLoaded(EventArgs e)
         {
@@ -206,9 +189,9 @@ namespace KpRefresher
             _cornerIconContextMenu = new ContextMenuStrip();
 
             var refeshKpMenuItem = new ContextMenuStripItem("Scan KP now");
-            refeshKpMenuItem.Click += (s, e) =>
+            refeshKpMenuItem.Click += async (s, e) =>
             {
-                KpMe();
+                await RaidService.Refresh();
             };
 
             _cornerIconContextMenu.AddMenuItem(refeshKpMenuItem);
@@ -218,67 +201,15 @@ namespace KpRefresher
         protected override void Update(GameTime gameTime)
         {
             _runningTime += gameTime.ElapsedGameTime.TotalMilliseconds;
+            RaidService.TriggerTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (_runningTime > 60000)
+            if (RaidService.RefreshTriggered)
             {
-                _runningTime -= 60000;
-
-                if (_numberOfRefreshTry > 0)
+                if (RaidService.TriggerTimer > _delayBetweenKpRefresh)
                 {
-                    CheckRaidClears();
+                    _ = RaidService.Refresh();
                 }
             }
-        }
-
-        private async void CheckRaidClears()
-        {
-            bool hasNewClear = false;
-            var clears = await GetRaidClears();
-
-            //Detects if we have a new final boss clear
-            foreach (var bossName in _raidBossNames)
-            {
-                if (!_baseRaidClears.Contains(bossName) && clears.Contains(bossName))
-                {
-                    hasNewClear = true;
-                    break;
-                }
-            }
-
-            if (hasNewClear)
-            {
-                //Calls Kp.Me to refresh kp
-                var kpRefreshed = await KpMe();
-                _baseRaidClears = clears;
-                _numberOfRefreshTry = 0;
-            }
-            else
-            {
-                _numberOfRefreshTry -= 1;
-            }
-        }
-
-        private async Task<bool> KpMe()
-        {
-            if (string.IsNullOrWhiteSpace(ModuleSettings.KpMeId.Value))
-                ScreenNotification.ShowNotification("L'id Kp.Me n'est pas défini !", ScreenNotification.NotificationType.Error);
-
-            var url = $"https://killproof.me/proof/{ModuleSettings.KpMeId.Value}/refresh";
-
-            var client = GetFlurlClient();
-            var response = await client.Request(url).GetAsync();
-
-            if (response != null)
-            {
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    return true;
-                else if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
-                    return true;
-
-            }
-
-            return false;
-
         }
 
         // For a good module experience, your module should clean up ANY and ALL entities
@@ -287,7 +218,9 @@ namespace KpRefresher
         protected override void Unload()
         {
             Gw2ApiManager.SubtokenUpdated -= OnApiSubTokenUpdated;
-            GameService.Gw2Mumble.CurrentMap.MapChanged -= this.CurrentMap_MapChanged;
+
+            //FEATURE CHANGE MAP
+            //GameService.Gw2Mumble.CurrentMap.MapChanged -= this.CurrentMap_MapChanged;
 
             _cornerIcon?.Dispose();
             _cornerIconContextMenu?.Dispose();
@@ -306,7 +239,6 @@ namespace KpRefresher
         private Texture2D _cornerIconTexture;
         private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
-        private double _runningTime;
         private KpRefresherWindow _mainWindow;
     }
 }

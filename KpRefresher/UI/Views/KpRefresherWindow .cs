@@ -4,6 +4,7 @@ using Blish_HUD.Controls;
 using Blish_HUD.Graphics.UI;
 using Blish_HUD.Input;
 using Blish_HUD.Modules.Managers;
+using KpRefresher.Services;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,16 @@ namespace KpRefresher.UI.Views
     public class KpRefresherWindow : StandardWindow
     {
         private ModuleSettings _moduleSettings { get; set; }
-        private Gw2ApiManager _gw2ApiManager { get; set; }
+        private RaidService _raidService { get; set; }
 
 
         private TextBox _textBox { get; set; }
         private StandardButton _refreshRaidClears { get; set; }
+        private StandardButton _displayRaidDifference { get; set; }
+        private StandardButton _stopRetry { get; set; }
 
         public KpRefresherWindow(AsyncTexture2D background, Rectangle windowRegion, Rectangle contentRegion,
-            AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, Gw2ApiManager gw2ApiManager) : base(background, windowRegion, contentRegion)
+            AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, RaidService raidService) : base(background, windowRegion, contentRegion)
         {
             Parent = GameService.Graphics.SpriteScreen;
             Title = "Kp Refresher";
@@ -32,7 +35,7 @@ namespace KpRefresher.UI.Views
             SavesPosition = true;
 
             _moduleSettings = moduleSettings;
-            _gw2ApiManager = gw2ApiManager;
+            _raidService = raidService;
 
             var configPannel = new Panel()
             {
@@ -46,7 +49,7 @@ namespace KpRefresher.UI.Views
 
             var label = new Label()
             {
-                Text = "Identifiant kp.me : ",
+                Text = "Killproof.me Id : ",
                 Parent = configPannel,
                 AutoSizeWidth = true
             };
@@ -73,18 +76,41 @@ namespace KpRefresher.UI.Views
 
             _refreshRaidClears = new StandardButton()
             {
-                Text = "Refresh raid clears",
-                Size = new Point(110, 30),
+                Text = "Refresh killproof.me",
+                BasicTooltipText = "Attempts to refresh killproof.me; if it fails, will try again 5 minutes later",
+                Size = new Point(150, 30),
                 Location = new Point(0, 0),
                 Parent = actionPannels
             };
             _refreshRaidClears.Click += RefreshRaidClears;
+
+            _displayRaidDifference = new StandardButton()
+            {
+                Text = "Show new clears",
+                BasicTooltipText = "Displays in a notification new kills made since KpRefresher start or last successful kp.me refresh",
+                Size = new Point(150, 30),
+                Location = new Point(_refreshRaidClears.Right + 30, 0),
+                Parent = actionPannels
+            };
+            _displayRaidDifference.Click += DisplayRaidDifference;
+
+            _stopRetry = new StandardButton()
+            {
+                Text = "Stop retry",
+                BasicTooltipText = "Resets any pending refresh",
+                Size = new Point(150, 30),
+                Location = new Point(_displayRaidDifference.Right + 30, 0),
+                Parent = actionPannels
+            };
+            _stopRetry.Click += StopRetry;
         }
 
         protected override void DisposeControl()
         {
             _textBox.EnterPressed -= SaveKpId;
             _refreshRaidClears.Click -= RefreshRaidClears;
+            _displayRaidDifference.Click -= DisplayRaidDifference;
+            _stopRetry.Click -= StopRetry;
         }
 
         private void SaveKpId(object s, EventArgs e)
@@ -97,7 +123,17 @@ namespace KpRefresher.UI.Views
 
         private async void RefreshRaidClears(object sender, MouseEventArgs e)
         {
-            var r = await _gw2ApiManager.Gw2ApiClient.V2.Account.Raids.GetAsync();
+            await _raidService.Refresh();
+        }
+
+        private async void DisplayRaidDifference(object sender, MouseEventArgs e)
+        {
+            await _raidService.ShowDelta();
+        }
+
+        private void StopRetry(object sender, MouseEventArgs e)
+        {
+             _raidService.StopRetry();
         }
     }
 }
