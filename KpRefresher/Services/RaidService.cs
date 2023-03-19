@@ -71,16 +71,16 @@ namespace KpRefresher.Services
             {
                 //Start auto-retry
                 RefreshTriggered = true;
-                ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available, retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
+                if (_moduleSettings.ShowAutoRetryNotification.Value)
+                    ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available\nAuto-retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
             }
         }
 
         public async Task<string> GetDelta()
         {
-            //TEST PURPOSE
+            //TODO: REMOVE TEST CODE
             _baseRaidClears.Remove("sabetha");
             _baseRaidClears.Remove("gorseval");
-            //TEST PURPOSE
 
             var clears = await GetRaidClears();
             var result = clears.Where(p => !_baseRaidClears.Any(p2 => p2 == p));

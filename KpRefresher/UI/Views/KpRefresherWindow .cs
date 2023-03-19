@@ -1,10 +1,8 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Content;
 using Blish_HUD.Controls;
-using Blish_HUD.Input;
 using KpRefresher.Services;
 using Microsoft.Xna.Framework;
-using System;
 using System.Threading.Tasks;
 
 namespace KpRefresher.UI.Views
@@ -14,12 +12,7 @@ namespace KpRefresher.UI.Views
         private ModuleSettings _moduleSettings { get; set; }
         private RaidService _raidService { get; set; }
 
-
-        private TextBox _kpIdTextBox { get; set; }
-        private StandardButton _refreshRaidClears { get; set; }
         private LoadingSpinner _loadingSpinner { get; set; }
-        private StandardButton _displayRaidDifference { get; set; }
-        private StandardButton _stopRetry { get; set; }
         private Label _notificationLabel { get; set; }
 
         public KpRefresherWindow(AsyncTexture2D background, Rectangle windowRegion, Rectangle contentRegion,
@@ -35,7 +28,7 @@ namespace KpRefresher.UI.Views
             _raidService = raidService;
 
             #region Config
-            var configPannel = new Panel()
+            Panel configPannel = new()
             {
                 Parent = this,
                 Location = new Point(0, 0),
@@ -45,27 +38,51 @@ namespace KpRefresher.UI.Views
                 ShowBorder = true
             };
 
-            var kpIdLabel = new Label()
+            Label kpIdLabel = new()
             {
                 Parent = configPannel,
                 Location = new Point(15, 15),
                 AutoSizeWidth = true,
                 Height = 25,
-                Text = "Killproof.me Id : "
+                Text = "Killproof.me Id : ",
             };
 
-            _kpIdTextBox = new TextBox()
+            TextBox kpIdTextBox = new()
             {
                 Parent = configPannel,
                 Location = new Point(kpIdLabel.Right + 5, kpIdLabel.Top),
-                Text = _moduleSettings.KpMeId.Value
+                Width = 75,
+                Text = _moduleSettings.KpMeId.Value,
+            };
+            kpIdTextBox.EnterPressed += (s, e) =>
+            {
+                _moduleSettings.KpMeId.Value = kpIdTextBox.Text;
             };
 
-            _kpIdTextBox.EnterPressed += SaveKpId;
+            Label showAutoRetryNotificationLabel = new()
+            {
+                Parent = configPannel,
+                Location = new Point(15, 50),
+                AutoSizeWidth = true,
+                Height = 25,
+                Text = "Show auto-retry notification : ",
+                BasicTooltipText = "Display a notification when killproof.me was not available for a refresh",
+            };
+
+            Checkbox showAutoRetryNotificationCheckbox = new()
+            {
+                Parent = configPannel,
+                Location = new Point(showAutoRetryNotificationLabel.Right + 5, showAutoRetryNotificationLabel.Top + 4),
+                Checked = _moduleSettings.ShowAutoRetryNotification.Value
+            };
+            showAutoRetryNotificationCheckbox.CheckedChanged += (s, e) =>
+            {
+                _moduleSettings.ShowAutoRetryNotification.Value = showAutoRetryNotificationCheckbox.Checked;
+            };
             #endregion Config
 
             #region Actions
-            var actionPannels = new Panel()
+            Panel actionPannels = new()
             {
                 Parent = this,
                 Location = new Point(0, configPannel.Bottom + 10),
@@ -75,47 +92,56 @@ namespace KpRefresher.UI.Views
                 ShowBorder = true
             };
 
-            _refreshRaidClears = new StandardButton()
+            StandardButton refreshRaidClears = new()
             {
                 Parent = actionPannels,
-                Location = new Point(0, 0),
+                Location = new Point(15, 15),
                 Size = new Point(150, 30),
                 Text = "Refresh killproof.me",
                 BasicTooltipText = "Attempts to refresh killproof.me; if it fails, will try again 5 minutes later",
             };
-            _refreshRaidClears.Click += RefreshRaidClears;
+            refreshRaidClears.Click += async (s, e) =>
+            {
+                await RefreshRaidClears();
+            };
 
             _loadingSpinner = new LoadingSpinner()
             {
                 Parent = actionPannels,
-                Location = new Point(_refreshRaidClears.Right + 2, 2),
+                Location = new Point(refreshRaidClears.Right + 2, 17),
                 Size = new Point(29, 29),
                 Visible = false,
             };
 
-            _displayRaidDifference = new StandardButton()
+            StandardButton displayRaidDifference = new()
             {
                 Parent = actionPannels,
-                Location = new Point(_refreshRaidClears.Right + 30, 0),
+                Location = new Point(refreshRaidClears.Right + 100, 15),
                 Size = new Point(150, 30),
                 Text = "Show new clears",
                 BasicTooltipText = "Displays new kills made since KpRefresher start or last successful killproof.me refresh",
             };
-            _displayRaidDifference.Click += DisplayRaidDifference;
+            displayRaidDifference.Click += async (s, e) =>
+            {
+                await DisplayRaidDifference();
+            };
 
-            _stopRetry = new StandardButton()
+            StandardButton stopRetry = new()
             {
                 Parent = actionPannels,
-                Location = new Point(_displayRaidDifference.Right + 30, 0),
+                Location = new Point(displayRaidDifference.Right + 100, 15),
                 Size = new Point(150, 30),
                 Text = "Stop retry",
                 BasicTooltipText = "Resets any pending refresh",
             };
-            _stopRetry.Click += StopRetry;
+            stopRetry.Click += (s, e) =>
+            {
+                StopRetry();
+            };
             #endregion Actions
 
             #region Notifications
-            var notificationsPannel = new Panel()
+            Panel notificationsPannel = new()
             {
                 Parent = this,
                 Location = new Point(0, this.Height - 200),
@@ -137,23 +163,7 @@ namespace KpRefresher.UI.Views
             #endregion Notifications
         }
 
-        protected override void DisposeControl()
-        {
-            _kpIdTextBox.EnterPressed -= SaveKpId;
-            _refreshRaidClears.Click -= RefreshRaidClears;
-            _displayRaidDifference.Click -= DisplayRaidDifference;
-            _stopRetry.Click -= StopRetry;
-        }
-
-        private void SaveKpId(object s, EventArgs e)
-        {
-            var scopeTextBox = s as TextBox;
-            var value = scopeTextBox.Text;
-
-            _moduleSettings.KpMeId.Value = value;
-        }
-
-        private async void RefreshRaidClears(object sender, MouseEventArgs e)
+        private async Task RefreshRaidClears()
         {
             _loadingSpinner.Visible = true;
 
@@ -163,13 +173,13 @@ namespace KpRefresher.UI.Views
             _loadingSpinner.Visible = _raidService.RefreshTriggered;
         }
 
-        private async void DisplayRaidDifference(object sender, MouseEventArgs e)
+        private async Task DisplayRaidDifference()
         {
             var data = await _raidService.GetDelta();
             ShowInsideNotification(data);
         }
 
-        private void StopRetry(object sender, MouseEventArgs e)
+        private void StopRetry()
         {
             _raidService.StopRetry();
 
