@@ -53,26 +53,29 @@ namespace KpRefresher.Services
             return hasNewClear;
         }
 
-        public async Task Refresh()
+        public async Task RefreshKillproofMe()
         {
+            //Resets any auto-retry timer
             TriggerTimer = 0;
 
-            var refreshed = await CallKpMeRefresh();
+            var refreshed = await KpMeRefresh();
             if (refreshed.HasValue && refreshed.Value)
             {
+                //Replace clears stored with updated clears and disable auto-retry
                 _baseRaidClears = await GetRaidClears();
                 RefreshTriggered = false;
 
-                ScreenNotification.ShowNotification("Killproof.me refresh successful !", ScreenNotification.NotificationType.Info);
+                ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh successful !", ScreenNotification.NotificationType.Info);
             }
             else if (refreshed.HasValue && !refreshed.Value)
             {
+                //Start auto-retry
                 RefreshTriggered = true;
-                ScreenNotification.ShowNotification("Killproof.me refresh was not available, retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
+                ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available, retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
             }
         }
 
-        public async Task ShowDelta()
+        public async Task<string> GetDelta()
         {
             //TEST PURPOSE
             _baseRaidClears.Remove("sabetha");
@@ -82,31 +85,22 @@ namespace KpRefresher.Services
             var clears = await GetRaidClears();
             var result = clears.Where(p => !_baseRaidClears.Any(p2 => p2 == p));
 
-            string msgToDisplay;
+            string msgToDisplay = !result.Any() ? "No new kill." : $"New kills : {string.Join(", ", result)}";
 
-            if (result.Any())
-            {
-                msgToDisplay = $"New kills : {string.Join(", ", result)}";
-            }
-            else
-                msgToDisplay = "No new kill.";
-
-            ScreenNotification.ShowNotification(msgToDisplay, ScreenNotification.NotificationType.Info);
+            return msgToDisplay;
         }
 
         public void StopRetry()
         {
             TriggerTimer = 0;
             RefreshTriggered = false;
-
-            ScreenNotification.ShowNotification("Auto-retry disabled !", ScreenNotification.NotificationType.Info);
         }
 
-        private async Task<bool?> CallKpMeRefresh()
+        private async Task<bool?> KpMeRefresh()
         {
             if (string.IsNullOrWhiteSpace(_moduleSettings.KpMeId.Value))
             {
-                ScreenNotification.ShowNotification("Killproof.me Id not set !", ScreenNotification.NotificationType.Error);
+                ScreenNotification.ShowNotification("[KpRefresher] Killproof.me Id not set !", ScreenNotification.NotificationType.Error);
                 return null;
             }
 

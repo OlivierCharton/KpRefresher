@@ -85,26 +85,6 @@ namespace KpRefresher
             await RaidService.InitBaseRaidClears();
         }
 
-        private async Task<List<string>> GetRaidClears()
-        {
-            if (Gw2ApiManager.HasPermissions(Gw2ApiManager.Permissions) == false)
-            {
-                Logger.Warn("Les permissions ne sont pas encore chargées");
-                return null;
-            }
-
-            try
-            {
-                var data = await Gw2ApiManager.Gw2ApiClient.V2.Account.Raids.GetAsync();
-                return data?.ToList();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"Error while getting raid clears : {ex.Message}");
-                return null;
-            }
-        }
-
         protected override async Task LoadAsync()
         {
             await RaidService.InitBaseRaidClears();
@@ -119,7 +99,7 @@ namespace KpRefresher
             _mainWindow = new KpRefresherWindow(
                 _windowBackgroundTexture,
                 new Rectangle(40, 26, 913, 691),
-                new Rectangle(70, 71, 839, 605),
+                new Rectangle(50, 36, 893, 671),
                 _cornerIconTexture,
                 ModuleSettings,
                 RaidService);
@@ -188,10 +168,10 @@ namespace KpRefresher
 
             _cornerIconContextMenu = new ContextMenuStrip();
 
-            var refeshKpMenuItem = new ContextMenuStripItem("Scan KP now");
+            var refeshKpMenuItem = new ContextMenuStripItem("Refresh Killproof.me data");
             refeshKpMenuItem.Click += async (s, e) =>
             {
-                await RaidService.Refresh();
+                await RaidService.RefreshKillproofMe();
             };
 
             _cornerIconContextMenu.AddMenuItem(refeshKpMenuItem);
@@ -207,7 +187,7 @@ namespace KpRefresher
             {
                 if (RaidService.TriggerTimer > _delayBetweenKpRefresh)
                 {
-                    _ = RaidService.Refresh();
+                    _ = RaidService.RefreshKillproofMe();
                 }
             }
         }
@@ -240,5 +220,6 @@ namespace KpRefresher
         private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
         private KpRefresherWindow _mainWindow;
+        private double _runningTime;
     }
 }

@@ -9,7 +9,9 @@ namespace KpRefresher
 
         public ModuleSettings(SettingCollection settings)
         {
-            KpMeId = settings.DefineSetting(nameof(KpMeId), string.Empty, () => "Killproof.me Id", () => "The id of your Killproof.me");
+            SettingCollection internalSettings = settings.AddSubCollection("Internal");
+
+            KpMeId = internalSettings.DefineSetting(nameof(KpMeId), string.Empty);
         }
     }
 }
