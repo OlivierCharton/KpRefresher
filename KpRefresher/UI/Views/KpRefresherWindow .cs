@@ -3,6 +3,7 @@ using Blish_HUD.Content;
 using Blish_HUD.Controls;
 using KpRefresher.Services;
 using Microsoft.Xna.Framework;
+using System;
 using System.Threading.Tasks;
 
 namespace KpRefresher.UI.Views
@@ -54,9 +55,10 @@ namespace KpRefresher.UI.Views
                 Width = 75,
                 Text = _moduleSettings.KpMeId.Value,
             };
-            kpIdTextBox.EnterPressed += (s, e) =>
+            kpIdTextBox.EnterPressed += async (s, e) =>
             {
                 _moduleSettings.KpMeId.Value = kpIdTextBox.Text;
+                await _raidService.UpdateLastRefresh();
             };
 
             Label showAutoRetryNotificationLabel = new()
@@ -112,6 +114,9 @@ namespace KpRefresher.UI.Views
                 Size = new Point(29, 29),
                 Visible = false,
             };
+            _loadingSpinner.MouseEntered += (s, e) => {
+                _loadingSpinner.BasicTooltipText =  $"Next retry in {Math.Round(_raidService.GetNextRetryTimer() / 60 / 1000)} minutes.";
+            };
 
             StandardButton displayRaidDifference = new()
             {
@@ -165,6 +170,8 @@ namespace KpRefresher.UI.Views
 
         private async Task RefreshRaidClears()
         {
+            //TODO: maybe disable Refresh btn if we can find a way to auto reactivate it from Service ?
+
             _loadingSpinner.Visible = true;
 
             await _raidService.RefreshKillproofMe();
@@ -181,7 +188,7 @@ namespace KpRefresher.UI.Views
 
         private void StopRetry()
         {
-            _raidService.StopRetry();
+            _raidService.StopAutoRetry();
 
             _loadingSpinner.Visible = false;
 

@@ -1,6 +1,8 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Modules.Managers;
+using KpRefresher.Domain;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +18,15 @@ namespace KpRefresher.Services
         private readonly Logger _logger;
 
         private static readonly List<string> _raidBossNames = new() { "sabetha", "matthias", "xera", "deimos", "voice_in_the_void", "qadim", "qadim_the_peerless" };
-        private const string _kpMeBaseUrl = "https://killproof.me/proof/";
+        private const string _kpMeBaseUrl = "https://killproof.me/";
 
         private List<string> _baseRaidClears { get; set; }
+        private DateTime? _lastRefresh { get; set; }
+        private DateTime? _refreshAvailable => _lastRefresh?.AddHours(1);
 
         public bool RefreshTriggered { get; set; }
         public double TriggerTimer { get; set; }
+        public double TriggerTimerEndValue { get; set; }
 
         public RaidService(ModuleSettings moduleSettings, Gw2ApiManager gw2ApiManager, Logger logger)
         {
@@ -30,15 +35,23 @@ namespace KpRefresher.Services
             _logger = logger;
         }
 
+        /// <summary>
+        /// Initialize <c>_baseRaidClears</c> with current raid progression exposed by GW2 API
+        /// </summary>
+        /// <returns></returns>
         public async Task InitBaseRaidClears()
         {
-            _baseRaidClears = await GetRaidClears();
+            _baseRaidClears = await GetApiRaidClears();
         }
 
+        /// <summary>
+        /// Compares the base raid clear from <c>_baseRaidClears</c> with the current clear
+        /// </summary>
+        /// <returns><see langword="true"/> if a new boss has been killed, <see langword="false"/> otherwise.</returns>
         public async Task<bool> CheckRaidClears()
         {
             bool hasNewClear = false;
-            var clears = await GetRaidClears();
+            var clears = await GetApiRaidClears();
 
             //Detects if we have a new final boss clear
             foreach (var bossName in _raidBossNames)
@@ -53,36 +66,61 @@ namespace KpRefresher.Services
             return hasNewClear;
         }
 
+        /// <summary>
+        /// Refresh Killproof.me data
+        /// </summary>
+        /// <returns></returns>
         public async Task RefreshKillproofMe()
         {
-            //Resets any auto-retry timer
-            TriggerTimer = 0;
+            StopAutoRetry();
+
+            if (!_refreshAvailable.HasValue)
+                ScreenNotification.ShowNotification("[KpRefresher] Please check your Id setting !", ScreenNotification.NotificationType.Error);
+
+            //Prevents spamming KP.me api
+            if (DateTime.UtcNow < _refreshAvailable.Value)
+            {
+                //Rounding up is a safety mesure to prevent early refresh
+                var minutesUntilRefreshAvailable = Math.Ceiling((_refreshAvailable.Value - DateTime.UtcNow).TotalMinutes);
+                StartAutoRetry(minutesUntilRefreshAvailable);
+
+                ScreenNotification.ShowNotification($"[KpRefresher] Next refresh available in {minutesUntilRefreshAvailable} minutes\nAuto-retry is activated.", ScreenNotification.NotificationType.Warning);
+
+                return;
+            }
 
             var refreshed = await KpMeRefresh();
             if (refreshed.HasValue && refreshed.Value)
             {
                 //Replace clears stored with updated clears and disable auto-retry
-                _baseRaidClears = await GetRaidClears();
-                RefreshTriggered = false;
+                _lastRefresh = DateTime.UtcNow;
+                _baseRaidClears = await GetApiRaidClears();
 
                 ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh successful !", ScreenNotification.NotificationType.Info);
             }
             else if (refreshed.HasValue && !refreshed.Value)
             {
-                //Start auto-retry
-                RefreshTriggered = true;
+                //Although we checked refresh date, we couldn't update, retry later
+                await UpdateLastRefresh(); //Necessary ?
+
+                StartAutoRetry();
+
                 if (_moduleSettings.ShowAutoRetryNotification.Value)
                     ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available\nAuto-retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
             }
         }
 
+        /// <summary>
+        /// Compares the base raid clear from <c>_baseRaidClears</c> with the current clear
+        /// </summary>
+        /// <returns>A list of the new kills formatted in a string</returns>
         public async Task<string> GetDelta()
         {
             //TODO: REMOVE TEST CODE
             _baseRaidClears.Remove("sabetha");
             _baseRaidClears.Remove("gorseval");
 
-            var clears = await GetRaidClears();
+            var clears = await GetApiRaidClears();
             var result = clears.Where(p => !_baseRaidClears.Any(p2 => p2 == p));
 
             string msgToDisplay = !result.Any() ? "No new kill." : $"New kills : {string.Join(", ", result)}";
@@ -90,10 +128,62 @@ namespace KpRefresher.Services
             return msgToDisplay;
         }
 
-        public void StopRetry()
+        /// <summary>
+        /// Disable any auto-retry pending
+        /// </summary>
+        public void StopAutoRetry()
         {
-            TriggerTimer = 0;
             RefreshTriggered = false;
+            TriggerTimer = 0;
+            TriggerTimerEndValue = double.MaxValue;
+        }
+
+        public async Task UpdateLastRefresh(DateTime? date = null)
+        {
+            if (date == null)
+            {
+                var accountData = await GetAccountData();
+                date = accountData?.LastRefresh;
+            }
+
+            _lastRefresh = date.Value;
+        }
+
+        public async Task<KpApiModel> GetAccountData()
+        {
+            if (string.IsNullOrWhiteSpace(_moduleSettings.KpMeId.Value))
+                return null;
+
+            var url = $"{_kpMeBaseUrl}api/kp/{_moduleSettings.KpMeId.Value}?lang=en";
+            try
+            {
+                using var client = new HttpClient();
+
+                var response = await client.GetAsync(url);
+                if (response != null)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<KpApiModel>(content);
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                        ScreenNotification.ShowNotification($"[KpRefresher] Killproof.me Id {_moduleSettings.KpMeId.Value} does not exist !", ScreenNotification.NotificationType.Error);
+                    else
+                        _logger.Error($"Unknown status while getting account data : {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Error while getting account info : {ex.Message}");
+            }
+
+            return null;
+        }
+
+        public double GetNextRetryTimer()
+        {
+            return !RefreshTriggered ? 0 : TriggerTimerEndValue - TriggerTimer;
         }
 
         private async Task<bool?> KpMeRefresh()
@@ -104,7 +194,7 @@ namespace KpRefresher.Services
                 return null;
             }
 
-            var url = $"{_kpMeBaseUrl}{_moduleSettings.KpMeId.Value}/refresh";
+            var url = $"{_kpMeBaseUrl}proof/{_moduleSettings.KpMeId.Value}/refresh";
 
             try
             {
@@ -117,6 +207,8 @@ namespace KpRefresher.Services
                         return true;
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
                         return false;
+                    else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                        ScreenNotification.ShowNotification($"[KpRefresher] Killproof.me Id {_moduleSettings.KpMeId.Value} does not exist !", ScreenNotification.NotificationType.Error);
                     else
                         _logger.Error($"Unknown status while refreshing kp.me : {response.StatusCode}");
                 }
@@ -129,8 +221,7 @@ namespace KpRefresher.Services
             return null;
         }
 
-
-        private async Task<List<string>> GetRaidClears()
+        private async Task<List<string>> GetApiRaidClears()
         {
             if (_gw2ApiManager.HasPermissions(_gw2ApiManager.Permissions) == false)
             {
@@ -148,6 +239,19 @@ namespace KpRefresher.Services
                 _logger.Error($"Error while getting raid clears : {ex.Message}");
                 return null;
             }
+        }
+
+        private void StartAutoRetry(DateTime target)
+        {
+            var waitingTime = target < DateTime.UtcNow ? 0 : (target - DateTime.UtcNow).TotalMinutes;
+            StartAutoRetry(waitingTime);
+        }
+
+        private void StartAutoRetry(double minutes = 5)
+        {
+            RefreshTriggered = true;
+            TriggerTimer = 0;
+            TriggerTimerEndValue = minutes * 60 * 1000;
         }
     }
 }

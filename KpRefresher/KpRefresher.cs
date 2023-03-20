@@ -30,11 +30,6 @@ namespace KpRefresher
         //private bool _playerWasInRaid { get; set; }
         //private bool _playerWasInStrike { get; set; }
 
-        //TODO: REMOVE TEST VALUE
-        private const int _delayBetweenKpRefresh = 5  * 1000;
-
-        //private const int _delayBetweenKpRefresh = 5 * 60 * 1000;
-
         public static ModuleSettings ModuleSettings { get; private set; }
         public static RaidService RaidService { get; private set; }
 
@@ -91,6 +86,7 @@ namespace KpRefresher
         protected override async Task LoadAsync()
         {
             await RaidService.InitBaseRaidClears();
+            await RaidService.UpdateLastRefresh();
 
             //FEATURE CHANGE MAP
             //GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
@@ -184,11 +180,11 @@ namespace KpRefresher
         protected override void Update(GameTime gameTime)
         {
             _runningTime += gameTime.ElapsedGameTime.TotalMilliseconds;
-            RaidService.TriggerTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
 
             if (RaidService.RefreshTriggered)
             {
-                if (RaidService.TriggerTimer > _delayBetweenKpRefresh)
+                RaidService.TriggerTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (RaidService.TriggerTimer > RaidService.TriggerTimerEndValue)
                 {
                     _ = RaidService.RefreshKillproofMe();
                 }
