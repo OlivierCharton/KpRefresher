@@ -6,7 +6,7 @@ namespace KpRefresher
     {
         public SettingEntry<string> KpMeId { get; set; }
 
-        public SettingEntry<bool> ShowAutoRetryNotification { get; set; }
+        public SettingEntry<bool> ShowScheduleNotification { get; set; }
         public SettingEntry<bool> AutoRefresh { get; set; }
 
 
@@ -15,7 +15,7 @@ namespace KpRefresher
             SettingCollection internalSettings = settings.AddSubCollection("Internal");
 
             KpMeId = internalSettings.DefineSetting(nameof(KpMeId), string.Empty);
-            ShowAutoRetryNotification = internalSettings.DefineSetting(nameof(ShowAutoRetryNotification), true);
+            ShowScheduleNotification = internalSettings.DefineSetting(nameof(ShowScheduleNotification), true);
             AutoRefresh = internalSettings.DefineSetting(nameof(AutoRefresh), false);
         }
     }

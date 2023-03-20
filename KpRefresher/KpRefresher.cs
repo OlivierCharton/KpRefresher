@@ -181,12 +181,12 @@ namespace KpRefresher
         {
             _runningTime += gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (RaidService.RefreshTriggered)
+            if (RaidService.RefreshScheduled)
             {
-                RaidService.TriggerTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                if (RaidService.TriggerTimer > RaidService.TriggerTimerEndValue)
+                RaidService.ScheduleTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (RaidService.ScheduleTimer > RaidService.ScheduleTimerEndValue)
                 {
-                    _ = RaidService.RefreshKillproofMe();
+                    _ = RaidService.RefreshKillproofMe(true);
                 }
             }
         }

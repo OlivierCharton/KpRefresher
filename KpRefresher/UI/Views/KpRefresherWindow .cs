@@ -67,7 +67,7 @@ namespace KpRefresher.UI.Views
                 Location = new Point(15, 50),
                 AutoSizeWidth = true,
                 Height = 25,
-                Text = "Show auto-retry notification : ",
+                Text = "Show auto-retry notifications : ",
                 BasicTooltipText = "Display a notification when killproof.me was not available for a refresh",
             };
 
@@ -75,11 +75,11 @@ namespace KpRefresher.UI.Views
             {
                 Parent = configPannel,
                 Location = new Point(showAutoRetryNotificationLabel.Right + 5, showAutoRetryNotificationLabel.Top + 4),
-                Checked = _moduleSettings.ShowAutoRetryNotification.Value
+                Checked = _moduleSettings.ShowScheduleNotification.Value
             };
             showAutoRetryNotificationCheckbox.CheckedChanged += (s, e) =>
             {
-                _moduleSettings.ShowAutoRetryNotification.Value = showAutoRetryNotificationCheckbox.Checked;
+                _moduleSettings.ShowScheduleNotification.Value = showAutoRetryNotificationCheckbox.Checked;
             };
             #endregion Config
 
@@ -177,7 +177,7 @@ namespace KpRefresher.UI.Views
             await _raidService.RefreshKillproofMe();
 
             //Keeps the spinner visible in refresh in auto-retry
-            _loadingSpinner.Visible = _raidService.RefreshTriggered;
+            _loadingSpinner.Visible = _raidService.RefreshScheduled;
         }
 
         private async Task DisplayRaidDifference()
@@ -188,7 +188,7 @@ namespace KpRefresher.UI.Views
 
         private void StopRetry()
         {
-            _raidService.StopAutoRetry();
+            _raidService.CancelSchedule();
 
             _loadingSpinner.Visible = false;
 

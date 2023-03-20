@@ -24,9 +24,9 @@ namespace KpRefresher.Services
         private DateTime? _lastRefresh { get; set; }
         private DateTime? _refreshAvailable => _lastRefresh?.AddHours(1);
 
-        public bool RefreshTriggered { get; set; }
-        public double TriggerTimer { get; set; }
-        public double TriggerTimerEndValue { get; set; }
+        public bool RefreshScheduled { get; set; }
+        public double ScheduleTimer { get; set; }
+        public double ScheduleTimerEndValue { get; set; }
 
         public RaidService(ModuleSettings moduleSettings, Gw2ApiManager gw2ApiManager, Logger logger)
         {
@@ -70,9 +70,9 @@ namespace KpRefresher.Services
         /// Refresh Killproof.me data
         /// </summary>
         /// <returns></returns>
-        public async Task RefreshKillproofMe()
+        public async Task RefreshKillproofMe(bool fromUpdateLoop = false)
         {
-            StopAutoRetry();
+            CancelSchedule();
 
             if (!_refreshAvailable.HasValue)
                 ScreenNotification.ShowNotification("[KpRefresher] Please check your Id setting !", ScreenNotification.NotificationType.Error);
@@ -82,9 +82,10 @@ namespace KpRefresher.Services
             {
                 //Rounding up is a safety mesure to prevent early refresh
                 var minutesUntilRefreshAvailable = Math.Ceiling((_refreshAvailable.Value - DateTime.UtcNow).TotalMinutes);
-                StartAutoRetry(minutesUntilRefreshAvailable);
+                ScheduleRefresh(minutesUntilRefreshAvailable + 1);
 
-                ScreenNotification.ShowNotification($"[KpRefresher] Next refresh available in {minutesUntilRefreshAvailable} minutes\nAuto-retry is activated.", ScreenNotification.NotificationType.Warning);
+                if (!fromUpdateLoop || _moduleSettings.ShowScheduleNotification.Value)
+                    ScreenNotification.ShowNotification($"[KpRefresher] Next refresh available in {minutesUntilRefreshAvailable} minutes\nA new try has been scheduled.", ScreenNotification.NotificationType.Warning);
 
                 return;
             }
@@ -103,9 +104,9 @@ namespace KpRefresher.Services
                 //Although we checked refresh date, we couldn't update, retry later
                 await UpdateLastRefresh(); //Necessary ?
 
-                StartAutoRetry();
+                ScheduleRefresh();
 
-                if (_moduleSettings.ShowAutoRetryNotification.Value)
+                if (_moduleSettings.ShowScheduleNotification.Value)
                     ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available\nAuto-retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
             }
         }
@@ -129,13 +130,13 @@ namespace KpRefresher.Services
         }
 
         /// <summary>
-        /// Disable any auto-retry pending
+        /// Disable any scheduled refresh
         /// </summary>
-        public void StopAutoRetry()
+        public void CancelSchedule()
         {
-            RefreshTriggered = false;
-            TriggerTimer = 0;
-            TriggerTimerEndValue = double.MaxValue;
+            RefreshScheduled = false;
+            ScheduleTimer = 0;
+            ScheduleTimerEndValue = double.MaxValue;
         }
 
         public async Task UpdateLastRefresh(DateTime? date = null)
@@ -183,7 +184,7 @@ namespace KpRefresher.Services
 
         public double GetNextRetryTimer()
         {
-            return !RefreshTriggered ? 0 : TriggerTimerEndValue - TriggerTimer;
+            return !RefreshScheduled ? 0 : ScheduleTimerEndValue - ScheduleTimer;
         }
 
         private async Task<bool?> KpMeRefresh()
@@ -241,17 +242,17 @@ namespace KpRefresher.Services
             }
         }
 
-        private void StartAutoRetry(DateTime target)
+        private void ScheduleRefresh(DateTime target)
         {
             var waitingTime = target < DateTime.UtcNow ? 0 : (target - DateTime.UtcNow).TotalMinutes;
-            StartAutoRetry(waitingTime);
+            ScheduleRefresh(waitingTime);
         }
 
-        private void StartAutoRetry(double minutes = 5)
+        private void ScheduleRefresh(double minutes = 5)
         {
-            RefreshTriggered = true;
-            TriggerTimer = 0;
-            TriggerTimerEndValue = minutes * 60 * 1000;
+            RefreshScheduled = true;
+            ScheduleTimer = 0;
+            ScheduleTimerEndValue = minutes * 60 * 1000;
         }
     }
 }
