@@ -117,10 +117,6 @@ namespace KpRefresher.Services
         /// <returns>A list of the new kills formatted in a string</returns>
         public async Task<string> GetDelta()
         {
-            //TODO: REMOVE TEST CODE
-            _baseRaidClears.Remove("sabetha");
-            _baseRaidClears.Remove("gorseval");
-
             var clears = await GetApiRaidClears();
             var result = clears.Where(p => !_baseRaidClears.Any(p2 => p2 == p));
 
@@ -147,7 +143,7 @@ namespace KpRefresher.Services
                 date = accountData?.LastRefresh;
             }
 
-            _lastRefresh = date.Value;
+            _lastRefresh = date.GetValueOrDefault();
         }
 
         public async Task<KpApiModel> GetAccountData()
