@@ -5,6 +5,7 @@ using KpRefresher.Services;
 using Microsoft.Xna.Framework;
 using System;
 using System.Threading.Tasks;
+using static Blish_HUD.ContentService;
 
 namespace KpRefresher.UI.Views
 {
@@ -14,6 +15,7 @@ namespace KpRefresher.UI.Views
         private RaidService _raidService { get; set; }
 
         private LoadingSpinner _loadingSpinner { get; set; }
+        private Panel _notificationsContainer { get; set; }
         private Label _notificationLabel { get; set; }
 
         public KpRefresherWindow(AsyncTexture2D background, Rectangle windowRegion, Rectangle contentRegion,
@@ -44,7 +46,7 @@ namespace KpRefresher.UI.Views
             {
                 Parent = this,
                 WidthSizingMode = SizingMode.Fill,
-                Height = this.Height - 200, //leave some space for notification area
+                HeightSizingMode = SizingMode.Fill,
                 ControlPadding = new(3, 3)
             };
 
@@ -125,7 +127,7 @@ namespace KpRefresher.UI.Views
             #endregion Config
 
             #region Actions
-            FlowPanel actionPannels = new()
+            FlowPanel actionContainer = new()
             {
                 Parent = mainContainer,
                 WidthSizingMode = SizingMode.Fill,
@@ -135,13 +137,24 @@ namespace KpRefresher.UI.Views
                 CanCollapse = true,
                 OuterControlPadding = new(5),
                 ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.SingleTopToBottom
+            };
+
+            #region Line1
+            FlowPanel actionLine1Container = new()
+            {
+                Parent = actionContainer,
+                WidthSizingMode = SizingMode.Fill,
+                HeightSizingMode = SizingMode.AutoSize,
+                //OuterControlPadding = new(5),
+                ControlPadding = new(3, 3),
                 FlowDirection = ControlFlowDirection.SingleLeftToRight
             };
 
             #region RefreshRaidClears
             StandardButton refreshRaidClears = new()
             {
-                Parent = actionPannels,
+                Parent = actionLine1Container,
                 Size = new Point(150, 30),
                 Text = "Refresh killproof.me",
                 BasicTooltipText = "Attempts to refresh killproof.me; if it fails, will try again 5 minutes later",
@@ -152,24 +165,10 @@ namespace KpRefresher.UI.Views
             };
             #endregion RefreshRaidClears
 
-            #region DisplayRaidDifference
-            StandardButton displayRaidDifference = new()
-            {
-                Parent = actionPannels,
-                Size = new Point(150, 30),
-                Text = "Show new clears",
-                BasicTooltipText = "Displays new kills made since KpRefresher start or last successful killproof.me refresh",
-            };
-            displayRaidDifference.Click += async (s, e) =>
-            {
-                await DisplayRaidDifference();
-            };
-            #endregion DisplayRaidDifference
-
             #region StopRetry
             StandardButton stopRetry = new()
             {
-                Parent = actionPannels,
+                Parent = actionLine1Container,
                 Size = new Point(130, 30),
                 Text = "Stop retry",
                 BasicTooltipText = "Resets any pending refresh",
@@ -183,7 +182,7 @@ namespace KpRefresher.UI.Views
             #region Spinner
             _loadingSpinner = new LoadingSpinner()
             {
-                Parent = actionPannels,
+                Parent = actionLine1Container,
                 Size = new Point(29, 29),
                 Visible = false,
             };
@@ -192,25 +191,77 @@ namespace KpRefresher.UI.Views
                 _loadingSpinner.BasicTooltipText = $"Next retry in {Math.Round(_raidService.GetNextRetryTimer() / 60 / 1000)} minutes.";
             };
             #endregion Spinner
+            #endregion Line1
+
+            #region Line2
+            FlowPanel actionLine2Container = new()
+            {
+                Parent = actionContainer,
+                WidthSizingMode = SizingMode.Fill,
+                HeightSizingMode = SizingMode.AutoSize,
+                //OuterControlPadding = new(5),
+                ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight
+            };
+
+            #region DisplayRaidDifference
+            StandardButton displayRaidDifference = new()
+            {
+                Parent = actionLine2Container,
+                Size = new Point(150, 30),
+                Text = "Show new clears",
+                BasicTooltipText = "Displays new kills made since KpRefresher start or last successful killproof.me refresh",
+            };
+            displayRaidDifference.Click += async (s, e) =>
+            {
+                await DisplayRaidDifference();
+            };
+            #endregion DisplayRaidDifference
+
+            #region DisplayCurrentKp
+            StandardButton displayCurrentKp = new()
+            {
+                Parent = actionLine2Container,
+                Size = new Point(150, 30),
+                Text = "Show current KP",
+                BasicTooltipText = "Displays current KP stored in your inventory according to killproof.me",
+            };
+            displayCurrentKp.Click += async (s, e) =>
+            {
+                await DisplayCurrentKp();
+            };
+            #endregion DisplayCurrentKp
+
+            #region ClearNotifications
+            StandardButton clearNotifications = new()
+            {
+                Parent = actionLine2Container,
+                Size = new Point(150, 30),
+                Text = "Clear notifications"
+            };
+            clearNotifications.Click += (s, e) =>
+            {
+                ClearNotifications();
+            };
+            #endregion ClearNotifications
+            #endregion Line2
             #endregion Actions
 
             #region Notifications
-            Panel notificationsContainer = new()
+            _notificationsContainer = new()
             {
-                Parent = this,
-                Location = new Point(0, this.Height - 200),
-                Width = this.Width,
-                Height = 100,
+                Parent = mainContainer,
+                HeightSizingMode = SizingMode.Fill,
+                WidthSizingMode = SizingMode.Fill,
             };
 
             _notificationLabel = new Label()
             {
-                Parent = notificationsContainer,
-                Width = notificationsContainer.Width,
-                Height = notificationsContainer.Height,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Bottom,
-                Font = GameService.Content.DefaultFont32
+                Parent = _notificationsContainer,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Font = GameService.Content.GetFont(FontFace.Menomonia, FontSize.Size24, FontStyle.Regular),
+                WrapText = true
             };
             #endregion Notifications
         }
@@ -229,33 +280,59 @@ namespace KpRefresher.UI.Views
 
         private async Task DisplayRaidDifference()
         {
+            ShowInsideNotification("Loading ...", true);
+
             var data = await _raidService.GetDelta();
-            ShowInsideNotification(data);
+            ShowInsideNotification(data, true);
         }
 
         private void StopRetry()
         {
-            _raidService.CancelSchedule();
+            if (_raidService.RefreshScheduled)
+            {
+                _raidService.CancelSchedule();
+                ShowInsideNotification("Auto-retry disabled !");
+            }
+            else
+            {
+                ShowInsideNotification("No scheduled refresh");
+            }
 
             _loadingSpinner.Visible = false;
-
-            ShowInsideNotification("Auto-retry disabled !");
         }
 
-        private void ShowInsideNotification(string message)
+        private void ShowInsideNotification(string message, bool persistMessage = false)
         {
             _notificationLabel.Text = message;
             _notificationLabel.Visible = true;
+            _notificationLabel.Width = _notificationsContainer.Width;
+            _notificationLabel.Height = _notificationsContainer.Height;
 
-            Task.Run(async delegate
+            if (!persistMessage)
             {
-                await Task.Delay(4000);
+                Task.Run(async delegate
+                {
+                    await Task.Delay(4000);
 
-                _notificationLabel.Text = string.Empty;
-                _notificationLabel.Visible = false;
+                    ClearNotifications();
 
-                return;
-            });
+                    return;
+                });
+            }
+        }
+
+        private async Task DisplayCurrentKp()
+        {
+            ShowInsideNotification("Loading ...", true);
+
+            var data = await _raidService.DisplayCurrentKp();
+            ShowInsideNotification(data, true);
+        }
+
+        private void ClearNotifications()
+        {
+            _notificationLabel.Text = string.Empty;
+            _notificationLabel.Visible = false;
         }
     }
 }

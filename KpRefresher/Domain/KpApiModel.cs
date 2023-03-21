@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace KpRefresher.Domain
 {
@@ -16,5 +17,18 @@ namespace KpRefresher.Domain
 
         [JsonProperty("account_name")]
         public string AccountName { get; set; }
+
+        [JsonProperty("killproofs")]
+        public List<Killproof> Killproofs { get; set; }
+    }
+
+    public class Killproof
+    {
+        [JsonProperty("amount")]
+        public int Amount { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        [JsonProperty("id")]
+        public int Id { get; set; }
     }
 }

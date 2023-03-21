@@ -118,9 +118,13 @@ namespace KpRefresher.Services
         public async Task<string> GetDelta()
         {
             var clears = await GetApiRaidClears();
+
+            if (clears == null || _baseRaidClears == null)
+                return string.Empty;
+
             var result = clears.Where(p => !_baseRaidClears.Any(p2 => p2 == p));
 
-            string msgToDisplay = !result.Any() ? "No new kill." : $"New kills : {string.Join(", ", result)}";
+            string msgToDisplay = !result.Any() ? "No new kill." : $"New kills :\n\n{string.Join("\n", result)}";
 
             return msgToDisplay;
         }
@@ -181,6 +185,37 @@ namespace KpRefresher.Services
         public double GetNextRetryTimer()
         {
             return !RefreshScheduled ? 0 : ScheduleTimerEndValue - ScheduleTimer;
+        }
+
+        public async Task<string> DisplayCurrentKp()
+        {
+            return string.Empty;
+            
+            //Scan with GW2 API all KP in inventory & display them
+            // -> Need to add Inventory auth
+            // -> Need to fetch kp internal IDs
+        }
+
+        /// <summary>
+        /// Unused, developed by mistake
+        /// </summary>
+        /// <returns></returns>
+        private async Task<string> DisplayCurrentKpTokens()
+        {
+            //WARNING : 
+            if (string.IsNullOrWhiteSpace(_moduleSettings.KpMeId.Value))
+                return "No Kp Id set.";
+
+            var accountData = await GetAccountData();
+            if (accountData == null)
+                return "Unknown error";
+
+            string msgToDisplay = !accountData.Killproofs.Any() ? "No new kp." : "New kp :\n\n";
+            foreach (var kp in accountData.Killproofs)
+            {
+                msgToDisplay = $"{msgToDisplay}{kp.Amount} {kp.Name}\n";
+            }
+            return msgToDisplay;
         }
 
         private async Task<bool?> KpMeRefresh()
