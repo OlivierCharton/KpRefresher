@@ -92,10 +92,9 @@ namespace KpRefresher
             //FEATURE CHANGE MAP
             //GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
 
-            // Load content from the ref directory in the module.bhm automatically with the ContentsManager
+            // Load textures
             _cornerIconTexture = ContentsManager.GetTexture("killproof_logo_dark.png");
-            _windowBackgroundTexture = ContentsManager.GetTexture("155985.png");
-            //_windowBackgroundTexture = AsyncTexture2D.FromAssetId(155985);
+            _windowBackgroundTexture = AsyncTexture2D.FromAssetId(155985);
 
             _mainWindow = new KpRefresherWindow(
                 _windowBackgroundTexture,
@@ -105,7 +104,7 @@ namespace KpRefresher
                 ModuleSettings,
                 RaidService);
 
-            //Resize the window to prevent background texture to overflow (not the best way maybe)
+            //Resize the window to prevent background texture to overflow
             _mainWindow.Size = new Point(500, 700);
             _mainWindow.BuildUi();
         }
@@ -218,7 +217,7 @@ namespace KpRefresher
         }
 
         internal static KpRefresher KpRefresherInstance;
-        private Texture2D _windowBackgroundTexture;
+        private AsyncTexture2D _windowBackgroundTexture;
         private Texture2D _cornerIconTexture;
         private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
