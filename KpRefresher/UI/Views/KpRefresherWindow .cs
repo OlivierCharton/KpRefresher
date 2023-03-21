@@ -20,7 +20,7 @@ namespace KpRefresher.UI.Views
             AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, RaidService raidService) : base(background, windowRegion, contentRegion)
         {
             Parent = GameService.Graphics.SpriteScreen;
-            Title = "Kp Refresher";
+            Title = " Kp Refresher";
             Emblem = cornerIconTexture;
             Location = new Point(300, 300);
             SavesPosition = true;
@@ -28,21 +28,53 @@ namespace KpRefresher.UI.Views
             _moduleSettings = moduleSettings;
             _raidService = raidService;
 
-            #region Config
-            Panel configPannel = new()
+            //Panel testPanel = new()
+            //{
+            //    Parent = this,
+            //    BackgroundColor = Color.Red,
+            //    WidthSizingMode = SizingMode.Fill,
+            //    HeightSizingMode = SizingMode.Fill,
+            //    ZIndex = 100
+            //};
+        }
+
+        public void BuildUi()
+        {
+            FlowPanel mainContainer = new()
             {
                 Parent = this,
-                Location = new Point(0, 0),
+                WidthSizingMode = SizingMode.Fill,
+                Height = this.Height - 200, //leave some space for notification area
+                ControlPadding = new(3, 3)
+            };
+
+            #region Config
+            FlowPanel configContainer = new()
+            {
+                Parent = mainContainer,
                 WidthSizingMode = SizingMode.Fill,
                 Height = 200,
                 Title = "Configuration",
-                ShowBorder = true
+                ShowBorder = true,
+                CanCollapse = true,
+                OuterControlPadding = new(5),
+                ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.TopToBottom
+            };
+
+            #region KpId
+            var kpIdContainer = new FlowPanel()
+            {
+                Parent = configContainer,
+                WidthSizingMode = SizingMode.Fill,
+                HeightSizingMode = SizingMode.AutoSize,
+                ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight,
             };
 
             Label kpIdLabel = new()
             {
-                Parent = configPannel,
-                Location = new Point(15, 15),
+                Parent = kpIdContainer,
                 AutoSizeWidth = true,
                 Height = 25,
                 Text = "Killproof.me Id : ",
@@ -50,8 +82,7 @@ namespace KpRefresher.UI.Views
 
             TextBox kpIdTextBox = new()
             {
-                Parent = configPannel,
-                Location = new Point(kpIdLabel.Right + 5, kpIdLabel.Top),
+                Parent = kpIdContainer,
                 Width = 75,
                 Text = _moduleSettings.KpMeId.Value,
             };
@@ -60,11 +91,21 @@ namespace KpRefresher.UI.Views
                 _moduleSettings.KpMeId.Value = kpIdTextBox.Text;
                 await _raidService.UpdateLastRefresh();
             };
+            #endregion KpId
+
+            #region autoRetryNotification
+            var autoRetryNotificationContainer = new FlowPanel()
+            {
+                Parent = configContainer,
+                WidthSizingMode = SizingMode.Fill,
+                HeightSizingMode = SizingMode.AutoSize,
+                ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight
+            };
 
             Label showAutoRetryNotificationLabel = new()
             {
-                Parent = configPannel,
-                Location = new Point(15, 50),
+                Parent = autoRetryNotificationContainer,
                 AutoSizeWidth = true,
                 Height = 25,
                 Text = "Show auto-retry notifications : ",
@@ -73,31 +114,34 @@ namespace KpRefresher.UI.Views
 
             Checkbox showAutoRetryNotificationCheckbox = new()
             {
-                Parent = configPannel,
-                Location = new Point(showAutoRetryNotificationLabel.Right + 5, showAutoRetryNotificationLabel.Top + 4),
+                Parent = autoRetryNotificationContainer,
                 Checked = _moduleSettings.ShowScheduleNotification.Value
             };
             showAutoRetryNotificationCheckbox.CheckedChanged += (s, e) =>
             {
                 _moduleSettings.ShowScheduleNotification.Value = showAutoRetryNotificationCheckbox.Checked;
             };
+            #endregion autoRetryNotification
             #endregion Config
 
             #region Actions
-            Panel actionPannels = new()
+            FlowPanel actionPannels = new()
             {
-                Parent = this,
-                Location = new Point(0, configPannel.Bottom + 10),
+                Parent = mainContainer,
                 WidthSizingMode = SizingMode.Fill,
                 HeightSizingMode = SizingMode.AutoSize,
                 Title = "Actions",
-                ShowBorder = true
+                ShowBorder = true,
+                CanCollapse = true,
+                OuterControlPadding = new(5),
+                ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight
             };
 
+            #region RefreshRaidClears
             StandardButton refreshRaidClears = new()
             {
                 Parent = actionPannels,
-                Location = new Point(15, 15),
                 Size = new Point(150, 30),
                 Text = "Refresh killproof.me",
                 BasicTooltipText = "Attempts to refresh killproof.me; if it fails, will try again 5 minutes later",
@@ -106,22 +150,12 @@ namespace KpRefresher.UI.Views
             {
                 await RefreshRaidClears();
             };
+            #endregion RefreshRaidClears
 
-            _loadingSpinner = new LoadingSpinner()
-            {
-                Parent = actionPannels,
-                Location = new Point(refreshRaidClears.Right + 2, 17),
-                Size = new Point(29, 29),
-                Visible = false,
-            };
-            _loadingSpinner.MouseEntered += (s, e) => {
-                _loadingSpinner.BasicTooltipText =  $"Next retry in {Math.Round(_raidService.GetNextRetryTimer() / 60 / 1000)} minutes.";
-            };
-
+            #region DisplayRaidDifference
             StandardButton displayRaidDifference = new()
             {
                 Parent = actionPannels,
-                Location = new Point(refreshRaidClears.Right + 100, 15),
                 Size = new Point(150, 30),
                 Text = "Show new clears",
                 BasicTooltipText = "Displays new kills made since KpRefresher start or last successful killproof.me refresh",
@@ -130,12 +164,13 @@ namespace KpRefresher.UI.Views
             {
                 await DisplayRaidDifference();
             };
+            #endregion DisplayRaidDifference
 
+            #region StopRetry
             StandardButton stopRetry = new()
             {
                 Parent = actionPannels,
-                Location = new Point(displayRaidDifference.Right + 100, 15),
-                Size = new Point(150, 30),
+                Size = new Point(130, 30),
                 Text = "Stop retry",
                 BasicTooltipText = "Resets any pending refresh",
             };
@@ -143,10 +178,24 @@ namespace KpRefresher.UI.Views
             {
                 StopRetry();
             };
+            #endregion StopRetry
+
+            #region Spinner
+            _loadingSpinner = new LoadingSpinner()
+            {
+                Parent = actionPannels,
+                Size = new Point(29, 29),
+                Visible = false,
+            };
+            _loadingSpinner.MouseEntered += (s, e) =>
+            {
+                _loadingSpinner.BasicTooltipText = $"Next retry in {Math.Round(_raidService.GetNextRetryTimer() / 60 / 1000)} minutes.";
+            };
+            #endregion Spinner
             #endregion Actions
 
             #region Notifications
-            Panel notificationsPannel = new()
+            Panel notificationsContainer = new()
             {
                 Parent = this,
                 Location = new Point(0, this.Height - 200),
@@ -156,14 +205,12 @@ namespace KpRefresher.UI.Views
 
             _notificationLabel = new Label()
             {
-                Parent = notificationsPannel,
-                Location = new Point(0, 0),
-                Width = notificationsPannel.Width,
-                Height = notificationsPannel.Height,
+                Parent = notificationsContainer,
+                Width = notificationsContainer.Width,
+                Height = notificationsContainer.Height,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Bottom,
-                Font = GameService.Content.DefaultFont32,
-                Text = string.Empty
+                Font = GameService.Content.DefaultFont32
             };
             #endregion Notifications
         }

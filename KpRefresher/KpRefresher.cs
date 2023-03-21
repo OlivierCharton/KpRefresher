@@ -1,4 +1,5 @@
 ﻿using Blish_HUD;
+using Blish_HUD.Content;
 using Blish_HUD.Controls;
 using Blish_HUD.Modules;
 using Blish_HUD.Modules.Managers;
@@ -94,14 +95,19 @@ namespace KpRefresher
             // Load content from the ref directory in the module.bhm automatically with the ContentsManager
             _cornerIconTexture = ContentsManager.GetTexture("killproof_logo_dark.png");
             _windowBackgroundTexture = ContentsManager.GetTexture("155985.png");
+            //_windowBackgroundTexture = AsyncTexture2D.FromAssetId(155985);
 
             _mainWindow = new KpRefresherWindow(
                 _windowBackgroundTexture,
                 new Rectangle(40, 26, 913, 691),
-                new Rectangle(50, 36, 893, 671),
+                new Rectangle(50, 26, 893, 681),
                 _cornerIconTexture,
                 ModuleSettings,
                 RaidService);
+
+            //Resize the window to prevent background texture to overflow (not the best way maybe)
+            _mainWindow.Size = new Point(500, 700);
+            _mainWindow.BuildUi();
         }
 
         //FEATURE CHANGE MAP
@@ -179,8 +185,6 @@ namespace KpRefresher
 
         protected override void Update(GameTime gameTime)
         {
-            _runningTime += gameTime.ElapsedGameTime.TotalMilliseconds;
-
             if (RaidService.RefreshScheduled)
             {
                 RaidService.ScheduleTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -219,6 +223,5 @@ namespace KpRefresher
         private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
         private KpRefresherWindow _mainWindow;
-        private double _runningTime;
     }
 }
