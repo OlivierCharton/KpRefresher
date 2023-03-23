@@ -32,8 +32,10 @@ namespace KpRefresher
         //private bool _playerWasInStrike { get; set; }
 
         public static ModuleSettings ModuleSettings { get; private set; }
-        public static RaidService RaidService { get; private set; }
-
+        public static Gw2ApiService Gw2ApiService { get; private set; }
+        public static KpMeService KpMeService { get; private set; }
+        public static BusinessService BusinessService { get; private set; }
+        
         #region Service Managers
 
         internal SettingsManager SettingsManager => this.ModuleParameters.SettingsManager;
@@ -63,7 +65,9 @@ namespace KpRefresher
         // and render loop, so be sure to not do anything here that takes too long.
         protected override void Initialize()
         {
-            RaidService = new RaidService(ModuleSettings, Gw2ApiManager, Logger);
+            Gw2ApiService = new Gw2ApiService(Gw2ApiManager, Logger);
+            KpMeService = new KpMeService(ModuleSettings, Logger);
+            BusinessService = new BusinessService(ModuleSettings, Gw2ApiService, KpMeService);
 
             Gw2ApiManager.SubtokenUpdated += OnApiSubTokenUpdated;
 
@@ -81,13 +85,13 @@ namespace KpRefresher
 
         private async void OnApiSubTokenUpdated(object sender, ValueEventArgs<IEnumerable<TokenPermission>> e)
         {
-            await RaidService.InitBaseRaidClears();
+            await BusinessService.RefreshBaseData();
         }
 
         protected override async Task LoadAsync()
         {
-            await RaidService.InitBaseRaidClears();
-            await RaidService.UpdateLastRefresh();
+            //TODO: check in useful here
+            //await BusinessService.RefreshBaseData();
 
             //FEATURE CHANGE MAP
             //GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
@@ -102,7 +106,7 @@ namespace KpRefresher
                 new Rectangle(50, 26, 893, 681),
                 _cornerIconTexture,
                 ModuleSettings,
-                RaidService);
+                BusinessService);
 
             //Resize the window to prevent background texture to overflow
             _mainWindow.Size = new Point(500, 700);
@@ -175,21 +179,29 @@ namespace KpRefresher
             var refeshKpMenuItem = new ContextMenuStripItem("Refresh Killproof.me data");
             refeshKpMenuItem.Click += async (s, e) =>
             {
-                await RaidService.RefreshKillproofMe();
+                await BusinessService.RefreshKillproofMe();
+            };
+
+            var copyKpToClipboard = new ContextMenuStripItem("Copy Killproof.me Id to clipboard");
+            copyKpToClipboard.Click += (s, e) =>
+            {
+                BusinessService.CopyKpToClipboard();
             };
 
             _cornerIconContextMenu.AddMenuItem(refeshKpMenuItem);
+            _cornerIconContextMenu.AddMenuItem(copyKpToClipboard);
+
             _cornerIcon.Menu = _cornerIconContextMenu;
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (RaidService.RefreshScheduled)
+            if (BusinessService.RefreshScheduled)
             {
-                RaidService.ScheduleTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                if (RaidService.ScheduleTimer > RaidService.ScheduleTimerEndValue)
+                BusinessService.ScheduleTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (BusinessService.ScheduleTimer > BusinessService.ScheduleTimerEndValue)
                 {
-                    _ = RaidService.RefreshKillproofMe(true);
+                    _ = BusinessService.RefreshKillproofMe(true);
                 }
             }
         }

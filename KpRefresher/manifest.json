@@ -26,6 +26,14 @@
     "progression": {
       "optional": false,
       "details": "Needed to check for completed events."
+    },
+    "inventories": {
+      "optional": false,
+      "details": "Needed to check for stored killproof."
+    },
+    "characters": {
+      "optional": false,
+      "details": "Needed to check for stored killproof."
     }
   }
 }

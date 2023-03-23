@@ -12,14 +12,14 @@ namespace KpRefresher.UI.Views
     public class KpRefresherWindow : StandardWindow
     {
         private ModuleSettings _moduleSettings { get; set; }
-        private RaidService _raidService { get; set; }
+        private BusinessService _businessService { get; set; }
 
         private LoadingSpinner _loadingSpinner { get; set; }
         private Panel _notificationsContainer { get; set; }
         private Label _notificationLabel { get; set; }
 
         public KpRefresherWindow(AsyncTexture2D background, Rectangle windowRegion, Rectangle contentRegion,
-            AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, RaidService raidService) : base(background, windowRegion, contentRegion)
+            AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, BusinessService businessService) : base(background, windowRegion, contentRegion)
         {
             Parent = GameService.Graphics.SpriteScreen;
             Title = " Kp Refresher";
@@ -28,7 +28,7 @@ namespace KpRefresher.UI.Views
             SavesPosition = true;
 
             _moduleSettings = moduleSettings;
-            _raidService = raidService;
+            _businessService = businessService;
 
             //Panel testPanel = new()
             //{
@@ -80,6 +80,7 @@ namespace KpRefresher.UI.Views
                 AutoSizeWidth = true,
                 Height = 25,
                 Text = "Killproof.me Id : ",
+                BasicTooltipText = "If empty, refresh will be made with the GW2 account name (e.g. Quaggan.1234)"
             };
 
             TextBox kpIdTextBox = new()
@@ -91,7 +92,7 @@ namespace KpRefresher.UI.Views
             kpIdTextBox.EnterPressed += async (s, e) =>
             {
                 _moduleSettings.KpMeId.Value = kpIdTextBox.Text;
-                await _raidService.UpdateLastRefresh();
+                await _businessService.UpdateLastRefresh();
             };
             #endregion KpId
 
@@ -188,7 +189,7 @@ namespace KpRefresher.UI.Views
             };
             _loadingSpinner.MouseEntered += (s, e) =>
             {
-                _loadingSpinner.BasicTooltipText = $"Next retry in {Math.Round(_raidService.GetNextRetryTimer() / 60 / 1000)} minutes.";
+                _loadingSpinner.BasicTooltipText = $"Next retry in {Math.Round(_businessService.GetNextScheduledTimer() / 60 / 1000)} minutes.";
             };
             #endregion Spinner
             #endregion Line1
@@ -224,7 +225,7 @@ namespace KpRefresher.UI.Views
                 Parent = actionLine2Container,
                 Size = new Point(150, 30),
                 Text = "Show current KP",
-                BasicTooltipText = "Displays current KP stored in your inventory according to killproof.me",
+                BasicTooltipText = "Scan your bank, shared slots and characters and displays current KP according GW2 API.\nEvery kp in the list is able to be scanned by killproof.me, if not already scanned. You can use this feature to check if a newly opened chest is already visible for killproof.me.",
             };
             displayCurrentKp.Click += async (s, e) =>
             {
@@ -272,25 +273,25 @@ namespace KpRefresher.UI.Views
 
             _loadingSpinner.Visible = true;
 
-            await _raidService.RefreshKillproofMe();
+            await _businessService.RefreshKillproofMe();
 
             //Keeps the spinner visible in refresh in auto-retry
-            _loadingSpinner.Visible = _raidService.RefreshScheduled;
+            _loadingSpinner.Visible = _businessService.RefreshScheduled;
         }
 
         private async Task DisplayRaidDifference()
         {
             ShowInsideNotification("Loading ...", true);
 
-            var data = await _raidService.GetDelta();
+            var data = await _businessService.GetDelta();
             ShowInsideNotification(data, true);
         }
 
         private void StopRetry()
         {
-            if (_raidService.RefreshScheduled)
+            if (_businessService.RefreshScheduled)
             {
-                _raidService.CancelSchedule();
+                _businessService.CancelSchedule();
                 ShowInsideNotification("Auto-retry disabled !");
             }
             else
@@ -325,7 +326,7 @@ namespace KpRefresher.UI.Views
         {
             ShowInsideNotification("Loading ...", true);
 
-            var data = await _raidService.DisplayCurrentKp();
+            var data = await _businessService.DisplayCurrentKp();
             ShowInsideNotification(data, true);
         }
 
