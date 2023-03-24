@@ -1,4 +1,6 @@
 ﻿using Blish_HUD.Controls;
+using KpRefresher.Domain;
+using KpRefresher.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,7 @@ namespace KpRefresher.Services
         private readonly Gw2ApiService _gw2ApiService;
         private readonly KpMeService _kpMeService;
 
-        private static readonly List<string> _raidBossNames = new() { "sabetha", "matthias", "xera", "deimos", "voice_in_the_void", "qadim", "qadim_the_peerless" };
+        private List<RaidBoss> _raidBossNames { get; set; }
 
         private DateTime? _lastRefresh { get; set; }
         private DateTime? _refreshAvailable => _lastRefresh?.AddMinutes(61);
@@ -31,6 +33,10 @@ namespace KpRefresher.Services
             _moduleSettings = moduleSettings;
             _gw2ApiService = gw2ApiService;
             _kpMeService = kpMeService;
+
+            _raidBossNames = Enum.GetValues(typeof(RaidBoss))
+                            .Cast<RaidBoss>()
+                            .ToList();
         }
 
         /// <summary>
@@ -45,7 +51,7 @@ namespace KpRefresher.Services
             //Detects if we have a new final boss clear
             foreach (var bossName in _raidBossNames)
             {
-                if (!_gw2ApiService.BaseRaidClears.Contains(bossName) && clears.Contains(bossName))
+                if (!_gw2ApiService.BaseRaidClears.Contains(bossName.ToString()) && clears.Contains(bossName.ToString()))
                 {
                     hasNewClear = true;
                     break;
@@ -111,7 +117,7 @@ namespace KpRefresher.Services
                 }
                 else
                 {
-                     ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                    ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
                 }
             }
         }
@@ -139,7 +145,22 @@ namespace KpRefresher.Services
 
             var result = clears.Where(p => !_gw2ApiService.BaseRaidClears.Any(p2 => p2 == p));
 
-            string msgToDisplay = !result.Any() ? "No new kill." : $"New kills :\n\n{string.Join("\n", result)}";
+            string msgToDisplay;
+            if (!result.Any())
+            {
+                msgToDisplay = "No new kill.";
+            }
+            else
+            {
+                msgToDisplay = "New kills :\n\n";
+                foreach (var res in result)
+                {
+                    if (Enum.TryParse(res, out RaidBoss raidBoss))
+                        msgToDisplay = $"{msgToDisplay}{raidBoss.GetDisplayName()}\n";
+                    else
+                        msgToDisplay = $"{msgToDisplay}{res}\n";
+                }
+            }
 
             return msgToDisplay;
         }

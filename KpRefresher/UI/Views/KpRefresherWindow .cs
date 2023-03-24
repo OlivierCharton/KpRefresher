@@ -180,7 +180,6 @@ namespace KpRefresher.UI.Views
                 Parent = actionContainer,
                 WidthSizingMode = SizingMode.Fill,
                 HeightSizingMode = SizingMode.AutoSize,
-                //OuterControlPadding = new(5),
                 ControlPadding = new(3, 3),
                 FlowDirection = ControlFlowDirection.SingleLeftToRight
             };
@@ -191,7 +190,7 @@ namespace KpRefresher.UI.Views
                 Parent = actionLine1Container,
                 Size = new Point(150, 30),
                 Text = "Refresh killproof.me",
-                BasicTooltipText = "Attempts to refresh killproof.me; if it fails, will try again 5 minutes later",
+                BasicTooltipText = "Attempts to refresh killproof.me\nIf auto-retry is enable, a new refresh will be scheduled in case of failure",
             };
             refreshRaidClears.Click += async (s, e) =>
             {
@@ -205,7 +204,7 @@ namespace KpRefresher.UI.Views
                 Parent = actionLine1Container,
                 Size = new Point(130, 30),
                 Text = "Stop retry",
-                BasicTooltipText = "Resets any pending refresh",
+                BasicTooltipText = "Resets any scheduled refresh",
             };
             stopRetry.Click += (s, e) =>
             {
@@ -233,7 +232,6 @@ namespace KpRefresher.UI.Views
                 Parent = actionContainer,
                 WidthSizingMode = SizingMode.Fill,
                 HeightSizingMode = SizingMode.AutoSize,
-                //OuterControlPadding = new(5),
                 ControlPadding = new(3, 3),
                 FlowDirection = ControlFlowDirection.SingleLeftToRight
             };
