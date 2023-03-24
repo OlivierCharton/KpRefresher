@@ -20,6 +20,15 @@ namespace KpRefresher.Extensions
                             .GetCustomAttribute<TAttribute>();
         }
 
+        public static bool HasAttribute<TAttribute>(this Enum enumValue)
+                where TAttribute : Attribute
+        {
+            return enumValue.GetType()
+                            .GetMember(enumValue.ToString())
+                            .First()
+                            .GetCustomAttribute<TAttribute>() != null;
+        }
+
         public static string GetDisplayName(this Enum enumValue)
         {
             return enumValue.GetType()

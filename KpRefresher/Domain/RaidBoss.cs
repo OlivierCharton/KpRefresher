@@ -10,14 +10,14 @@ namespace KpRefresher.Domain
         spirit_woods,
         [Display(Name = "Gorseval")]
         gorseval,
-        [Display(Name = "Sabetha")]
+        [Display(Name = "Sabetha"), FinalBoss]
         sabetha,
 
         [Display(Name = "Slothasor")]
         slothasor,
         [Display(Name = "Bandit Trio")]
         bandit_trio,
-        [Display(Name = "Matthias")]
+        [Display(Name = "Matthias"), FinalBoss]
         matthias,
 
         [Display(Name = "Escort")]
@@ -26,7 +26,7 @@ namespace KpRefresher.Domain
         keep_construct,
         [Display(Name = "Twisted Castle")]
         twisted_castle,
-        [Display(Name = "Xera")]
+        [Display(Name = "Xera"), FinalBoss]
         xera,
 
         [Display(Name = "Cairn")]
@@ -35,7 +35,7 @@ namespace KpRefresher.Domain
         mursaat_overseer,
         [Display(Name = "Samarog")]
         samarog,
-        [Display(Name = "Deimos")]
+        [Display(Name = "Deimos"), FinalBoss]
         deimos,
 
         [Display(Name = "Desmina")]
@@ -44,14 +44,14 @@ namespace KpRefresher.Domain
         river_of_souls,
         [Display(Name = "Statues of Grenth")]
         statues_of_grenth,
-        [Display(Name = "Dhuum")]
+        [Display(Name = "Dhuum"), FinalBoss]
         voice_in_the_void,
 
         [Display(Name = "Conjured Amalgamate")]
         conjured_amalgamate,
         [Display(Name = "Twin Largos")]
         twin_largos,
-        [Display(Name = "Qadim")]
+        [Display(Name = "Qadim"), FinalBoss]
         qadim,
 
         [Display(Name = "Gate")]
@@ -60,7 +60,7 @@ namespace KpRefresher.Domain
         adina,
         [Display(Name = "Sabir")]
         sabir,
-        [Display(Name = "Qadim the Peerless")]
+        [Display(Name = "Qadim the Peerless"), FinalBoss]
         qadim_the_peerless
     }
 }

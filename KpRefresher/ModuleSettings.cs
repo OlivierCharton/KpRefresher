@@ -6,8 +6,11 @@ namespace KpRefresher
     {
         public SettingEntry<string> KpMeId { get; set; }
 
-        public SettingEntry<bool> ShowScheduleNotification { get; set; }
         public SettingEntry<bool> EnableAutoRetry { get; set; }
+        public SettingEntry<bool> ShowScheduleNotification { get; set; }
+        public SettingEntry<bool> EnableRefreshOnKill { get; set; }
+        public SettingEntry<bool> RefreshOnKillOnlyBoss { get; set; }
+        
 
 
         public ModuleSettings(SettingCollection settings)
@@ -15,8 +18,10 @@ namespace KpRefresher
             SettingCollection internalSettings = settings.AddSubCollection("Internal");
 
             KpMeId = internalSettings.DefineSetting(nameof(KpMeId), string.Empty);
-            ShowScheduleNotification = internalSettings.DefineSetting(nameof(ShowScheduleNotification), true);
             EnableAutoRetry = internalSettings.DefineSetting(nameof(EnableAutoRetry), true);
+            ShowScheduleNotification = internalSettings.DefineSetting(nameof(ShowScheduleNotification), true);
+            EnableRefreshOnKill = internalSettings.DefineSetting(nameof(EnableRefreshOnKill), true);
+            RefreshOnKillOnlyBoss = internalSettings.DefineSetting(nameof(RefreshOnKillOnlyBoss), true);
         }
     }
 }

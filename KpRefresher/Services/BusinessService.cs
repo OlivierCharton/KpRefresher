@@ -45,20 +45,37 @@ namespace KpRefresher.Services
         /// <returns><see langword="true"/> if a new boss has been killed, <see langword="false"/> otherwise.</returns>
         public async Task<bool> CheckRaidClears()
         {
-            bool hasNewClear = false;
             var clears = await _gw2ApiService.GetRaidClears();
 
+            //No data
+            if (clears == null || _gw2ApiService.BaseRaidClears == null)
+                return false;
+
+            //No new clear
+            var result = clears.Where(p => !_gw2ApiService.BaseRaidClears.Any(p2 => p2 == p));
+            if (!result.Any())
+                return false;
+
+            //New clear and no check for final boss
+            if (!_moduleSettings.RefreshOnKillOnlyBoss.Value)
+                return true;
+
             //Detects if we have a new final boss clear
-            foreach (var bossName in _raidBossNames)
+            foreach (var res in result)
             {
-                if (!_gw2ApiService.BaseRaidClears.Contains(bossName.ToString()) && clears.Contains(bossName.ToString()))
+                if (Enum.TryParse(res, out RaidBoss raidBoss))
                 {
-                    hasNewClear = true;
-                    break;
+                    if (raidBoss.HasAttribute<FinalBossAttribute>())
+                        return true;
+                }
+                else
+                {
+                    //Boss unknown - what to do ? For now it's a joker
+                    return true;
                 }
             }
 
-            return hasNewClear;
+            return false;
         }
 
         /// <summary>
@@ -92,6 +109,16 @@ namespace KpRefresher.Services
                 }
 
                 return;
+            }
+
+            if (_moduleSettings.EnableRefreshOnKill.Value)
+            {
+                var hasNewClear = await CheckRaidClears();
+                if (!hasNewClear)
+                {
+                    ScreenNotification.ShowNotification("[KpRefresher] No new kill, refresh aborted !", ScreenNotification.NotificationType.Info);
+                    return;
+                }
             }
 
             var refreshed = await _kpMeService.RefreshApi();

@@ -1,5 +1,3 @@
-﻿- Setting to refresh only if boss clear
-- Setting to allow all boss in clear detection
-- Setting to refresh auto on raid map leave
+﻿- Setting to refresh auto on raid map leave
 
 - Strike support

@@ -18,6 +18,7 @@ namespace KpRefresher.UI.Views
         private Panel _notificationsContainer { get; set; }
         private Label _notificationLabel { get; set; }
         private Checkbox _showAutoRetryNotificationCheckbox { get; set; }
+        private Checkbox _refreshOnKillOnlyBossCheckbox { get; set; }
 
         public KpRefresherWindow(AsyncTexture2D background, Rectangle windowRegion, Rectangle contentRegion,
             AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, BusinessService businessService) : base(background, windowRegion, contentRegion)
@@ -169,6 +170,79 @@ namespace KpRefresher.UI.Views
             };
             #endregion autoRetryNotification
             #endregion Auto retry
+
+            #region Refresh only if boss clear
+            FlowPanel refreshOnKillContainer = new()
+            {
+                Parent = configContainer,
+                WidthSizingMode = SizingMode.Fill,
+                HeightSizingMode = SizingMode.AutoSize,
+                ControlPadding = new(20, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight
+            };
+
+            #region refreshOnKillEnable
+            FlowPanel refreshOnKillEnableContainer = new()
+            {
+                Parent = refreshOnKillContainer,
+                WidthSizingMode = SizingMode.AutoSize,
+                HeightSizingMode = SizingMode.AutoSize,
+                ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight
+            };
+
+            Label refreshOnKillEnableLabel = new()
+            {
+                Parent = refreshOnKillEnableContainer,
+                AutoSizeWidth = true,
+                Height = 25,
+                Text = "Condition refresh to clear : ",
+                BasicTooltipText = "Only allow refresh if a clear was made and is visible by GW2 API",
+            };
+
+            Checkbox refreshOnKillEnableCheckbox = new()
+            {
+                Parent = refreshOnKillEnableContainer,
+                Checked = _moduleSettings.EnableRefreshOnKill.Value
+            };
+            refreshOnKillEnableCheckbox.CheckedChanged += (s, e) =>
+            {
+                _moduleSettings.EnableRefreshOnKill.Value = refreshOnKillEnableCheckbox.Checked;
+                _refreshOnKillOnlyBossCheckbox.Enabled = refreshOnKillEnableCheckbox.Checked;
+            };
+            #endregion refreshOnKillEnable
+
+            #region refreshOnKillOnlyBossNotification
+            FlowPanel refreshOnKillOnlyBossContainer = new()
+            {
+                Parent = refreshOnKillContainer,
+                WidthSizingMode = SizingMode.AutoSize,
+                HeightSizingMode = SizingMode.AutoSize,
+                ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight
+            };
+
+            Label refreshOnKillOnlyBossLabel = new()
+            {
+                Parent = refreshOnKillOnlyBossContainer,
+                AutoSizeWidth = true,
+                Height = 25,
+                Text = "Refresh on final boss kill : ",
+                BasicTooltipText = "Only refresh if a final raid wing boss was cleared (e.g. Sabetha)",
+            };
+
+            _refreshOnKillOnlyBossCheckbox = new Checkbox()
+            {
+                Parent = refreshOnKillOnlyBossContainer,
+                Checked = _moduleSettings.RefreshOnKillOnlyBoss.Value,
+                Enabled = _moduleSettings.EnableRefreshOnKill.Value
+            };
+            _refreshOnKillOnlyBossCheckbox.CheckedChanged += (s, e) =>
+            {
+                _moduleSettings.RefreshOnKillOnlyBoss.Value = _refreshOnKillOnlyBossCheckbox.Checked;
+            };
+            #endregion refreshOnKillOnlyBoss
+            #endregion Refresh only if boss clear
 
             #endregion Config
 
