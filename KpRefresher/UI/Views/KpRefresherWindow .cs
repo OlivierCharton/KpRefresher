@@ -97,11 +97,21 @@ namespace KpRefresher.UI.Views
             };
             #endregion KpId
 
-            #region autoRetryEnable
-            var autoRetryEnableContainer = new FlowPanel()
+            #region Auto retry
+            var autoRetryContainer = new FlowPanel()
             {
                 Parent = configContainer,
                 WidthSizingMode = SizingMode.Fill,
+                HeightSizingMode = SizingMode.AutoSize,
+                ControlPadding = new(20, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight
+            };
+
+            #region autoRetryEnable
+            var autoRetryEnableContainer = new FlowPanel()
+            {
+                Parent = autoRetryContainer,
+                WidthSizingMode = SizingMode.AutoSize,
                 HeightSizingMode = SizingMode.AutoSize,
                 ControlPadding = new(3, 3),
                 FlowDirection = ControlFlowDirection.SingleLeftToRight
@@ -131,8 +141,8 @@ namespace KpRefresher.UI.Views
             #region autoRetryNotification
             FlowPanel autoRetryNotificationContainer = new()
             {
-                Parent = configContainer,
-                WidthSizingMode = SizingMode.Fill,
+                Parent = autoRetryContainer,
+                WidthSizingMode = SizingMode.AutoSize,
                 HeightSizingMode = SizingMode.AutoSize,
                 ControlPadding = new(3, 3),
                 FlowDirection = ControlFlowDirection.SingleLeftToRight
@@ -158,6 +168,8 @@ namespace KpRefresher.UI.Views
                 _moduleSettings.ShowScheduleNotification.Value = _showAutoRetryNotificationCheckbox.Checked;
             };
             #endregion autoRetryNotification
+            #endregion Auto retry
+
             #endregion Config
 
             #region Actions
