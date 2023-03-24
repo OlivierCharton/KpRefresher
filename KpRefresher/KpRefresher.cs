@@ -12,7 +12,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Threading.Tasks;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -35,7 +34,7 @@ namespace KpRefresher
         public static Gw2ApiService Gw2ApiService { get; private set; }
         public static KpMeService KpMeService { get; private set; }
         public static BusinessService BusinessService { get; private set; }
-        
+
         #region Service Managers
 
         internal SettingsManager SettingsManager => this.ModuleParameters.SettingsManager;
@@ -188,8 +187,24 @@ namespace KpRefresher
                 BusinessService.CopyKpToClipboard();
             };
 
+            _notificationNextRefreshAvailable = new ContextMenuStripItem("Notify when refresh available");
+            _notificationNextRefreshAvailable.Click += (s, e) =>
+            {
+                if (!BusinessService.NotificationNextRefreshAvailabledActivated)
+                {
+                    BusinessService.ActivateNotificationNextRefreshAvailable();
+                    _notificationNextRefreshAvailable.Text = "Cancel notification for next refresh";
+                }
+                else
+                {
+                    BusinessService.ResetNotificationNextRefreshAvailable();
+                    _notificationNextRefreshAvailable.Text = "Notify when refresh available";
+                }
+            };
+
             _cornerIconContextMenu.AddMenuItem(refeshKpMenuItem);
             _cornerIconContextMenu.AddMenuItem(copyKpToClipboard);
+            _cornerIconContextMenu.AddMenuItem(_notificationNextRefreshAvailable);
 
             _cornerIcon.Menu = _cornerIconContextMenu;
         }
@@ -202,6 +217,16 @@ namespace KpRefresher
                 if (BusinessService.ScheduleTimer > BusinessService.ScheduleTimerEndValue)
                 {
                     _ = BusinessService.RefreshKillproofMe(true);
+                }
+            }
+
+            if (BusinessService.NotificationNextRefreshAvailabledActivated)
+            {
+                BusinessService.NotificationNextRefreshAvailabledTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (BusinessService.NotificationNextRefreshAvailabledTimer > BusinessService.NotificationNextRefreshAvailabledTimerEndValue)
+                {
+                    BusinessService.NextRefreshIsAvailable();
+                    _notificationNextRefreshAvailable.Text = "Notify when refresh available";
                 }
             }
         }
@@ -234,5 +259,6 @@ namespace KpRefresher
         private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
         private KpRefresherWindow _mainWindow;
+        private ContextMenuStripItem _notificationNextRefreshAvailable;
     }
 }

@@ -16,11 +16,15 @@ namespace KpRefresher.Services
         private static readonly List<string> _raidBossNames = new() { "sabetha", "matthias", "xera", "deimos", "voice_in_the_void", "qadim", "qadim_the_peerless" };
 
         private DateTime? _lastRefresh { get; set; }
-        private DateTime? _refreshAvailable => _lastRefresh?.AddHours(1);
+        private DateTime? _refreshAvailable => _lastRefresh?.AddMinutes(61);
 
         public bool RefreshScheduled { get; set; }
         public double ScheduleTimer { get; set; }
         public double ScheduleTimerEndValue { get; set; }
+
+        public bool NotificationNextRefreshAvailabledActivated { get; set; }
+        public double NotificationNextRefreshAvailabledTimer { get; set; }
+        public double NotificationNextRefreshAvailabledTimerEndValue { get; set; }
 
         public BusinessService(ModuleSettings moduleSettings, Gw2ApiService gw2ApiService, KpMeService kpMeService)
         {
@@ -67,7 +71,7 @@ namespace KpRefresher.Services
             {
                 //Rounding up is a safety mesure to prevent early refresh
                 var minutesUntilRefreshAvailable = Math.Ceiling((_refreshAvailable.Value - DateTime.UtcNow).TotalMinutes);
-                ScheduleRefresh(minutesUntilRefreshAvailable + 1);
+                ScheduleRefresh(minutesUntilRefreshAvailable);
 
                 if (!fromUpdateLoop || _moduleSettings.ShowScheduleNotification.Value)
                     ScreenNotification.ShowNotification($"[KpRefresher] Next refresh available in {minutesUntilRefreshAvailable} minutes\nA new try has been scheduled.", ScreenNotification.NotificationType.Warning);
@@ -181,6 +185,40 @@ namespace KpRefresher.Services
                 ScreenNotification.ShowNotification("[KpRefresher] Id copied to clipboard !", ScreenNotification.NotificationType.Info);
             }
         }
+
+        #region Notification next refresh available
+        public void ActivateNotificationNextRefreshAvailable()
+        {
+            if (DateTime.UtcNow > _refreshAvailable.Value)
+            {
+                ScreenNotification.ShowNotification($"[KpRefresher] Next refresh is available !", ScreenNotification.NotificationType.Info);
+                return;
+            }
+
+            //Rounding up is a safety mesure to prevent early refresh
+            var minutesUntilRefreshAvailable = Math.Ceiling((_refreshAvailable.Value - DateTime.UtcNow).TotalMinutes);
+
+            NotificationNextRefreshAvailabledActivated = true;
+            NotificationNextRefreshAvailabledTimer = 0;
+            NotificationNextRefreshAvailabledTimerEndValue = minutesUntilRefreshAvailable * 60 * 1000;
+
+            ScreenNotification.ShowNotification($"[KpRefresher] You will be notified when next refresh is available,\nin approx. {minutesUntilRefreshAvailable -1} minutes.", ScreenNotification.NotificationType.Info);
+        }
+
+        public void NextRefreshIsAvailable()
+        {
+            ScreenNotification.ShowNotification($"[KpRefresher] Next refresh is available !", ScreenNotification.NotificationType.Info);
+
+            ResetNotificationNextRefreshAvailable();
+        }
+
+        public void ResetNotificationNextRefreshAvailable()
+        {
+            NotificationNextRefreshAvailabledActivated = false;
+            NotificationNextRefreshAvailabledTimer = 0;
+            NotificationNextRefreshAvailabledTimerEndValue = double.MaxValue;
+        }
+        #endregion Notification next refresh available
 
         /// <summary>
         /// Unused, developed by mistake

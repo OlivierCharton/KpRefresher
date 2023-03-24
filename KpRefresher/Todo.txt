@@ -1,1 +1,1 @@
-﻿- Option to have a reminder when refresh is ready
+﻿- Setting to disable auto retry
