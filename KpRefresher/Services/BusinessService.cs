@@ -71,10 +71,19 @@ namespace KpRefresher.Services
             {
                 //Rounding up is a safety mesure to prevent early refresh
                 var minutesUntilRefreshAvailable = Math.Ceiling((_refreshAvailable.Value - DateTime.UtcNow).TotalMinutes);
-                ScheduleRefresh(minutesUntilRefreshAvailable);
 
-                if (!fromUpdateLoop || _moduleSettings.ShowScheduleNotification.Value)
-                    ScreenNotification.ShowNotification($"[KpRefresher] Next refresh available in {minutesUntilRefreshAvailable} minutes\nA new try has been scheduled.", ScreenNotification.NotificationType.Warning);
+                string baseMsg = $"[KpRefresher] Next refresh available in {minutesUntilRefreshAvailable} minutes";
+                if (_moduleSettings.EnableAutoRetry.Value)
+                {
+                    ScheduleRefresh(minutesUntilRefreshAvailable);
+
+                    if (!fromUpdateLoop || _moduleSettings.ShowScheduleNotification.Value)
+                        ScreenNotification.ShowNotification($"{baseMsg}\nA new try has been scheduled.", ScreenNotification.NotificationType.Warning);
+                }
+                else
+                {
+                    ScreenNotification.ShowNotification(baseMsg, ScreenNotification.NotificationType.Warning);
+                }
 
                 return;
             }
@@ -93,10 +102,17 @@ namespace KpRefresher.Services
                 //Although we checked refresh date, we couldn't update, retry later
                 await UpdateLastRefresh(); //Necessary ?
 
-                ScheduleRefresh();
+                if (_moduleSettings.EnableAutoRetry.Value)
+                {
+                    ScheduleRefresh();
 
-                if (_moduleSettings.ShowScheduleNotification.Value)
-                    ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available\nAuto-retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
+                    if (_moduleSettings.ShowScheduleNotification.Value)
+                        ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available\nAuto-retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
+                }
+                else
+                {
+                     ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                }
             }
         }
 
@@ -178,7 +194,7 @@ namespace KpRefresher.Services
         public void CopyKpToClipboard()
         {
             if (string.IsNullOrWhiteSpace(_moduleSettings.KpMeId.Value))
-                ScreenNotification.ShowNotification("[KpRefresher] No Kp Id set.", ScreenNotification.NotificationType.Info);
+                ScreenNotification.ShowNotification("[KpRefresher] No Kp Id set.", ScreenNotification.NotificationType.Warning);
             else
             {
                 Clipboard.SetText($"KpMe id : {_moduleSettings.KpMeId.Value}");
@@ -202,7 +218,7 @@ namespace KpRefresher.Services
             NotificationNextRefreshAvailabledTimer = 0;
             NotificationNextRefreshAvailabledTimerEndValue = minutesUntilRefreshAvailable * 60 * 1000;
 
-            ScreenNotification.ShowNotification($"[KpRefresher] You will be notified when next refresh is available,\nin approx. {minutesUntilRefreshAvailable -1} minutes.", ScreenNotification.NotificationType.Info);
+            ScreenNotification.ShowNotification($"[KpRefresher] You will be notified when next refresh is available,\nin approx. {minutesUntilRefreshAvailable - 1} minutes.", ScreenNotification.NotificationType.Info);
         }
 
         public void NextRefreshIsAvailable()

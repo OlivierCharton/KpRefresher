@@ -17,6 +17,7 @@ namespace KpRefresher.UI.Views
         private LoadingSpinner _loadingSpinner { get; set; }
         private Panel _notificationsContainer { get; set; }
         private Label _notificationLabel { get; set; }
+        private Checkbox _showAutoRetryNotificationCheckbox { get; set; }
 
         public KpRefresherWindow(AsyncTexture2D background, Rectangle windowRegion, Rectangle contentRegion,
             AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, BusinessService businessService) : base(background, windowRegion, contentRegion)
@@ -96,8 +97,39 @@ namespace KpRefresher.UI.Views
             };
             #endregion KpId
 
+            #region autoRetryEnable
+            var autoRetryEnableContainer = new FlowPanel()
+            {
+                Parent = configContainer,
+                WidthSizingMode = SizingMode.Fill,
+                HeightSizingMode = SizingMode.AutoSize,
+                ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight
+            };
+
+            Label autoRetryEnableLabel = new()
+            {
+                Parent = autoRetryEnableContainer,
+                AutoSizeWidth = true,
+                Height = 25,
+                Text = "Enable auto-retry : ",
+                BasicTooltipText = "Schedule automatically a new try when killproof.me was not available for a refresh",
+            };
+
+            Checkbox autoRetryEnableCheckbox = new()
+            {
+                Parent = autoRetryEnableContainer,
+                Checked = _moduleSettings.EnableAutoRetry.Value
+            };
+            autoRetryEnableCheckbox.CheckedChanged += (s, e) =>
+            {
+                _moduleSettings.EnableAutoRetry.Value = autoRetryEnableCheckbox.Checked;
+                _showAutoRetryNotificationCheckbox.Enabled= autoRetryEnableCheckbox.Checked;
+            };
+            #endregion autoRetryEnable
+
             #region autoRetryNotification
-            var autoRetryNotificationContainer = new FlowPanel()
+            FlowPanel autoRetryNotificationContainer = new()
             {
                 Parent = configContainer,
                 WidthSizingMode = SizingMode.Fill,
@@ -112,17 +144,18 @@ namespace KpRefresher.UI.Views
                 AutoSizeWidth = true,
                 Height = 25,
                 Text = "Show auto-retry notifications : ",
-                BasicTooltipText = "Display a notification when killproof.me was not available for a refresh",
+                BasicTooltipText = "Display notification when retry is scheduled",
             };
 
-            Checkbox showAutoRetryNotificationCheckbox = new()
+            _showAutoRetryNotificationCheckbox = new Checkbox()
             {
                 Parent = autoRetryNotificationContainer,
-                Checked = _moduleSettings.ShowScheduleNotification.Value
+                Checked = _moduleSettings.ShowScheduleNotification.Value,
+                Enabled = _moduleSettings.EnableAutoRetry.Value
             };
-            showAutoRetryNotificationCheckbox.CheckedChanged += (s, e) =>
+            _showAutoRetryNotificationCheckbox.CheckedChanged += (s, e) =>
             {
-                _moduleSettings.ShowScheduleNotification.Value = showAutoRetryNotificationCheckbox.Checked;
+                _moduleSettings.ShowScheduleNotification.Value = _showAutoRetryNotificationCheckbox.Checked;
             };
             #endregion autoRetryNotification
             #endregion Config
