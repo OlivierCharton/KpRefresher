@@ -19,6 +19,7 @@ namespace KpRefresher.UI.Views
         private Label _notificationLabel { get; set; }
         private Checkbox _showAutoRetryNotificationCheckbox { get; set; }
         private Checkbox _refreshOnKillOnlyBossCheckbox { get; set; }
+        private TextBox _delayBeforeRefreshOnMapChangeInput { get; set; }
 
         public KpRefresherWindow(AsyncTexture2D background, Rectangle windowRegion, Rectangle contentRegion,
             AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, BusinessService businessService) : base(background, windowRegion, contentRegion)
@@ -135,7 +136,7 @@ namespace KpRefresher.UI.Views
             autoRetryEnableCheckbox.CheckedChanged += (s, e) =>
             {
                 _moduleSettings.EnableAutoRetry.Value = autoRetryEnableCheckbox.Checked;
-                _showAutoRetryNotificationCheckbox.Enabled= autoRetryEnableCheckbox.Checked;
+                _showAutoRetryNotificationCheckbox.Enabled = autoRetryEnableCheckbox.Checked;
             };
             #endregion autoRetryEnable
 
@@ -244,6 +245,95 @@ namespace KpRefresher.UI.Views
             #endregion refreshOnKillOnlyBoss
             #endregion Refresh only if boss clear
 
+            #region Refresh on map change
+            FlowPanel refreshOnMapChangeContainer = new()
+            {
+                Parent = configContainer,
+                WidthSizingMode = SizingMode.Fill,
+                HeightSizingMode = SizingMode.AutoSize,
+                ControlPadding = new(20, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight
+            };
+
+            #region refreshOnMapChangeEnable
+            FlowPanel refreshOnMapChangeEnableContainer = new()
+            {
+                Parent = refreshOnMapChangeContainer,
+                WidthSizingMode = SizingMode.AutoSize,
+                HeightSizingMode = SizingMode.AutoSize,
+                ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight
+            };
+
+            Label refreshOnMapChangeEnableLabel = new()
+            {
+                Parent = refreshOnMapChangeEnableContainer,
+                AutoSizeWidth = true,
+                Height = 25,
+                Text = "Refresh on map change : ",
+                BasicTooltipText = "Schedule a refresh when leaving a raid or strike map",
+            };
+
+            Checkbox refreshOnMapChangeEnableCheckbox = new()
+            {
+                Parent = refreshOnMapChangeEnableContainer,
+                Checked = _moduleSettings.RefreshOnMapChange.Value
+            };
+            refreshOnMapChangeEnableCheckbox.CheckedChanged += (s, e) =>
+            {
+                _moduleSettings.RefreshOnMapChange.Value = refreshOnMapChangeEnableCheckbox.Checked;
+                //_delayBeforeRefreshOnMapChangeInput.Enabled = refreshOnMapChangeEnableCheckbox.Checked;
+            };
+            #endregion refreshOnMapChangeEnable
+
+            #region DelayBeforeRefreshOnMapChange
+            FlowPanel delayBeforeRefreshOnMapChangeContainer = new()
+            {
+                Parent = refreshOnMapChangeContainer,
+                WidthSizingMode = SizingMode.AutoSize,
+                HeightSizingMode = SizingMode.AutoSize,
+                ControlPadding = new(3, 3),
+                FlowDirection = ControlFlowDirection.SingleLeftToRight//,
+                //Enabled = false,
+            };
+
+            Label delayBeforeRefreshOnMapChangeLabel = new()
+            {
+                Parent = delayBeforeRefreshOnMapChangeContainer,
+                AutoSizeWidth = true,
+                Height = 25,
+                Text = "Delay before refresh : ",
+                BasicTooltipText = "Time in minutes before refresh is triggered after map change (between 1 and 60)",
+            };
+
+            _delayBeforeRefreshOnMapChangeInput = new TextBox()
+            {
+                Parent = delayBeforeRefreshOnMapChangeContainer,
+                Text = _moduleSettings.DelayBeforeRefreshOnMapChange.Value.ToString()//,
+                //Enabled = _moduleSettings.RefreshOnMapChange.Value,
+            };
+            _delayBeforeRefreshOnMapChangeInput.TextChanged += (s, e) =>
+            {
+                _delayBeforeRefreshOnMapChangeInput.Text = _delayBeforeRefreshOnMapChangeInput.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(_delayBeforeRefreshOnMapChangeInput.Text))
+                {
+                    _moduleSettings.DelayBeforeRefreshOnMapChange.Value = 1;
+                }
+                else if (int.TryParse(_delayBeforeRefreshOnMapChangeInput.Text, out int newValue))
+                {
+                    //Only allow value between 1 and 60
+                    newValue = Math.Max(newValue, 1);
+                    newValue = Math.Min(newValue, 60);
+
+                    _moduleSettings.DelayBeforeRefreshOnMapChange.Value = newValue;
+                }
+
+                _delayBeforeRefreshOnMapChangeInput.Text = _moduleSettings.DelayBeforeRefreshOnMapChange.Value.ToString();
+            };
+            #endregion DelayBeforeRefreshOnMapChange
+            #endregion Refresh on map change
+
             #endregion Config
 
             #region Actions
@@ -289,7 +379,7 @@ namespace KpRefresher.UI.Views
             {
                 Parent = actionLine1Container,
                 Size = new Point(130, 30),
-                Text = "Stop retry",
+                Text = "Clear schedule",
                 BasicTooltipText = "Resets any scheduled refresh",
             };
             stopRetry.Click += (s, e) =>
@@ -307,7 +397,11 @@ namespace KpRefresher.UI.Views
             };
             _loadingSpinner.MouseEntered += (s, e) =>
             {
-                _loadingSpinner.BasicTooltipText = $"Next retry in {Math.Round(_businessService.GetNextScheduledTimer() / 60 / 1000)} minutes.";
+                var nextRefresh = _businessService.GetNextScheduledTimer();
+                if (nextRefresh.TotalMinutes >= 1)
+                    _loadingSpinner.BasicTooltipText = $"Next retry in {nextRefresh.TotalMinutes} minute{(nextRefresh.TotalMinutes > 1 ? "s" : string.Empty)}.";
+                else 
+                    _loadingSpinner.BasicTooltipText = $"Next retry in {nextRefresh.TotalSeconds} second{(nextRefresh.TotalSeconds > 1 ? "s" : string.Empty)}.";
             };
             #endregion Spinner
             #endregion Line1
@@ -384,6 +478,11 @@ namespace KpRefresher.UI.Views
             #endregion Notifications
         }
 
+        public void RefreshLoadingSpinnerState()
+        {
+            _loadingSpinner.Visible = _businessService.RefreshScheduled;
+        }
+
         private async Task RefreshRaidClears()
         {
             //TODO: maybe disable Refresh btn if we can find a way to auto reactivate it from Service ?
@@ -392,8 +491,8 @@ namespace KpRefresher.UI.Views
 
             await _businessService.RefreshKillproofMe();
 
-            //Keeps the spinner visible in refresh in auto-retry
-            _loadingSpinner.Visible = _businessService.RefreshScheduled;
+            //Keeps the spinner visible if a refresh has been scheduled
+            RefreshLoadingSpinnerState();
         }
 
         private async Task DisplayRaidDifference()
@@ -409,7 +508,7 @@ namespace KpRefresher.UI.Views
             if (_businessService.RefreshScheduled)
             {
                 _businessService.CancelSchedule();
-                ShowInsideNotification("Auto-retry disabled !");
+                ShowInsideNotification("Scheduled refresh disabled !");
             }
             else
             {

@@ -21,15 +21,7 @@ namespace KpRefresher
     public class KpRefresher : Module
     {
         private static readonly Logger Logger = Logger.GetLogger<KpRefresher>();
-
-        //FEATURE CHANGE MAP
-        //private bool _isFirstLoad = true;
-        //private int _mapId { get; set; }
-        //private List<int> _raidMapIds { get; set; }
-        //private List<int> _strikeMapIds { get; set; }
-        //private bool _playerWasInRaid { get; set; }
-        //private bool _playerWasInStrike { get; set; }
-
+        
         public static ModuleSettings ModuleSettings { get; private set; }
         public static Gw2ApiService Gw2ApiService { get; private set; }
         public static KpMeService KpMeService { get; private set; }
@@ -69,17 +61,6 @@ namespace KpRefresher
             BusinessService = new BusinessService(ModuleSettings, Gw2ApiService, KpMeService);
 
             Gw2ApiManager.SubtokenUpdated += OnApiSubTokenUpdated;
-
-            //FEATURE CHANGE MAP
-            //_raidMapIds = Enum.GetValues(typeof(RaidMap))
-            //                .Cast<RaidMap>()
-            //                .Select(m => (int)m)
-            //                .ToList();
-
-            //_strikeMapIds = Enum.GetValues(typeof(StrikeMap))
-            //                .Cast<StrikeMap>()
-            //                .Select(m => (int)m)
-            //                .ToList();
         }
 
         private async void OnApiSubTokenUpdated(object sender, ValueEventArgs<IEnumerable<TokenPermission>> e)
@@ -89,11 +70,7 @@ namespace KpRefresher
 
         protected override async Task LoadAsync()
         {
-            //TODO: check in useful here
-            //await BusinessService.RefreshBaseData();
-
-            //FEATURE CHANGE MAP
-            //GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
+            GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
 
             // Load textures
             _emblemTexture = ContentsManager.GetTexture("emblem.png");
@@ -114,44 +91,14 @@ namespace KpRefresher
             _mainWindow.BuildUi();
         }
 
-        //FEATURE CHANGE MAP
-        //private async void CurrentMap_MapChanged(object sender, ValueEventArgs<int> e)
-        //{
-        //    _mapId = GameService.Gw2Mumble.CurrentMap.Id;
-
-        //    if (_isFirstLoad)
-        //    {
-        //        _isFirstLoad = false;
-        //        return;
-        //    }
-
-        //    if (_raidMapIds.Contains(_mapId))
-        //    {
-        //        ScreenNotification.ShowNotification("Vous êtes en raid !", ScreenNotification.NotificationType.Warning);
-        //        _playerWasInRaid = true;
-        //    }
-        //    else if (_strikeMapIds.Contains(_mapId))
-        //    {
-        //        ScreenNotification.ShowNotification("Vous êtes en mission d'attaque !", ScreenNotification.NotificationType.Warning);
-        //        _playerWasInStrike = true;
-        //    }
-        //    else
-        //    {
-        //        if (_playerWasInRaid)
-        //        {
-        //            _playerWasInRaid = false;
-        //            ScreenNotification.ShowNotification("Sortie du mode raid !", ScreenNotification.NotificationType.Warning);
-        //            _numberOfRefreshTry = 15;
-
-        //        }
-        //        else if (_playerWasInStrike)
-        //        {
-        //            _playerWasInStrike = false;
-        //            ScreenNotification.ShowNotification("Sortie du mode mission d'attaque !", ScreenNotification.NotificationType.Warning);
-        //            _numberOfRefreshTry = 15;
-        //        }
-        //    }
-        //}
+        private void CurrentMap_MapChanged(object sender, ValueEventArgs<int> e)
+        {
+            if (ModuleSettings.RefreshOnMapChange.Value)
+            {
+                BusinessService.MapChanged();
+                _mainWindow.RefreshLoadingSpinnerState();
+            }
+        }
 
         protected override void OnModuleLoaded(EventArgs e)
         {
@@ -219,7 +166,7 @@ namespace KpRefresher
                 BusinessService.ScheduleTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (BusinessService.ScheduleTimer > BusinessService.ScheduleTimerEndValue)
                 {
-                    _ = BusinessService.RefreshKillproofMe(true);
+                    _ = BusinessService.RefreshKillproofMe(true).ContinueWith(task => _mainWindow.RefreshLoadingSpinnerState());
                 }
             }
 
@@ -241,8 +188,7 @@ namespace KpRefresher
         {
             Gw2ApiManager.SubtokenUpdated -= OnApiSubTokenUpdated;
 
-            //FEATURE CHANGE MAP
-            //GameService.Gw2Mumble.CurrentMap.MapChanged -= this.CurrentMap_MapChanged;
+            GameService.Gw2Mumble.CurrentMap.MapChanged -= CurrentMap_MapChanged;
 
             _cornerIcon?.Dispose();
             _cornerIconContextMenu?.Dispose();

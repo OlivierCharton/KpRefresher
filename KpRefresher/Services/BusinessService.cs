@@ -1,9 +1,11 @@
-﻿using Blish_HUD.Controls;
+﻿using Blish_HUD;
+using Blish_HUD.Controls;
 using KpRefresher.Domain;
 using KpRefresher.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,6 +21,10 @@ namespace KpRefresher.Services
 
         private DateTime? _lastRefresh { get; set; }
         private DateTime? _refreshAvailable => _lastRefresh?.AddMinutes(61);
+
+        private List<int> _raidMapIds { get; set; }
+        private List<int> _strikeMapIds { get; set; }
+        private bool _playerWasInInstance { get; set; }
 
         public bool RefreshScheduled { get; set; }
         public double ScheduleTimer { get; set; }
@@ -36,6 +42,16 @@ namespace KpRefresher.Services
 
             _raidBossNames = Enum.GetValues(typeof(RaidBoss))
                             .Cast<RaidBoss>()
+                            .ToList();
+
+            _raidMapIds = Enum.GetValues(typeof(RaidMap))
+                            .Cast<RaidMap>()
+                            .Select(m => (int)m)
+                            .ToList();
+
+            _strikeMapIds = Enum.GetValues(typeof(StrikeMap))
+                            .Cast<StrikeMap>()
+                            .Select(m => (int)m)
                             .ToList();
         }
 
@@ -220,9 +236,14 @@ namespace KpRefresher.Services
             ScheduleTimer = 0;
             ScheduleTimerEndValue = double.MaxValue;
         }
-        public double GetNextScheduledTimer()
+
+        public TimeSpan GetNextScheduledTimer()
         {
-            return !RefreshScheduled ? 0 : ScheduleTimerEndValue - ScheduleTimer;
+            if (!RefreshScheduled)
+                return TimeSpan.Zero;
+
+            var seconds = (ScheduleTimerEndValue - ScheduleTimer) / 1000;
+            return new TimeSpan(0, 0, (int)seconds);
         }
 
         private void ScheduleRefresh(DateTime target)
@@ -283,6 +304,28 @@ namespace KpRefresher.Services
             NotificationNextRefreshAvailabledTimerEndValue = double.MaxValue;
         }
         #endregion Notification next refresh available
+
+        #region Map Change
+        public void MapChanged()
+        {
+            var mapId = GameService.Gw2Mumble.CurrentMap.Id;
+
+            if (_raidMapIds.Contains(mapId) || _strikeMapIds.Contains(mapId))
+            {
+                //Activate the map change watcher
+                _playerWasInInstance = true;
+            }
+            else if (_playerWasInInstance)
+            {
+                //Trigger refresh on instance exit
+                _playerWasInInstance = false;
+
+                ScheduleRefresh(_moduleSettings.DelayBeforeRefreshOnMapChange.Value);
+
+                ScreenNotification.ShowNotification($"[KpRefresher] Instance exit detected, refresh scheduled in {_moduleSettings.DelayBeforeRefreshOnMapChange.Value} minute{(_moduleSettings.DelayBeforeRefreshOnMapChange.Value > 1 ? "s" : string.Empty)}", ScreenNotification.NotificationType.Info);
+            }
+        }
+        #endregion Map Change
 
         /// <summary>
         /// Unused, developed by mistake
