@@ -24,7 +24,7 @@ namespace KpRefresher.UI.Views
             AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, BusinessService businessService) : base(background, windowRegion, contentRegion)
         {
             Parent = GameService.Graphics.SpriteScreen;
-            Title = " Kp Refresher";
+            Title = "Kp Refresher";
             Emblem = cornerIconTexture;
             Location = new Point(300, 300);
             SavesPosition = true;
