@@ -98,6 +98,7 @@ namespace KpRefresher
             // Load textures
             _emblemTexture = ContentsManager.GetTexture("emblem.png");
             _cornerIconTexture = ContentsManager.GetTexture("corner.png");
+            _cornerIconHoverTexture = ContentsManager.GetTexture("corner-hover.png");
             _windowBackgroundTexture = AsyncTexture2D.FromAssetId(155985);
 
             _mainWindow = new KpRefresherWindow(
@@ -166,7 +167,8 @@ namespace KpRefresher
             {
                 Icon = _cornerIconTexture,
                 BasicTooltipText = $"{Name}",
-                Parent = GameService.Graphics.SpriteScreen
+                Parent = GameService.Graphics.SpriteScreen,
+                HoverIcon = _cornerIconHoverTexture
             };
 
             _cornerIcon.Click += delegate
@@ -248,6 +250,7 @@ namespace KpRefresher
             _windowBackgroundTexture?.Dispose();
             _emblemTexture?.Dispose();
             _cornerIconTexture?.Dispose();
+            _cornerIconHoverTexture?.Dispose();
 
             // All static members must be manually unset
             // Static members are not automatically cleared and will keep a reference to your,
@@ -259,6 +262,7 @@ namespace KpRefresher
         private AsyncTexture2D _windowBackgroundTexture;
         private Texture2D _emblemTexture;
         private Texture2D _cornerIconTexture;
+        private Texture2D _cornerIconHoverTexture;
         private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
         private KpRefresherWindow _mainWindow;
