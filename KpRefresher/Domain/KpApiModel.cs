@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace KpRefresher.Domain
 {
     /// <summary>
-    /// Basic model of Killproof.me api. Only necessary fields are implemented.
+    /// Basic model of KillProof.me api. Only necessary fields are implemented.
     /// </summary>
     public class KpApiModel
     {

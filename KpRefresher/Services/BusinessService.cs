@@ -79,7 +79,7 @@ namespace KpRefresher.Services
         }
 
         /// <summary>
-        /// Refresh Killproof.me data
+        /// Refresh KillProof.me data
         /// </summary>
         /// <returns></returns>
         public async Task RefreshKillproofMe(bool fromUpdateLoop = false)
@@ -128,7 +128,7 @@ namespace KpRefresher.Services
                 _lastRefresh = DateTime.UtcNow;
                 await _gw2ApiService.RefreshBaseRaidClears();
 
-                ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh successful !", ScreenNotification.NotificationType.Info);
+                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh successful !", ScreenNotification.NotificationType.Info);
             }
             else if (refreshed.HasValue && !refreshed.Value)
             {
@@ -140,11 +140,11 @@ namespace KpRefresher.Services
                     ScheduleRefresh();
 
                     if (_moduleSettings.ShowScheduleNotification.Value)
-                        ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available\nAuto-retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
+                        ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nAuto-retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
                 }
                 else
                 {
-                    ScreenNotification.ShowNotification("[KpRefresher] Killproof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                    ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
                 }
             }
         }

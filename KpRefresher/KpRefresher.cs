@@ -178,13 +178,13 @@ namespace KpRefresher
 
             _cornerIconContextMenu = new ContextMenuStrip();
 
-            var refeshKpMenuItem = new ContextMenuStripItem("Refresh Killproof.me data");
+            var refeshKpMenuItem = new ContextMenuStripItem("Refresh KillProof.me data");
             refeshKpMenuItem.Click += async (s, e) =>
             {
                 await BusinessService.RefreshKillproofMe();
             };
 
-            var copyKpToClipboard = new ContextMenuStripItem("Copy Killproof.me Id to clipboard");
+            var copyKpToClipboard = new ContextMenuStripItem("Copy KillProof.me Id to clipboard");
             copyKpToClipboard.Click += (s, e) =>
             {
                 BusinessService.CopyKpToClipboard();

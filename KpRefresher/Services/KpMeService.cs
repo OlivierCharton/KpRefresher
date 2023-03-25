@@ -50,7 +50,7 @@ namespace KpRefresher.Services
                         return JsonConvert.DeserializeObject<KpApiModel>(content);
                     }
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        ScreenNotification.ShowNotification($"[KpRefresher] Killproof.me Id {_moduleSettings.KpMeId.Value} does not exist !", ScreenNotification.NotificationType.Error);
+                        ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {_moduleSettings.KpMeId.Value} does not exist !", ScreenNotification.NotificationType.Error);
                     else
                         _logger.Error($"Unknown status while getting account data : {response.StatusCode}");
                 }
@@ -82,7 +82,7 @@ namespace KpRefresher.Services
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
                         return false;
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        ScreenNotification.ShowNotification($"[KpRefresher] Killproof.me Id {_moduleSettings.KpMeId.Value} does not exist !", ScreenNotification.NotificationType.Error);
+                        ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {_moduleSettings.KpMeId.Value} does not exist !", ScreenNotification.NotificationType.Error);
                     else
                         _logger.Error($"Unknown status while refreshing kp.me : {response.StatusCode}");
                 }

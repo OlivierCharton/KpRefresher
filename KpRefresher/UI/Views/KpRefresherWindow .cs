@@ -24,7 +24,7 @@ namespace KpRefresher.UI.Views
             AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, BusinessService businessService) : base(background, windowRegion, contentRegion)
         {
             Parent = GameService.Graphics.SpriteScreen;
-            Title = "Kp Refresher";
+            Title = "KillProof.me Refresher";
             Emblem = cornerIconTexture;
             Location = new Point(300, 300);
             SavesPosition = true;
@@ -81,7 +81,7 @@ namespace KpRefresher.UI.Views
                 Parent = kpIdContainer,
                 AutoSizeWidth = true,
                 Height = 25,
-                Text = "Killproof.me Id : ",
+                Text = "KillProof.me Id : ",
                 BasicTooltipText = "If empty, refresh will be made with the GW2 account name (e.g. Quaggan.1234)"
             };
 
@@ -124,7 +124,7 @@ namespace KpRefresher.UI.Views
                 AutoSizeWidth = true,
                 Height = 25,
                 Text = "Enable auto-retry : ",
-                BasicTooltipText = "Schedule automatically a new try when killproof.me was not available for a refresh",
+                BasicTooltipText = "Schedule automatically a new try when KillProof.me was not available for a refresh",
             };
 
             Checkbox autoRetryEnableCheckbox = new()
@@ -275,8 +275,8 @@ namespace KpRefresher.UI.Views
             {
                 Parent = actionLine1Container,
                 Size = new Point(150, 30),
-                Text = "Refresh killproof.me",
-                BasicTooltipText = "Attempts to refresh killproof.me\nIf auto-retry is enable, a new refresh will be scheduled in case of failure",
+                Text = "Refresh KillProof.me",
+                BasicTooltipText = "Attempts to refresh KillProof.me\nIf auto-retry is enable, a new refresh will be scheduled in case of failure",
             };
             refreshRaidClears.Click += async (s, e) =>
             {
@@ -328,7 +328,7 @@ namespace KpRefresher.UI.Views
                 Parent = actionLine2Container,
                 Size = new Point(150, 30),
                 Text = "Show new clears",
-                BasicTooltipText = "Displays new kills made since KpRefresher start or last successful killproof.me refresh",
+                BasicTooltipText = "Displays new kills made since KpRefresher start or last successful KillProof.me refresh",
             };
             displayRaidDifference.Click += async (s, e) =>
             {
@@ -342,7 +342,7 @@ namespace KpRefresher.UI.Views
                 Parent = actionLine2Container,
                 Size = new Point(150, 30),
                 Text = "Show current KP",
-                BasicTooltipText = "Scan your bank, shared slots and characters and displays current KP according GW2 API.\nEvery kp in the list is able to be scanned by killproof.me, if not already scanned. You can use this feature to check if a newly opened chest is already visible for killproof.me.",
+                BasicTooltipText = "Scan your bank, shared slots and characters and displays current KP according GW2 API.\nEvery kp in the list is able to be scanned by KillProof.me, if not already scanned. You can use this feature to check if a newly opened chest is already visible for KillProof.me.",
             };
             displayCurrentKp.Click += async (s, e) =>
             {
