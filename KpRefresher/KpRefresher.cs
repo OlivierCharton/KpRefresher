@@ -96,14 +96,15 @@ namespace KpRefresher
             //GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
 
             // Load textures
-            _cornerIconTexture = ContentsManager.GetTexture("killproof_logo_dark.png");
+            _emblemTexture = ContentsManager.GetTexture("emblem.png");
+            _cornerIconTexture = ContentsManager.GetTexture("corner.png");
             _windowBackgroundTexture = AsyncTexture2D.FromAssetId(155985);
 
             _mainWindow = new KpRefresherWindow(
                 _windowBackgroundTexture,
                 new Rectangle(40, 26, 913, 691),
                 new Rectangle(50, 26, 893, 681),
-                _cornerIconTexture,
+                _emblemTexture,
                 ModuleSettings,
                 BusinessService);
 
@@ -245,6 +246,7 @@ namespace KpRefresher
             _cornerIconContextMenu?.Dispose();
             _mainWindow?.Dispose();
             _windowBackgroundTexture?.Dispose();
+            _emblemTexture?.Dispose();
             _cornerIconTexture?.Dispose();
 
             // All static members must be manually unset
@@ -255,6 +257,7 @@ namespace KpRefresher
 
         internal static KpRefresher KpRefresherInstance;
         private AsyncTexture2D _windowBackgroundTexture;
+        private Texture2D _emblemTexture;
         private Texture2D _cornerIconTexture;
         private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
