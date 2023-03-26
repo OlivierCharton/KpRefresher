@@ -66,64 +66,89 @@ namespace KpRefresher.Services
             string res = string.Empty;
             var tokensId = _tokens.Select(c => (int)c).ToList();
 
-            var bankItems = await _gw2ApiManager.Gw2ApiClient.V2.Account.Bank.GetAsync();
-            if (bankItems != null)
+            try
             {
-                foreach (var item in bankItems)
+                var bankItems = await _gw2ApiManager.Gw2ApiClient.V2.Account.Bank.GetAsync();
+
+                if (bankItems != null)
                 {
-                    if (item != null && tokensId.Contains(item.Id))
+                    foreach (var item in bankItems)
                     {
-                        res = $"{res}{item.Count} {((Token)item.Id).GetDisplayName()} (bank)\n";
+                        if (item != null && tokensId.Contains(item.Id))
+                        {
+                            res = $"{res}{item.Count} {((Token)item.Id).GetDisplayName()} (bank)\n";
+                        }
                     }
                 }
-            }
-            else
-            {
-                _logger.Warn("Failed to retrieve bank items.");
-            }
-
-            var sharedInventoryItems = await _gw2ApiManager.Gw2ApiClient.V2.Account.Inventory.GetAsync();
-            if (sharedInventoryItems != null)
-            {
-                foreach (var item in sharedInventoryItems)
+                else
                 {
-                    if (item != null && tokensId.Contains(item.Id))
-                        res = $"{res}{item.Count} {((Token)item.Id).GetDisplayName()} (shared slot)\n";
+                    _logger.Warn("Failed to retrieve bank items.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.Warn("Failed to retrieve shared inventory items.");
+                _logger.Warn("Failed to retrieve bank items.");
+                _logger.Warn($"{ex}");
             }
 
-            var characters = await _gw2ApiManager.Gw2ApiClient.V2.Characters.AllAsync();
-            if (characters != null)
+            try
             {
-                foreach (var character in characters)
+                var sharedInventoryItems = await _gw2ApiManager.Gw2ApiClient.V2.Account.Inventory.GetAsync();
+                if (sharedInventoryItems != null)
                 {
-                    if (character.Bags != null)
+                    foreach (var item in sharedInventoryItems)
                     {
-                        foreach (var bag in character.Bags)
+                        if (item != null && tokensId.Contains(item.Id))
+                            res = $"{res}{item.Count} {((Token)item.Id).GetDisplayName()} (shared slot)\n";
+                    }
+                }
+                else
+                {
+                    _logger.Warn("Failed to retrieve shared inventory items.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn("Failed to retrieve shared inventory items.");
+                _logger.Warn($"{ex}");
+            }
+
+            try
+            {
+                var characters = await _gw2ApiManager.Gw2ApiClient.V2.Characters.AllAsync();
+                if (characters != null)
+                {
+                    foreach (var character in characters)
+                    {
+                        if (character.Bags != null)
                         {
-                            if (bag != null)
+                            foreach (var bag in character.Bags)
                             {
-                                foreach (var item in bag.Inventory)
+                                if (bag != null)
                                 {
-                                    if (item != null && tokensId.Contains(item.Id))
-                                        res = $"{res}{item.Count} {((Token)item.Id).GetDisplayName()} ({character.Name})\n";
+                                    foreach (var item in bag.Inventory)
+                                    {
+                                        if (item != null && tokensId.Contains(item.Id))
+                                            res = $"{res}{item.Count} {((Token)item.Id).GetDisplayName()} ({character.Name})\n";
+                                    }
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        _logger.Warn("Failed to retrieve character bags");
+                        else
+                        {
+                            _logger.Warn("Failed to retrieve character bags");
+                        }
                     }
                 }
+                else
+                {
+                    _logger.Warn("Failed to retrieve characters.");
+                }
             }
-            else
+            catch (Exception ex)
             {
                 _logger.Warn("Failed to retrieve characters.");
+                _logger.Warn($"{ex}");
             }
 
             return res;

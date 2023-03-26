@@ -4,6 +4,8 @@ using Blish_HUD.Controls;
 using KpRefresher.Services;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using static Blish_HUD.ContentService;
 
@@ -11,15 +13,14 @@ namespace KpRefresher.UI.Views
 {
     public class KpRefresherWindow : StandardWindow
     {
-        private ModuleSettings _moduleSettings { get; set; }
-        private BusinessService _businessService { get; set; }
+        private readonly ModuleSettings _moduleSettings;
+        private readonly BusinessService _businessService;
+        private readonly List<StandardButton> _buttons = new();
 
-        private LoadingSpinner _loadingSpinner { get; set; }
-        private Panel _notificationsContainer { get; set; }
-        private Label _notificationLabel { get; set; }
-        private Checkbox _showAutoRetryNotificationCheckbox { get; set; }
-        private Checkbox _refreshOnKillOnlyBossCheckbox { get; set; }
-        private TextBox _delayBeforeRefreshOnMapChangeInput { get; set; }
+        private LoadingSpinner _loadingSpinner;
+        private Panel _notificationsContainer;
+        private Label _notificationLabel;
+        private Checkbox _showAutoRetryNotificationCheckbox;
 
         public KpRefresherWindow(AsyncTexture2D background, Rectangle windowRegion, Rectangle contentRegion,
             AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, BusinessService businessService) : base(background, windowRegion, contentRegion)
@@ -49,250 +50,64 @@ namespace KpRefresher.UI.Views
             {
                 Parent = mainContainer,
                 WidthSizingMode = SizingMode.Fill,
-                Height = 200,
+                HeightSizingMode = SizingMode.AutoSize,
                 Title = "Configuration",
                 ShowBorder = true,
                 CanCollapse = true,
                 OuterControlPadding = new(5),
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.TopToBottom
+                ControlPadding = new(5),
             };
 
-            #region Auto retry
-            var autoRetryContainer = new FlowPanel()
+            var checkbox_controls = CreateLabeledControl<Checkbox>("Enable auto-retry", "Schedule automatically a new try when KillProof.me was not available for a refresh", configContainer);
+            checkbox_controls.control.CheckedChanged += (s, e) =>
             {
-                Parent = configContainer,
-                WidthSizingMode = SizingMode.Fill,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(20, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight
+                _moduleSettings.EnableAutoRetry.Value = e.Checked;
+                _showAutoRetryNotificationCheckbox.Enabled = e.Checked;
             };
 
-            #region autoRetryEnable
-            var autoRetryEnableContainer = new FlowPanel()
+            checkbox_controls = CreateLabeledControl<Checkbox>("Show auto-retry notifications", "Display notification when retry is scheduled", configContainer);
+            _showAutoRetryNotificationCheckbox = checkbox_controls.control;
+            checkbox_controls.control.CheckedChanged += (s, e) =>
             {
-                Parent = autoRetryContainer,
-                WidthSizingMode = SizingMode.AutoSize,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight
+                _moduleSettings.ShowScheduleNotification.Value = e.Checked;
             };
 
-            Label autoRetryEnableLabel = new()
+            checkbox_controls = CreateLabeledControl<Checkbox>("Condition refresh to clear", "Only allow refresh if a clear was made and is visible by GW2 API", configContainer);
+            checkbox_controls.control.CheckedChanged += (s, e) =>
             {
-                Parent = autoRetryEnableContainer,
-                AutoSizeWidth = true,
-                Height = 25,
-                Text = "Enable auto-retry : ",
-                BasicTooltipText = "Schedule automatically a new try when KillProof.me was not available for a refresh",
+                _moduleSettings.EnableRefreshOnKill.Value = e.Checked;
             };
 
-            Checkbox autoRetryEnableCheckbox = new()
+            checkbox_controls = CreateLabeledControl<Checkbox>("Refresh on final boss kill", "Only refresh if a final raid wing boss was cleared (e.g. Sabetha)", configContainer);
+            checkbox_controls.control.CheckedChanged += (s, e) =>
             {
-                Parent = autoRetryEnableContainer,
-                Checked = _moduleSettings.EnableAutoRetry.Value
-            };
-            autoRetryEnableCheckbox.CheckedChanged += (s, e) =>
-            {
-                _moduleSettings.EnableAutoRetry.Value = autoRetryEnableCheckbox.Checked;
-                _showAutoRetryNotificationCheckbox.Enabled = autoRetryEnableCheckbox.Checked;
-            };
-            #endregion autoRetryEnable
-
-            #region autoRetryNotification
-            FlowPanel autoRetryNotificationContainer = new()
-            {
-                Parent = autoRetryContainer,
-                WidthSizingMode = SizingMode.AutoSize,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight
+                _moduleSettings.RefreshOnKillOnlyBoss.Value = e.Checked;
             };
 
-            Label showAutoRetryNotificationLabel = new()
+            checkbox_controls = CreateLabeledControl<Checkbox>("Refresh on map change", "Schedule a refresh when leaving a raid or strike map", configContainer);
+            checkbox_controls.control.CheckedChanged += (s, e) =>
             {
-                Parent = autoRetryNotificationContainer,
-                AutoSizeWidth = true,
-                Height = 25,
-                Text = "Show auto-retry notifications : ",
-                BasicTooltipText = "Display notification when retry is scheduled",
+                _moduleSettings.RefreshOnMapChange.Value = e.Checked;
             };
 
-            _showAutoRetryNotificationCheckbox = new Checkbox()
+            var (panel, label, control) = CreateLabeledControl<TextBox>("Refresh on map change", "Schedule a refresh when leaving a raid or strike map", configContainer);
+            control.TextChanged += (s, e) =>
             {
-                Parent = autoRetryNotificationContainer,
-                Checked = _moduleSettings.ShowScheduleNotification.Value,
-                Enabled = _moduleSettings.EnableAutoRetry.Value
-            };
-            _showAutoRetryNotificationCheckbox.CheckedChanged += (s, e) =>
-            {
-                _moduleSettings.ShowScheduleNotification.Value = _showAutoRetryNotificationCheckbox.Checked;
-            };
-            #endregion autoRetryNotification
-            #endregion Auto retry
+                string txt = (s as TextBox).Text.Trim();
 
-            #region Refresh only if boss clear
-            FlowPanel refreshOnKillContainer = new()
-            {
-                Parent = configContainer,
-                WidthSizingMode = SizingMode.Fill,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(20, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight
-            };
-
-            #region refreshOnKillEnable
-            FlowPanel refreshOnKillEnableContainer = new()
-            {
-                Parent = refreshOnKillContainer,
-                WidthSizingMode = SizingMode.AutoSize,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight
-            };
-
-            Label refreshOnKillEnableLabel = new()
-            {
-                Parent = refreshOnKillEnableContainer,
-                AutoSizeWidth = true,
-                Height = 25,
-                Text = "Condition refresh to clear : ",
-                BasicTooltipText = "Only allow refresh if a clear was made and is visible by GW2 API",
-            };
-
-            Checkbox refreshOnKillEnableCheckbox = new()
-            {
-                Parent = refreshOnKillEnableContainer,
-                Checked = _moduleSettings.EnableRefreshOnKill.Value
-            };
-            refreshOnKillEnableCheckbox.CheckedChanged += (s, e) =>
-            {
-                _moduleSettings.EnableRefreshOnKill.Value = refreshOnKillEnableCheckbox.Checked;
-                _refreshOnKillOnlyBossCheckbox.Enabled = refreshOnKillEnableCheckbox.Checked;
-            };
-            #endregion refreshOnKillEnable
-
-            #region refreshOnKillOnlyBossNotification
-            FlowPanel refreshOnKillOnlyBossContainer = new()
-            {
-                Parent = refreshOnKillContainer,
-                WidthSizingMode = SizingMode.AutoSize,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight
-            };
-
-            Label refreshOnKillOnlyBossLabel = new()
-            {
-                Parent = refreshOnKillOnlyBossContainer,
-                AutoSizeWidth = true,
-                Height = 25,
-                Text = "Refresh on final boss kill : ",
-                BasicTooltipText = "Only refresh if a final raid wing boss was cleared (e.g. Sabetha)",
-            };
-
-            _refreshOnKillOnlyBossCheckbox = new Checkbox()
-            {
-                Parent = refreshOnKillOnlyBossContainer,
-                Checked = _moduleSettings.RefreshOnKillOnlyBoss.Value,
-                Enabled = _moduleSettings.EnableRefreshOnKill.Value
-            };
-            _refreshOnKillOnlyBossCheckbox.CheckedChanged += (s, e) =>
-            {
-                _moduleSettings.RefreshOnKillOnlyBoss.Value = _refreshOnKillOnlyBossCheckbox.Checked;
-            };
-            #endregion refreshOnKillOnlyBoss
-            #endregion Refresh only if boss clear
-
-            #region Refresh on map change
-            FlowPanel refreshOnMapChangeContainer = new()
-            {
-                Parent = configContainer,
-                WidthSizingMode = SizingMode.Fill,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(20, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight
-            };
-
-            #region refreshOnMapChangeEnable
-            FlowPanel refreshOnMapChangeEnableContainer = new()
-            {
-                Parent = refreshOnMapChangeContainer,
-                WidthSizingMode = SizingMode.AutoSize,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight
-            };
-
-            Label refreshOnMapChangeEnableLabel = new()
-            {
-                Parent = refreshOnMapChangeEnableContainer,
-                AutoSizeWidth = true,
-                Height = 25,
-                Text = "Refresh on map change : ",
-                BasicTooltipText = "Schedule a refresh when leaving a raid or strike map",
-            };
-
-            Checkbox refreshOnMapChangeEnableCheckbox = new()
-            {
-                Parent = refreshOnMapChangeEnableContainer,
-                Checked = _moduleSettings.RefreshOnMapChange.Value
-            };
-            refreshOnMapChangeEnableCheckbox.CheckedChanged += (s, e) =>
-            {
-                _moduleSettings.RefreshOnMapChange.Value = refreshOnMapChangeEnableCheckbox.Checked;
-                //_delayBeforeRefreshOnMapChangeInput.Enabled = refreshOnMapChangeEnableCheckbox.Checked;
-            };
-            #endregion refreshOnMapChangeEnable
-
-            #region DelayBeforeRefreshOnMapChange
-            FlowPanel delayBeforeRefreshOnMapChangeContainer = new()
-            {
-                Parent = refreshOnMapChangeContainer,
-                WidthSizingMode = SizingMode.AutoSize,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight//,
-                //Enabled = false,
-            };
-
-            Label delayBeforeRefreshOnMapChangeLabel = new()
-            {
-                Parent = delayBeforeRefreshOnMapChangeContainer,
-                AutoSizeWidth = true,
-                Height = 25,
-                Text = "Delay before refresh : ",
-                BasicTooltipText = "Time in minutes before refresh is triggered after map change (between 1 and 60)",
-            };
-
-            _delayBeforeRefreshOnMapChangeInput = new TextBox()
-            {
-                Parent = delayBeforeRefreshOnMapChangeContainer,
-                Text = _moduleSettings.DelayBeforeRefreshOnMapChange.Value.ToString()//,
-                //Enabled = _moduleSettings.RefreshOnMapChange.Value,
-            };
-            _delayBeforeRefreshOnMapChangeInput.TextChanged += (s, e) =>
-            {
-                _delayBeforeRefreshOnMapChangeInput.Text = _delayBeforeRefreshOnMapChangeInput.Text.Trim();
-
-                if (string.IsNullOrWhiteSpace(_delayBeforeRefreshOnMapChangeInput.Text))
+                if (string.IsNullOrWhiteSpace(txt))
                 {
                     _moduleSettings.DelayBeforeRefreshOnMapChange.Value = 1;
                 }
-                else if (int.TryParse(_delayBeforeRefreshOnMapChangeInput.Text, out int newValue))
+                else if (int.TryParse(txt, out int newValue))
                 {
                     //Only allow value between 1 and 60
                     newValue = Math.Max(newValue, 1);
                     newValue = Math.Min(newValue, 60);
 
                     _moduleSettings.DelayBeforeRefreshOnMapChange.Value = newValue;
-                }
-
-                _delayBeforeRefreshOnMapChangeInput.Text = _moduleSettings.DelayBeforeRefreshOnMapChange.Value.ToString();
+                };
             };
-            #endregion DelayBeforeRefreshOnMapChange
-            #endregion Refresh on map change
-
             #endregion Config
 
             #region Actions
@@ -305,72 +120,82 @@ namespace KpRefresher.UI.Views
                 ShowBorder = true,
                 CanCollapse = true,
                 OuterControlPadding = new(5),
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.SingleTopToBottom
+                ControlPadding = new(5),
             };
+            actionContainer.ContentResized += ActionContainer_ContentResized;
 
-            #region Line1
-            FlowPanel actionLine1Container = new()
+            StandardButton button;
+            _buttons.Add(button = new StandardButton()
             {
-                Parent = actionContainer,
-                WidthSizingMode = SizingMode.Fill,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight
-            };
-
-            #region RefreshRaidClears
-            StandardButton refreshRaidClears = new()
-            {
-                Parent = actionLine1Container,
-                Size = new Point(150, 30),
                 Text = "Refresh KillProof.me",
                 BasicTooltipText = "Attempts to refresh KillProof.me\nIf auto-retry is enable, a new refresh will be scheduled in case of failure",
-            };
-            refreshRaidClears.Click += async (s, e) =>
-            {
-                await RefreshRaidClears();
-            };
-            #endregion RefreshRaidClears
+                Parent = actionContainer
+            });
+            button.Click += async (s, e) => await RefreshRaidClears();
 
-            #region StopRetry
-            StandardButton stopRetry = new()
+            _buttons.Add(button = new StandardButton()
             {
-                Parent = actionLine1Container,
-                Size = new Point(130, 30),
-                Text = "Clear schedule",
-                BasicTooltipText = "Resets any scheduled refresh",
-            };
-            stopRetry.Click += (s, e) =>
-            {
-                StopRetry();
-            };
-            #endregion StopRetry
-
-            #region RefreshLinkedAccounts
-            StandardButton refreshLinkedAccounts = new()
-            {
-                Parent = actionLine1Container,
-                Size = new Point(150, 30),
                 Text = "Refresh linked accounts",
                 BasicTooltipText = "Attempts to refresh all linked KillProof.me accounts",
-            };
-            refreshLinkedAccounts.Click += async (s, e) =>
+                Parent = actionContainer
+            });
+            button.Click += async (s, e) =>
             {
                 if (_businessService.LinkedKpId?.Count > 0)
                 {
-                    var res = await _businessService.RefreshLinkedAccounts();
+                    string res = await _businessService.RefreshLinkedAccounts();
                     ShowInsideNotification($"{_businessService.LinkedKpId?.Count} linked account{(_businessService.LinkedKpId?.Count > 1 ? "s" : string.Empty)} found !\n{res}", true);
                 }
                 else
+                {
                     ShowInsideNotification("No linked account found !");
+                }
             };
-            #endregion RefreshLinkedAccounts
+
+            _buttons.Add(button = new StandardButton()
+            {
+                Text = "Show new clears",
+                BasicTooltipText = "Displays new kills made since KpRefresher start or last successful KillProof.me refresh",
+                Parent = actionContainer
+            });
+            button.Click += async (s, e) => await DisplayRaidDifference();
+
+            _buttons.Add(button = new StandardButton()
+            {
+                Text = "Show current KP",
+                BasicTooltipText = "Scan your bank, shared slots and characters and displays current KP according GW2 API.\nEvery kp in the list is able to be scanned by KillProof.me, if not already scanned. You can use this feature to check if a newly opened chest is already visible for KillProof.me.",
+                Parent = actionContainer
+            });
+            button.Click += async (s, e) => await DisplayCurrentKp();
+
+            _buttons.Add(button = new StandardButton()
+            {
+                Text = "Clear schedule",
+                BasicTooltipText = "Resets any scheduled refresh",
+                Parent = actionContainer
+            });
+            button.Click += (s, e) => StopRetry();
+
+            _buttons.Add(button = new StandardButton()
+            {
+                Text = "Clear notifications",
+                Parent = actionContainer
+            });
+            button.Click += (s, e) => ClearNotifications();
+            #endregion Actions
+
+            #region Notifications
+            _notificationsContainer = new()
+            {
+                Parent = mainContainer,
+                HeightSizingMode = SizingMode.Fill,
+                WidthSizingMode = SizingMode.Fill,
+            };
 
             #region Spinner
             _loadingSpinner = new LoadingSpinner()
             {
-                Parent = actionLine1Container,
+                Parent = _notificationsContainer,
                 Size = new Point(29, 29),
                 Visible = false,
             };
@@ -383,78 +208,33 @@ namespace KpRefresher.UI.Views
                     _loadingSpinner.BasicTooltipText = $"Next retry in {nextRefresh.TotalSeconds} second{(nextRefresh.TotalSeconds > 1 ? "s" : string.Empty)}.";
             };
             #endregion Spinner
-            #endregion Line1
-
-            #region Line2
-            FlowPanel actionLine2Container = new()
-            {
-                Parent = actionContainer,
-                WidthSizingMode = SizingMode.Fill,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight
-            };
-
-            #region DisplayRaidDifference
-            StandardButton displayRaidDifference = new()
-            {
-                Parent = actionLine2Container,
-                Size = new Point(150, 30),
-                Text = "Show new clears",
-                BasicTooltipText = "Displays new kills made since KpRefresher start or last successful KillProof.me refresh",
-            };
-            displayRaidDifference.Click += async (s, e) =>
-            {
-                await DisplayRaidDifference();
-            };
-            #endregion DisplayRaidDifference
-
-            #region DisplayCurrentKp
-            StandardButton displayCurrentKp = new()
-            {
-                Parent = actionLine2Container,
-                Size = new Point(150, 30),
-                Text = "Show current KP",
-                BasicTooltipText = "Scan your bank, shared slots and characters and displays current KP according GW2 API.\nEvery kp in the list is able to be scanned by KillProof.me, if not already scanned. You can use this feature to check if a newly opened chest is already visible for KillProof.me.",
-            };
-            displayCurrentKp.Click += async (s, e) =>
-            {
-                await DisplayCurrentKp();
-            };
-            #endregion DisplayCurrentKp
-
-            #region ClearNotifications
-            StandardButton clearNotifications = new()
-            {
-                Parent = actionLine2Container,
-                Size = new Point(150, 30),
-                Text = "Clear notifications"
-            };
-            clearNotifications.Click += (s, e) =>
-            {
-                ClearNotifications();
-            };
-            #endregion ClearNotifications
-            #endregion Line2
-            #endregion Actions
-
-            #region Notifications
-            _notificationsContainer = new()
-            {
-                Parent = mainContainer,
-                HeightSizingMode = SizingMode.Fill,
-                WidthSizingMode = SizingMode.Fill,
-            };
 
             _notificationLabel = new Label()
             {
+                Location = new(_loadingSpinner.Right + 5, _loadingSpinner.Top),
                 Parent = _notificationsContainer,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Font = GameService.Content.GetFont(FontFace.Menomonia, FontSize.Size24, FontStyle.Regular),
+
                 WrapText = true
             };
             #endregion Notifications
+        }
+
+        private void ActionContainer_ContentResized(object sender, RegionChangedEventArgs e)
+        {
+            if (_buttons?.Count >= 0)
+            {
+                int columns = 2;
+                var parent = _buttons.FirstOrDefault()?.Parent as FlowPanel;
+                int width = (parent?.ContentRegion.Width - (int)parent.OuterControlPadding.X - ((int)parent.ControlPadding.X * (columns - 1))) / columns ?? 100;
+
+                foreach (var button in _buttons)
+                {
+                    button.Width = width;
+                }
+            }
         }
 
         public void RefreshLoadingSpinnerState()
@@ -529,6 +309,53 @@ namespace KpRefresher.UI.Views
         {
             _notificationLabel.Text = string.Empty;
             _notificationLabel.Visible = false;
+        }
+
+        private (FlowPanel panel, Label label, T control) CreateLabeledControl<T>(string labelText, string tooltipText, FlowPanel parent, int amount = 2, int ctrlWidth = 50) where T : Control, new()
+        {
+            FlowPanel panel = new()
+            {
+                Parent = parent,
+                FlowDirection = ControlFlowDirection.SingleLeftToRight,
+                ControlPadding = new(5),
+                BasicTooltipText = tooltipText,
+                HeightSizingMode = SizingMode.AutoSize,
+            };
+
+            Label label = new()
+            {
+                Parent = panel,
+                Text = labelText,
+                Height = 25,
+                VerticalAlignment = VerticalAlignment.Middle,
+                BasicTooltipText = tooltipText,
+            };
+
+            T control = new()
+            {
+                Parent = panel,
+                BasicTooltipText = tooltipText,
+                Height = label.Height,
+                Width = ctrlWidth,
+            };
+
+            void FitToPanel(object sender, RegionChangedEventArgs e)
+            {
+                label.Width = panel.ContentRegion.Width - control.Width - ((int)panel.ControlPadding.X * amount);
+                panel.Invalidate();
+            }
+
+            void FitToParent(object sender, RegionChangedEventArgs e)
+            {
+                int width = (parent.ContentRegion.Width - (int)(parent.ControlPadding.X * (amount - 1))) / amount;
+                panel.Width = width;
+                panel.Invalidate();
+            }
+
+            panel.ContentResized += FitToPanel;
+            parent.ContentResized += FitToParent;
+
+            return new(panel, label, control);
         }
     }
 }
