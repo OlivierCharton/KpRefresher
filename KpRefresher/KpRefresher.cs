@@ -134,7 +134,7 @@ namespace KpRefresher
             var copyKpToClipboard = new ContextMenuStripItem("Copy KillProof.me Id to clipboard");
             copyKpToClipboard.Click += (s, e) =>
             {
-                BusinessService.CopyKpToClipboard();
+                _ = BusinessService.CopyKpToClipboard();
             };
 
             _notificationNextRefreshAvailable = new ContextMenuStripItem("Notify when refresh available");

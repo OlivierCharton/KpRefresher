@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -103,7 +104,10 @@ namespace KpRefresher.Services
             CancelSchedule();
 
             if (!_refreshAvailable.HasValue)
-                ScreenNotification.ShowNotification("[KpRefresher] Please check your Id setting !", ScreenNotification.NotificationType.Error);
+            { 
+                ScreenNotification.ShowNotification("[KpRefresher] Data not yet loaded, please retry later !", ScreenNotification.NotificationType.Error);
+                return;
+            }
 
             //Prevents spamming KP.me api
             if (DateTime.UtcNow < _refreshAvailable.Value)
@@ -167,12 +171,15 @@ namespace KpRefresher.Services
 
         public async Task RefreshBaseData()
         {
-            await _gw2ApiService.RefreshBaseRaidClears();
-
             var accountName = await _gw2ApiService.GetAccountName();
             _kpMeService.SetAccountName(accountName);
 
-            await UpdateLastRefresh();
+            await _gw2ApiService.RefreshBaseRaidClears();
+
+            var accountData = await _kpMeService.GetAccountData();
+            _kpMeService.SetKpId(accountData?.Id);
+
+            await UpdateLastRefresh(accountData?.LastRefresh);
         }
 
         /// <summary>
@@ -260,20 +267,36 @@ namespace KpRefresher.Services
         }
         #endregion Schedule
 
-        public void CopyKpToClipboard()
+        public async Task CopyKpToClipboard(int retryCount = 0)
         {
-            if (string.IsNullOrWhiteSpace(_moduleSettings.KpMeId.Value))
-                ScreenNotification.ShowNotification("[KpRefresher] No Kp Id set.", ScreenNotification.NotificationType.Warning);
+            //Loop to wait for id fetch if data not yet loaded
+            if (string.IsNullOrWhiteSpace(_kpMeService.KpId) && retryCount < 5)
+            {
+                await Task.Delay(1000);
+
+                retryCount++;
+                await CopyKpToClipboard(retryCount);
+            }
+            else if (!string.IsNullOrWhiteSpace(_kpMeService.KpId))
+            {
+                Clipboard.SetText($"KpMe id : {_kpMeService.KpId}");
+                ScreenNotification.ShowNotification("[KpRefresher] Id copied to clipboard !", ScreenNotification.NotificationType.Info);
+            }
             else
             {
-                Clipboard.SetText($"KpMe id : {_moduleSettings.KpMeId.Value}");
-                ScreenNotification.ShowNotification("[KpRefresher] Id copied to clipboard !", ScreenNotification.NotificationType.Info);
+                ScreenNotification.ShowNotification("[KpRefresher] Id could not be loaded\nPlease try again later", ScreenNotification.NotificationType.Warning);
             }
         }
 
         #region Notification next refresh available
         public void ActivateNotificationNextRefreshAvailable()
         {
+            if (!_refreshAvailable.HasValue)
+            {
+                ScreenNotification.ShowNotification("[KpRefresher] Data not yet loaded, please retry later !", ScreenNotification.NotificationType.Error);
+                return;
+            }
+
             if (DateTime.UtcNow > _refreshAvailable.Value)
             {
                 ScreenNotification.ShowNotification($"[KpRefresher] Next refresh is available !", ScreenNotification.NotificationType.Info);
@@ -333,10 +356,6 @@ namespace KpRefresher.Services
         /// <returns></returns>
         private async Task<string> DisplayCurrentKpTokens()
         {
-            //WARNING : 
-            if (string.IsNullOrWhiteSpace(_moduleSettings.KpMeId.Value))
-                return "No Kp Id set.";
-
             var accountData = await _kpMeService.GetAccountData();
             if (accountData == null)
                 return "Unknown error";

@@ -67,38 +67,6 @@ namespace KpRefresher.UI.Views
                 FlowDirection = ControlFlowDirection.TopToBottom
             };
 
-            #region KpId
-            var kpIdContainer = new FlowPanel()
-            {
-                Parent = configContainer,
-                WidthSizingMode = SizingMode.Fill,
-                HeightSizingMode = SizingMode.AutoSize,
-                ControlPadding = new(3, 3),
-                FlowDirection = ControlFlowDirection.SingleLeftToRight,
-            };
-
-            Label kpIdLabel = new()
-            {
-                Parent = kpIdContainer,
-                AutoSizeWidth = true,
-                Height = 25,
-                Text = "KillProof.me Id : ",
-                BasicTooltipText = "If empty, refresh will be made with the GW2 account name (e.g. Quaggan.1234)"
-            };
-
-            TextBox kpIdTextBox = new()
-            {
-                Parent = kpIdContainer,
-                Width = 75,
-                Text = _moduleSettings.KpMeId.Value,
-            };
-            kpIdTextBox.EnterPressed += async (s, e) =>
-            {
-                _moduleSettings.KpMeId.Value = kpIdTextBox.Text;
-                await _businessService.UpdateLastRefresh();
-            };
-            #endregion KpId
-
             #region Auto retry
             var autoRetryContainer = new FlowPanel()
             {
