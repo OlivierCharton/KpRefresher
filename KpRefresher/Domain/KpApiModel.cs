@@ -20,6 +20,9 @@ namespace KpRefresher.Domain
 
         [JsonProperty("killproofs")]
         public List<Killproof> Killproofs { get; set; }
+        
+        [JsonProperty("linked")]
+        public List<KpApiModel> LinkedAccounts { get; set; }
     }
 
     public class Killproof

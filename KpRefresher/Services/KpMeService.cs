@@ -10,40 +10,25 @@ namespace KpRefresher.Services
 {
     public class KpMeService
     {
-        private readonly ModuleSettings _moduleSettings;
         private readonly Logger _logger;
 
         private const string _kpMeBaseUrl = "https://killproof.me/";
 
-        private string _kpId { get; set; }
-        private string _accountName { get; set; } = string.Empty;
-
-        public string KpId => string.IsNullOrWhiteSpace(_kpId) ? _accountName : _kpId;
-
-        public KpMeService(ModuleSettings moduleSettings, Logger logger)
+        public KpMeService(Logger logger)
         {
-            _moduleSettings = moduleSettings;
             _logger = logger;
-        }
+        }       
 
-        public void SetAccountName(string accountName)
+        public async Task<KpApiModel> GetAccountData(string kpId)
         {
-            _accountName = accountName;
-        }
-
-        public void SetKpId(string kpId)
-        {
-            _kpId = kpId;
-        }
-
-        public async Task<KpApiModel> GetAccountData()
-        {
-            if (string.IsNullOrWhiteSpace(KpId))
+            if (string.IsNullOrWhiteSpace(kpId))
                 return null;
 
             try
             {
-                var url = $"{_kpMeBaseUrl}api/kp/{KpId}?lang=en";
+                var url = $"{_kpMeBaseUrl}api/kp/{kpId}?lang=en";
+
+                _logger.Info($"[KpRefresher] Calling {url}");
 
                 using var client = new HttpClient();
 
@@ -56,7 +41,7 @@ namespace KpRefresher.Services
                         return JsonConvert.DeserializeObject<KpApiModel>(content);
                     }
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {KpId} does not exist !", ScreenNotification.NotificationType.Error);
+                        ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {kpId} does not exist !", ScreenNotification.NotificationType.Error);
                     else
                         _logger.Error($"Unknown status while getting account data : {response.StatusCode}");
                 }
@@ -69,14 +54,16 @@ namespace KpRefresher.Services
             return null;
         }
 
-        public async Task<bool?> RefreshApi()
+        public async Task<bool?> RefreshApi(string kpId)
         {
-            if (string.IsNullOrWhiteSpace(KpId))
+            if (string.IsNullOrWhiteSpace(kpId))
                 return null;
 
             try
             {
-                var url = $"{_kpMeBaseUrl}proof/{KpId}/refresh";
+                var url = $"{_kpMeBaseUrl}proof/{kpId}/refresh";
+
+                _logger.Info($"[KpRefresher] Calling {url}");
 
                 using var client = new HttpClient();
 
@@ -88,7 +75,7 @@ namespace KpRefresher.Services
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
                         return false;
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {KpId} does not exist !", ScreenNotification.NotificationType.Error);
+                        ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {kpId} does not exist !", ScreenNotification.NotificationType.Error);
                     else
                         _logger.Error($"Unknown status while refreshing kp.me : {response.StatusCode}");
                 }

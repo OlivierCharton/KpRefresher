@@ -28,15 +28,6 @@ namespace KpRefresher.Services
                             .ToList();
         }
 
-        /// <summary>
-        /// Sets <c>_baseRaidClears</c> with current raid progression exposed by GW2 API
-        /// </summary>
-        /// <returns></returns>
-        public async Task RefreshBaseRaidClears()
-        {
-            BaseRaidClears = await GetRaidClears();
-        }
-
         public async Task<string> GetAccountName()
         {
             if (_gw2ApiManager.HasPermissions(_gw2ApiManager.Permissions) == false)
@@ -49,24 +40,19 @@ namespace KpRefresher.Services
             return account?.Name;
         }
 
-        public async Task<List<string>> GetRaidClears()
+        /// <summary>
+        /// Sets <c>_baseRaidClears</c> with current raid progression exposed by GW2 API
+        /// </summary>
+        /// <returns></returns>
+        public async Task RefreshBaseRaidClears()
         {
-            if (_gw2ApiManager.HasPermissions(_gw2ApiManager.Permissions) == false)
-            {
-                _logger.Warn("Permissions not granted.");
-                return null;
-            }
+            BaseRaidClears = await GetRaidClears();
+        }
 
-            try
-            {
-                var data = await _gw2ApiManager.Gw2ApiClient.V2.Account.Raids.GetAsync();
-                return data?.ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Error while getting raid clears : {ex.Message}");
-                return null;
-            }
+        public async Task<List<string>> GetCurrentClears()
+        {
+            var clears = await GetRaidClears();
+            return clears;
         }
 
         public async Task<string> ScanAccountForKp()
@@ -141,6 +127,26 @@ namespace KpRefresher.Services
             }
 
             return res;
+        }
+
+        private async Task<List<string>> GetRaidClears()
+        {
+            if (_gw2ApiManager.HasPermissions(_gw2ApiManager.Permissions) == false)
+            {
+                _logger.Warn("Permissions not granted.");
+                return null;
+            }
+
+            try
+            {
+                var data = await _gw2ApiManager.Gw2ApiClient.V2.Account.Raids.GetAsync();
+                return data?.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Error while getting raid clears : {ex.Message}");
+                return null;
+            }
         }
     }
 }

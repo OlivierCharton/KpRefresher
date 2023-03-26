@@ -32,15 +32,6 @@ namespace KpRefresher.UI.Views
 
             _moduleSettings = moduleSettings;
             _businessService = businessService;
-
-            //Panel testPanel = new()
-            //{
-            //    Parent = this,
-            //    BackgroundColor = Color.Red,
-            //    WidthSizingMode = SizingMode.Fill,
-            //    HeightSizingMode = SizingMode.Fill,
-            //    ZIndex = 100
-            //};
         }
 
         public void BuildUi()
@@ -356,6 +347,26 @@ namespace KpRefresher.UI.Views
             };
             #endregion StopRetry
 
+            #region RefreshLinkedAccounts
+            StandardButton refreshLinkedAccounts = new()
+            {
+                Parent = actionLine1Container,
+                Size = new Point(150, 30),
+                Text = "Refresh linked accounts",
+                BasicTooltipText = "Attempts to refresh all linked KillProof.me accounts",
+            };
+            refreshLinkedAccounts.Click += async (s, e) =>
+            {
+                if (_businessService.LinkedKpId?.Count > 0)
+                {
+                    var res = await _businessService.RefreshLinkedAccounts();
+                    ShowInsideNotification($"{_businessService.LinkedKpId?.Count} linked account{(_businessService.LinkedKpId?.Count > 1 ? "s" : string.Empty)} found !\n{res}", true);
+                }
+                else
+                    ShowInsideNotification("No linked account found !");
+            };
+            #endregion RefreshLinkedAccounts
+
             #region Spinner
             _loadingSpinner = new LoadingSpinner()
             {
@@ -368,7 +379,7 @@ namespace KpRefresher.UI.Views
                 var nextRefresh = _businessService.GetNextScheduledTimer();
                 if (nextRefresh.TotalMinutes >= 1)
                     _loadingSpinner.BasicTooltipText = $"Next retry in {nextRefresh.TotalMinutes} minute{(nextRefresh.TotalMinutes > 1 ? "s" : string.Empty)}.";
-                else 
+                else
                     _loadingSpinner.BasicTooltipText = $"Next retry in {nextRefresh.TotalSeconds} second{(nextRefresh.TotalSeconds > 1 ? "s" : string.Empty)}.";
             };
             #endregion Spinner

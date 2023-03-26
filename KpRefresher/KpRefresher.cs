@@ -57,7 +57,7 @@ namespace KpRefresher
         protected override void Initialize()
         {
             Gw2ApiService = new Gw2ApiService(Gw2ApiManager, Logger);
-            KpMeService = new KpMeService(ModuleSettings, Logger);
+            KpMeService = new KpMeService(Logger);
             BusinessService = new BusinessService(ModuleSettings, Gw2ApiService, KpMeService);
 
             Gw2ApiManager.SubtokenUpdated += OnApiSubTokenUpdated;
@@ -138,11 +138,11 @@ namespace KpRefresher
             };
 
             _notificationNextRefreshAvailable = new ContextMenuStripItem("Notify when refresh available");
-            _notificationNextRefreshAvailable.Click += (s, e) =>
+            _notificationNextRefreshAvailable.Click += async (s, e) =>
             {
                 if (!BusinessService.NotificationNextRefreshAvailabledActivated)
                 {
-                    BusinessService.ActivateNotificationNextRefreshAvailable();
+                    await BusinessService.ActivateNotificationNextRefreshAvailable();
                     _notificationNextRefreshAvailable.Text = "Cancel notification for next refresh";
                 }
                 else
