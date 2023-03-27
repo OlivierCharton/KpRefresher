@@ -90,7 +90,7 @@ namespace KpRefresher.UI.Views
                 _moduleSettings.RefreshOnMapChange.Value = e.Checked;
             };
 
-            var (panel, label, control) = CreateLabeledControl<TextBox>("Refresh on map change", "Schedule a refresh when leaving a raid or strike map", configContainer);
+            var (panel, label, control) = CreateLabeledControl<TextBox>("Delay before refresh", "Time in minutes before refresh is triggered after map change (between 1 and 60)", configContainer);
             control.TextChanged += (s, e) =>
             {
                 string txt = (s as TextBox).Text.Trim();
