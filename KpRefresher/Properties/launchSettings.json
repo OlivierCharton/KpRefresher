@@ -2,8 +2,8 @@
   "profiles": {
     "gw2": {
       "commandName": "Executable",
-      "executablePath": "C:\\Program Files\\Guild Wars 2\\Blish HUD\\Blish HUD.exe",
-      "commandLineArgs": "--debug --module \"$(ProjectDir)\\$(BaseOutputPath)\\$(Configuration)/$(TargetFramework)\\$(TargetName).bhm\" --mumble \"MumbleLink_1"
+      "executablePath": "C:\\Users\\olivi\\Documents\\Blish.HUD\\Blish HUD.exe",
+      "commandLineArgs": "--debug --module \"$(ProjectDir)\\$(BaseOutputPath)\\$(Configuration)/$(TargetFramework)\\$(TargetName).bhm\" --settings \"..\\Settings_$(TargetName)\""
     },
     "powershell": {
       "commandName": "Executable",
