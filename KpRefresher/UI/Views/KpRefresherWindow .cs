@@ -21,6 +21,7 @@ namespace KpRefresher.UI.Views
         private Panel _notificationsContainer;
         private Label _notificationLabel;
         private Checkbox _showAutoRetryNotificationCheckbox;
+        private Checkbox _onlyRefreshOnFinalBossKillCheckbox;
 
         public KpRefresherWindow(AsyncTexture2D background, Rectangle windowRegion, Rectangle contentRegion,
             AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, BusinessService businessService) : base(background, windowRegion, contentRegion)
@@ -59,6 +60,7 @@ namespace KpRefresher.UI.Views
             };
 
             var checkbox_controls = CreateLabeledControl<Checkbox>("Enable auto-retry", "Schedule automatically a new try when KillProof.me was not available for a refresh", configContainer);
+            checkbox_controls.control.Checked = _moduleSettings.EnableAutoRetry.Value;
             checkbox_controls.control.CheckedChanged += (s, e) =>
             {
                 _moduleSettings.EnableAutoRetry.Value = e.Checked;
@@ -67,30 +69,39 @@ namespace KpRefresher.UI.Views
 
             checkbox_controls = CreateLabeledControl<Checkbox>("Show auto-retry notifications", "Display notification when retry is scheduled", configContainer);
             _showAutoRetryNotificationCheckbox = checkbox_controls.control;
+            checkbox_controls.control.Enabled = _moduleSettings.EnableAutoRetry.Value;
+            checkbox_controls.control.Checked = _moduleSettings.ShowScheduleNotification.Value;
             checkbox_controls.control.CheckedChanged += (s, e) =>
             {
                 _moduleSettings.ShowScheduleNotification.Value = e.Checked;
             };
 
             checkbox_controls = CreateLabeledControl<Checkbox>("Condition refresh to clear", "Only allow refresh if a clear was made and is visible by GW2 API", configContainer);
+            checkbox_controls.control.Checked = _moduleSettings.EnableRefreshOnKill.Value;
             checkbox_controls.control.CheckedChanged += (s, e) =>
             {
                 _moduleSettings.EnableRefreshOnKill.Value = e.Checked;
+                _onlyRefreshOnFinalBossKillCheckbox.Enabled = e.Checked;
             };
 
             checkbox_controls = CreateLabeledControl<Checkbox>("Refresh on final boss kill", "Only refresh if a final raid wing boss was cleared (e.g. Sabetha)", configContainer);
+            _onlyRefreshOnFinalBossKillCheckbox = checkbox_controls.control;
+            checkbox_controls.control.Enabled = _moduleSettings.EnableRefreshOnKill.Value;
+            checkbox_controls.control.Checked = _moduleSettings.RefreshOnKillOnlyBoss.Value;
             checkbox_controls.control.CheckedChanged += (s, e) =>
             {
                 _moduleSettings.RefreshOnKillOnlyBoss.Value = e.Checked;
             };
 
             checkbox_controls = CreateLabeledControl<Checkbox>("Refresh on map change", "Schedule a refresh when leaving a raid or strike map", configContainer);
+            checkbox_controls.control.Checked = _moduleSettings.RefreshOnMapChange.Value;
             checkbox_controls.control.CheckedChanged += (s, e) =>
             {
                 _moduleSettings.RefreshOnMapChange.Value = e.Checked;
             };
 
             var (panel, label, control) = CreateLabeledControl<TextBox>("Delay before refresh", "Time in minutes before refresh is triggered after map change (between 1 and 60)", configContainer);
+            control.Text = _moduleSettings.DelayBeforeRefreshOnMapChange.Value.ToString();
             control.TextChanged += (s, e) =>
             {
                 string txt = (s as TextBox).Text.Trim();
@@ -107,6 +118,8 @@ namespace KpRefresher.UI.Views
 
                     _moduleSettings.DelayBeforeRefreshOnMapChange.Value = newValue;
                 };
+
+                control.Text = _moduleSettings.DelayBeforeRefreshOnMapChange.Value.ToString();
             };
             #endregion Config
 
@@ -202,10 +215,11 @@ namespace KpRefresher.UI.Views
             _loadingSpinner.MouseEntered += (s, e) =>
             {
                 var nextRefresh = _businessService.GetNextScheduledTimer();
-                if (nextRefresh.TotalMinutes >= 1)
-                    _loadingSpinner.BasicTooltipText = $"Next retry in {nextRefresh.TotalMinutes} minute{(nextRefresh.TotalMinutes > 1 ? "s" : string.Empty)}.";
+                var totalMinutes = (int)nextRefresh.TotalMinutes;
+                if (totalMinutes >= 1)
+                    _loadingSpinner.BasicTooltipText = $"Next retry in {totalMinutes} minute{(totalMinutes > 1 ? "s" : string.Empty)}.";
                 else
-                    _loadingSpinner.BasicTooltipText = $"Next retry in {nextRefresh.TotalSeconds} second{(nextRefresh.TotalSeconds > 1 ? "s" : string.Empty)}.";
+                    _loadingSpinner.BasicTooltipText = $"Next retry in {(int)nextRefresh.TotalSeconds} second{((int)nextRefresh.TotalSeconds > 1 ? "s" : string.Empty)}.";
             };
             #endregion Spinner
 
