@@ -1,11 +1,11 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Controls;
 using KpRefresher.Domain;
+using KpRefresher.Domain.Attributes;
 using KpRefresher.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -267,14 +267,14 @@ namespace KpRefresher.Services
             if (clears == null || baseClears == null)
                 return string.Empty;
 
-            var formattedGw2ApiClears = new List<string>();
+            var formattedGw2ApiClears = new List<RaidBoss>();
             foreach (var clear in clears)
             {
                 Enum.TryParse(clear, out RaidBoss boss);
-                formattedGw2ApiClears.Add(boss.GetDisplayName());
+                formattedGw2ApiClears.Add(boss);
             }
 
-            var result = formattedGw2ApiClears.Where(p => !baseClears.Any(p2 => p2 == p));
+            var result = formattedGw2ApiClears.Where(p => !baseClears.Any(p2 => p2 == p.GetDisplayName()));
 
             string msgToDisplay;
             if (!result.Any())
@@ -283,13 +283,14 @@ namespace KpRefresher.Services
             }
             else
             {
-                msgToDisplay = "New clears :\n\n";
-                foreach (var res in result)
+                msgToDisplay = "New clears :\n";
+
+                var orderedBoss = result.OrderBy(x => (int)x).ToList();
+
+                foreach (var wingNumber in orderedBoss.Select(ob => ob.GetAttribute<WingAttribute>().WingNumber).Distinct())
                 {
-                    if (Enum.TryParse(res, out RaidBoss raidBoss))
-                        msgToDisplay = $"{msgToDisplay}{raidBoss.GetDisplayName()}\n";
-                    else
-                        msgToDisplay = $"{msgToDisplay}{res}\n";
+                    var bossFromWing = orderedBoss.Where(o => o.GetAttribute<WingAttribute>().WingNumber == wingNumber).Select(o => o.GetDisplayName());
+                    msgToDisplay = $"{msgToDisplay}\n[Wing {wingNumber}]\n{string.Join("\n", bossFromWing)}\n";
                 }
             }
 
@@ -377,7 +378,7 @@ namespace KpRefresher.Services
                 return false;
 
             var formattedGw2ApiClears = new List<string>();
-            foreach (var clear in clears) 
+            foreach (var clear in clears)
             {
                 Enum.TryParse(clear, out RaidBoss boss);
                 formattedGw2ApiClears.Add(boss.GetDisplayName());

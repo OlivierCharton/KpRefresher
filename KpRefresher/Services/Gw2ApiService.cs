@@ -75,13 +75,19 @@ namespace KpRefresher.Services
 
                 if (bankItems != null)
                 {
+                    var bankHasData = false;
+                    var bankData = string.Empty;
                     foreach (var item in bankItems)
                     {
                         if (item != null && tokensId.Contains(item.Id))
                         {
-                            res = $"{res}{item.Count} {((Token)item.Id).GetDisplayName()} (bank)\n";
+                            bankHasData = true;
+                            bankData = $"{bankData}{item.Count}   {((Token)item.Id).GetDisplayName()}\n";
                         }
                     }
+
+                    if (bankHasData)
+                        res = $"{res}[Bank]\n{bankData}\n";
                 }
                 else
                 {
@@ -99,11 +105,19 @@ namespace KpRefresher.Services
                 var sharedInventoryItems = await _gw2ApiManager.Gw2ApiClient.V2.Account.Inventory.GetAsync();
                 if (sharedInventoryItems != null)
                 {
+                    var sharedInventoryHasData = false;
+                    var sharedInventoryData = string.Empty;
                     foreach (var item in sharedInventoryItems)
                     {
                         if (item != null && tokensId.Contains(item.Id))
-                            res = $"{res}{item.Count} {((Token)item.Id).GetDisplayName()} (shared slot)\n";
+                        {
+                            sharedInventoryHasData = true;
+                            sharedInventoryData = $"{sharedInventoryData}{item.Count}   {((Token)item.Id).GetDisplayName()}\n";
+                        }
                     }
+
+                    if (sharedInventoryHasData)
+                        res = $"{res}[Shared Slots]\n{sharedInventoryData}\n";
                 }
                 else
                 {
@@ -121,6 +135,8 @@ namespace KpRefresher.Services
                 var characters = await _gw2ApiManager.Gw2ApiClient.V2.Characters.AllAsync();
                 if (characters != null)
                 {
+                    var characterHasData = false;
+                    var characterData = string.Empty;
                     foreach (var character in characters)
                     {
                         if (character.Bags != null)
@@ -132,7 +148,10 @@ namespace KpRefresher.Services
                                     foreach (var item in bag.Inventory)
                                     {
                                         if (item != null && tokensId.Contains(item.Id))
-                                            res = $"{res}{item.Count} {((Token)item.Id).GetDisplayName()} ({character.Name})\n";
+                                        {
+                                            characterHasData = true;
+                                            characterData = $"{characterData}{item.Count}   {((Token)item.Id).GetDisplayName()}\n";
+                                        }
                                     }
                                 }
                             }
@@ -140,6 +159,14 @@ namespace KpRefresher.Services
                         else
                         {
                             _logger.Warn("Failed to retrieve character bags");
+                        }
+
+                        if (characterHasData)
+                        {
+                            res = $"{res}[{character.Name}]\n{characterData}\n";
+
+                            characterHasData = false;
+                            characterData = string.Empty;
                         }
                     }
                 }

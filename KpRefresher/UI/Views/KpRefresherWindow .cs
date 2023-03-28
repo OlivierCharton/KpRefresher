@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Blish_HUD.ContentService;
 
 namespace KpRefresher.UI.Views
 {
@@ -229,8 +228,7 @@ namespace KpRefresher.UI.Views
                 Parent = _notificationsContainer,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
-                Font = GameService.Content.GetFont(FontFace.Menomonia, FontSize.Size24, FontStyle.Regular),
-
+                Font = GameService.Content.DefaultFont18,
                 WrapText = true
             };
             #endregion Notifications
