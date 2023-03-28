@@ -168,7 +168,7 @@ namespace KpRefresher.UI.Views
             _buttons.Add(button = new StandardButton()
             {
                 Text = "Show new clears",
-                BasicTooltipText = "Displays new kills made since KpRefresher start or last successful KillProof.me refresh",
+                BasicTooltipText = "Displays new clears made since last KillProof.me refresh",
                 Parent = actionContainer
             });
             button.Click += async (s, e) => await DisplayRaidDifference();

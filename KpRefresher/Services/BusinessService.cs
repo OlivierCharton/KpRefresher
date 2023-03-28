@@ -117,7 +117,7 @@ namespace KpRefresher.Services
                 var hasNewClear = await CheckRaidClears();
                 if (!hasNewClear)
                 {
-                    ScreenNotification.ShowNotification("[KpRefresher] No new kill, refresh aborted !", ScreenNotification.NotificationType.Info);
+                    ScreenNotification.ShowNotification("[KpRefresher] No new clear validating settings, refresh aborted !", ScreenNotification.NotificationType.Info);
                     return;
                 }
             }
@@ -279,11 +279,11 @@ namespace KpRefresher.Services
             string msgToDisplay;
             if (!result.Any())
             {
-                msgToDisplay = "No new kill.";
+                msgToDisplay = "No new clear.";
             }
             else
             {
-                msgToDisplay = "New kills :\n\n";
+                msgToDisplay = "New clears :\n\n";
                 foreach (var res in result)
                 {
                     if (Enum.TryParse(res, out RaidBoss raidBoss))
