@@ -2,7 +2,9 @@
 using Blish_HUD.Controls;
 using KpRefresher.Domain;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -17,7 +19,7 @@ namespace KpRefresher.Services
         public KpMeService(Logger logger)
         {
             _logger = logger;
-        }       
+        }
 
         public async Task<KpApiModel> GetAccountData(string kpId)
         {
@@ -49,6 +51,59 @@ namespace KpRefresher.Services
             catch (Exception ex)
             {
                 _logger.Error($"Error while getting account info : {ex.Message}");
+            }
+
+            return null;
+        }
+
+        public async Task<List<string>> GetClearData(string kpId)
+        {
+            if (string.IsNullOrWhiteSpace(kpId))
+                return null;
+
+            try
+            {
+                var url = $"{_kpMeBaseUrl}api/clear/{kpId}";
+
+                _logger.Info($"[KpRefresher] Calling {url}");
+
+                using var client = new HttpClient();
+
+                var res = new List<string>();
+
+                var response = await client.GetAsync(url);
+                if (response != null)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+
+                        JObject jo = JObject.Parse(content);
+                        foreach (var wing in jo)
+                        {
+                            foreach (var encounters in wing.Value)
+                            {
+                                var encounter = encounters.First;
+
+                                var encounterName = ((JProperty)encounter).Name;
+                                var encounterValue = (bool)((JProperty)encounter).Value;
+
+                                if (encounterValue)
+                                    res.Add(encounterName);
+                            }
+                        }
+
+                        return res;
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                        ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {kpId} does not exist !", ScreenNotification.NotificationType.Error);
+                    else
+                        _logger.Error($"Unknown status while getting clear data : {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Error while refreshing kp.me : {ex.Message}");
             }
 
             return null;

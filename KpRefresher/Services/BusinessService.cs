@@ -68,8 +68,6 @@ namespace KpRefresher.Services
             //Get accountName to refresh kp.me id
             _accountName = await _gw2ApiService.GetAccountName();
 
-            await _gw2ApiService.RefreshBaseRaidClears();
-
             await RefreshKpMeData();
         }
 
@@ -83,7 +81,7 @@ namespace KpRefresher.Services
 
             if (!_refreshAvailable.HasValue)
             {
-                if(!_isRefreshingKpDate)
+                if (!_isRefreshingKpDate)
                     await RefreshKpMeData();
                 else
                     Thread.Sleep(2000);
@@ -129,7 +127,6 @@ namespace KpRefresher.Services
             {
                 //Replace clears stored with updated clears and disable auto-retry
                 _lastRefresh = DateTime.UtcNow;
-                await _gw2ApiService.RefreshBaseRaidClears();
 
                 ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh successful !", ScreenNotification.NotificationType.Info);
             }
@@ -264,12 +261,20 @@ namespace KpRefresher.Services
         /// <returns>A list of the new kills formatted in a string</returns>
         public async Task<string> GetDelta()
         {
-            var clears = await _gw2ApiService.GetCurrentClears();
+            var baseClears = await _kpMeService.GetClearData(_kpId);
+            var clears = await _gw2ApiService.GetClears();
 
-            if (clears == null || _gw2ApiService.BaseRaidClears == null)
+            if (clears == null || baseClears == null)
                 return string.Empty;
 
-            var result = clears.Where(p => !_gw2ApiService.BaseRaidClears.Any(p2 => p2 == p));
+            var formattedGw2ApiClears = new List<string>();
+            foreach (var clear in clears)
+            {
+                Enum.TryParse(clear, out RaidBoss boss);
+                formattedGw2ApiClears.Add(boss.GetDisplayName());
+            }
+
+            var result = formattedGw2ApiClears.Where(p => !baseClears.Any(p2 => p2 == p));
 
             string msgToDisplay;
             if (!result.Any())
@@ -316,7 +321,8 @@ namespace KpRefresher.Services
             var res = string.Empty;
             foreach (var acc in LinkedKpId)
             {
-                Task tt = Task.Run(async () => {
+                Task tt = Task.Run(async () =>
+                {
                     var refreshRes = await _kpMeService.RefreshApi(acc);
                     res = $"{res}- {acc} : {(refreshRes == true ? "Refreshed" : refreshRes == false ? "Refresh not available" : "Error")}\n";
                 });
@@ -363,14 +369,22 @@ namespace KpRefresher.Services
         /// <returns><see langword="true"/> if a new boss has been killed, <see langword="false"/> otherwise.</returns>
         private async Task<bool> CheckRaidClears()
         {
-            var clears = await _gw2ApiService.GetCurrentClears();
+            var baseClears = await _kpMeService.GetClearData(_kpId);
+            var clears = await _gw2ApiService.GetClears();
 
             //No data
-            if (clears == null || _gw2ApiService.BaseRaidClears == null)
+            if (clears == null || baseClears == null)
                 return false;
 
+            var formattedGw2ApiClears = new List<string>();
+            foreach (var clear in clears) 
+            {
+                Enum.TryParse(clear, out RaidBoss boss);
+                formattedGw2ApiClears.Add(boss.GetDisplayName());
+            }
+
             //No new clear
-            var result = clears.Where(p => !_gw2ApiService.BaseRaidClears.Any(p2 => p2 == p));
+            var result = formattedGw2ApiClears.Where(p => !baseClears.Any(p2 => p2 == p));
             if (!result.Any())
                 return false;
 

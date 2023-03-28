@@ -14,8 +14,6 @@ namespace KpRefresher.Services
         private readonly Gw2ApiManager _gw2ApiManager;
         private readonly Logger _logger;
 
-        public List<string> BaseRaidClears { get; set; }
-
         private List<Token> _tokens { get; set; }
 
         public Gw2ApiService(Gw2ApiManager gw2ApiManager, Logger logger)
@@ -40,19 +38,24 @@ namespace KpRefresher.Services
             return account?.Name;
         }
 
-        /// <summary>
-        /// Sets <c>_baseRaidClears</c> with current raid progression exposed by GW2 API
-        /// </summary>
-        /// <returns></returns>
-        public async Task RefreshBaseRaidClears()
+        public async Task<List<string>> GetClears()
         {
-            BaseRaidClears = await GetRaidClears();
-        }
+            if (_gw2ApiManager.HasPermissions(_gw2ApiManager.Permissions) == false)
+            {
+                _logger.Warn("Permissions not granted.");
+                return null;
+            }
 
-        public async Task<List<string>> GetCurrentClears()
-        {
-            var clears = await GetRaidClears();
-            return clears;
+            try
+            {
+                var data = await _gw2ApiManager.Gw2ApiClient.V2.Account.Raids.GetAsync();
+                return data?.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Error while getting raid clears : {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<string> ScanAccountForKp()
@@ -152,26 +155,6 @@ namespace KpRefresher.Services
             }
 
             return res;
-        }
-
-        private async Task<List<string>> GetRaidClears()
-        {
-            if (_gw2ApiManager.HasPermissions(_gw2ApiManager.Permissions) == false)
-            {
-                _logger.Warn("Permissions not granted.");
-                return null;
-            }
-
-            try
-            {
-                var data = await _gw2ApiManager.Gw2ApiClient.V2.Account.Raids.GetAsync();
-                return data?.ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Error while getting raid clears : {ex.Message}");
-                return null;
-            }
         }
     }
 }
