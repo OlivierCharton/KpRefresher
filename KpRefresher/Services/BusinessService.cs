@@ -22,7 +22,7 @@ namespace KpRefresher.Services
         private string _accountName { get; set; }
         private string _kpId { get; set; }
 
-        private bool _isRefreshingKpDate { get; set; }
+        private bool _isRefreshingKpData { get; set; }
 
         private List<RaidBoss> _raidBossNames { get; set; }
 
@@ -85,15 +85,10 @@ namespace KpRefresher.Services
         {
             CancelSchedule();
 
-            if (!_refreshAvailable.HasValue)
+            if (!await DataLoaded())
             {
-                if (!_isRefreshingKpDate)
-                    await RefreshKpMeData();
-                else
-                    Thread.Sleep(2000);
-
-                if (!_refreshAvailable.HasValue)
-                    return;
+                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                return;
             }
 
             //Prevents spamming KP.me api
@@ -185,17 +180,9 @@ namespace KpRefresher.Services
             }
         }
 
-        public async Task CopyKpToClipboard(int retryCount = 0)
+        public async Task CopyKpToClipboard()
         {
-            //Loop to wait for id fetch if data not yet loaded
-            if (string.IsNullOrWhiteSpace(_kpId) && retryCount < 5)
-            {
-                await Task.Delay(1000);
-
-                retryCount++;
-                await CopyKpToClipboard(retryCount);
-            }
-            else if (!string.IsNullOrWhiteSpace(_kpId))
+            if (await DataLoaded())
             {
                 Clipboard.SetText($"KpMe id : {_kpId}");
                 ScreenNotification.ShowNotification("[KpRefresher] Id copied to clipboard !", ScreenNotification.NotificationType.Info);
@@ -209,15 +196,10 @@ namespace KpRefresher.Services
         #region Notification next refresh available
         public async Task ActivateNotificationNextRefreshAvailable()
         {
-            if (!_refreshAvailable.HasValue)
+            if (!await DataLoaded())
             {
-                if (!_isRefreshingKpDate)
-                    await RefreshKpMeData();
-                else
-                    Thread.Sleep(2000);
-
-                if (!_refreshAvailable.HasValue)
-                    return;
+                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                return;
             }
 
             if (DateTime.UtcNow > _refreshAvailable.Value)
@@ -267,6 +249,12 @@ namespace KpRefresher.Services
         /// <returns>A list of the new kills formatted in a string</returns>
         public async Task<string> GetDelta()
         {
+            if (!await DataLoaded())
+            {
+                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                return string.Empty;
+            }
+
             var baseClears = await _kpMeService.GetClearData(_kpId);
             var clears = await _gw2ApiService.GetClears();
 
@@ -305,6 +293,12 @@ namespace KpRefresher.Services
 
         public async Task<string> DisplayCurrentKp()
         {
+            if (!await DataLoaded())
+            {
+                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                return string.Empty;
+            }
+
             var accountKp = await _gw2ApiService.ScanAccountForKp();
 
             return accountKp;
@@ -312,15 +306,10 @@ namespace KpRefresher.Services
 
         public async Task<string> RefreshLinkedAccounts()
         {
-            if (!_refreshAvailable.HasValue)
+            if (!await DataLoaded())
             {
-                if (!_isRefreshingKpDate)
-                    await RefreshKpMeData();
-                else
-                    Thread.Sleep(2000);
-
-                if (!_refreshAvailable.HasValue)
-                    return string.Empty;
+                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                return string.Empty;
             }
 
             var tasks = new List<Task>();
@@ -334,8 +323,6 @@ namespace KpRefresher.Services
                     res = $"{res}- {acc} : {(refreshRes == true ? "Refreshed" : refreshRes == false ? "Refresh not available" : "Error")}\n";
                 });
                 tasks.Add(tt);
-
-                //tasks.Add(Task.Run(() => _kpMeService.RefreshApi(acc)));
             }
 
             await Task.WhenAll(tasks);
@@ -346,7 +333,12 @@ namespace KpRefresher.Services
 
         private async Task RefreshKpMeData()
         {
-            _isRefreshingKpDate = true;
+            _isRefreshingKpData = true;
+
+            //Reset stored data
+            _kpId = string.Empty;
+            _lastRefresh = null;
+            LinkedKpId = null;
 
             var accountData = await _kpMeService.GetAccountData(_accountName);
             if (accountData == null)
@@ -357,10 +349,9 @@ namespace KpRefresher.Services
 
             _kpId = accountData.Id;
             _lastRefresh = accountData.LastRefresh;
-
             LinkedKpId = accountData.LinkedAccounts?.Select(l => l.Id)?.ToList();
 
-            _isRefreshingKpDate = false;
+            _isRefreshingKpData = false;
         }
 
         private void ScheduleRefresh(double minutes = 5)
@@ -426,6 +417,28 @@ namespace KpRefresher.Services
             }
 
             _lastRefresh = date.GetValueOrDefault();
+        }
+
+        private async Task<bool> DataLoaded(int retryCount = 0)
+        {
+            if (!string.IsNullOrWhiteSpace(_kpId))
+                return true;
+
+            if (retryCount >= 5)
+                return false;
+
+            if (_isRefreshingKpData)
+            {
+                retryCount++;
+
+                await Task.Delay(1000);
+            }
+            else
+            {
+                await RefreshKpMeData();
+            }
+
+            return await DataLoaded(retryCount);
         }
     }
 }
