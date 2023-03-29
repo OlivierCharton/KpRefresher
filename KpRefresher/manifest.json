@@ -1,6 +1,6 @@
 {
   "name": "KpRefresher",
-  "version": "0.3.0",
+  "version": "0.1.0",
   "namespace": "japyx.kprefresher",
   "package": "KpRefresher.dll",
   "manifest_version": 1,
