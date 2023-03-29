@@ -4,7 +4,7 @@
   "namespace": "japyx.kprefresher",
   "package": "KpRefresher.dll",
   "manifest_version": 1,
-  "description": "A module to auto-refresh your kp.",
+  "description": "A module to help refresh your kp on KillProof.me ! Includes many useful tools, such as auto-refresh, map detection, easy week clear status, copy id to clipboard, linked account support and more",
   "dependencies": {
     "bh.blishhud": ">=1.0.0"
   },
