@@ -17,6 +17,7 @@ namespace KpRefresher.Services
         private readonly ModuleSettings _moduleSettings;
         private readonly Gw2ApiService _gw2ApiService;
         private readonly KpMeService _kpMeService;
+        private readonly Func<LoadingSpinner> _getSpinner;
 
         private string _accountName { get; set; }
         private string _kpId { get; set; }
@@ -42,11 +43,12 @@ namespace KpRefresher.Services
         public double NotificationNextRefreshAvailabledTimer { get; set; }
         public double NotificationNextRefreshAvailabledTimerEndValue { get; set; }
 
-        public BusinessService(ModuleSettings moduleSettings, Gw2ApiService gw2ApiService, KpMeService kpMeService)
+        public BusinessService(ModuleSettings moduleSettings, Gw2ApiService gw2ApiService, KpMeService kpMeService, Func<LoadingSpinner> getSpinner)
         {
             _moduleSettings = moduleSettings;
             _gw2ApiService = gw2ApiService;
             _kpMeService = kpMeService;
+            _getSpinner = getSpinner;
 
             _raidBossNames = Enum.GetValues(typeof(RaidBoss))
                             .Cast<RaidBoss>()
@@ -65,10 +67,14 @@ namespace KpRefresher.Services
 
         public async Task RefreshBaseData()
         {
+            _getSpinner?.Invoke()?.Show();
+
             //Get accountName to refresh kp.me id
             _accountName = await _gw2ApiService.GetAccountName();
 
             await RefreshKpMeData();
+
+            _getSpinner?.Invoke()?.Hide();
         }
 
         /// <summary>

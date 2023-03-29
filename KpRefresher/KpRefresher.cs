@@ -58,7 +58,7 @@ namespace KpRefresher
         {
             Gw2ApiService = new Gw2ApiService(Gw2ApiManager, Logger);
             KpMeService = new KpMeService(Logger);
-            BusinessService = new BusinessService(ModuleSettings, Gw2ApiService, KpMeService);
+            BusinessService = new BusinessService(ModuleSettings, Gw2ApiService, KpMeService, () => _apiSpinner);
 
             Gw2ApiManager.SubtokenUpdated += OnApiSubTokenUpdated;
         }
@@ -158,6 +158,15 @@ namespace KpRefresher
             _cornerIconContextMenu.AddMenuItem(_notificationNextRefreshAvailable);
 
             _cornerIcon.Menu = _cornerIconContextMenu;
+
+            _apiSpinner = new LoadingSpinner()
+            {
+                Location = new Point(_cornerIcon.Left, _cornerIcon.Bottom + 3),
+                Parent = GameService.Graphics.SpriteScreen,
+                Size = new Point(_cornerIcon.Width, _cornerIcon.Height),
+                BasicTooltipText = "Fetching Api Data",
+                Visible = false
+            };
         }
 
         protected override void Update(GameTime gameTime)
@@ -193,6 +202,7 @@ namespace KpRefresher
 
             _cornerIcon?.Dispose();
             _cornerIconContextMenu?.Dispose();
+            _apiSpinner?.Dispose();
             _mainWindow?.Dispose();
             _windowBackgroundTexture?.Dispose();
             _emblemTexture?.Dispose();
@@ -212,6 +222,7 @@ namespace KpRefresher
         private Texture2D _cornerIconHoverTexture;
         private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
+        private LoadingSpinner _apiSpinner;
         private KpRefresherWindow _mainWindow;
         private ContextMenuStripItem _notificationNextRefreshAvailable;
     }
