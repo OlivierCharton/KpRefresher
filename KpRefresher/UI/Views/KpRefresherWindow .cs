@@ -1,6 +1,7 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Content;
 using Blish_HUD.Controls;
+using KpRefresher.Domain;
 using KpRefresher.Services;
 using Microsoft.Xna.Framework;
 using System;
@@ -19,6 +20,7 @@ namespace KpRefresher.UI.Views
         private LoadingSpinner _loadingSpinner;
         private Panel _notificationsContainer;
         private Label _notificationLabel;
+        private FormattedLabel _notificationFormattedLabel;
         private Checkbox _showAutoRetryNotificationCheckbox;
         private Checkbox _onlyRefreshOnFinalBossKillCheckbox;
 
@@ -166,8 +168,8 @@ namespace KpRefresher.UI.Views
 
             _buttons.Add(button = new StandardButton()
             {
-                Text = "Show new clears",
-                BasicTooltipText = "Displays new clears made since last KillProof.me refresh",
+                Text = "Show clears",
+                BasicTooltipText = "Displays current raid clears according to KillProof.me and GW2\n\nIf the color is green, it means the clear has been registered on KillProof.me\nIf the color is purple, it means that the clear is visible by GW2 API, and can be added to KillProof.me through refresh",
                 Parent = actionContainer
             });
             button.Click += async (s, e) => await DisplayRaidDifference();
@@ -270,8 +272,8 @@ namespace KpRefresher.UI.Views
         {
             ShowInsideNotification("Loading ...", true);
 
-            var data = await _businessService.GetDelta();
-            ShowInsideNotification(data, true);
+            var data = await _businessService.GetFullRaidStatus();
+            ShowFormattedNotification(data, true);
         }
 
         private void StopRetry()
@@ -291,10 +293,60 @@ namespace KpRefresher.UI.Views
 
         private void ShowInsideNotification(string message, bool persistMessage = false)
         {
+            ClearNotifications();
+
             _notificationLabel.Text = message;
             _notificationLabel.Visible = true;
             _notificationLabel.Width = _notificationsContainer.Width;
             _notificationLabel.Height = _notificationsContainer.Height;
+
+            if (!persistMessage)
+            {
+                Task.Run(async delegate
+                {
+                    await Task.Delay(4000);
+
+                    ClearNotifications();
+
+                    return;
+                });
+            }
+        }
+
+        private void ShowFormattedNotification(List<(string, Color?)> parts, bool persistMessage = false)
+        {
+            ClearNotifications();
+
+            var builder = new FormattedLabelBuilder();
+
+            foreach (var part in parts)
+            {
+                if (part.Item2.HasValue)
+                {
+                    if(part.Item2.Value == Colors.OnlyGw2)
+                        builder = builder.CreatePart(part.Item1, b => b.SetFontSize(ContentService.FontSize.Size18)
+                                         .SetTextColor(part.Item2.Value)
+                                         .MakeBold());
+                    else
+                        builder = builder.CreatePart(part.Item1, b => b.SetFontSize(ContentService.FontSize.Size18)
+                                     .SetTextColor(part.Item2.Value));
+                }
+                else
+                    builder = builder.CreatePart(part.Item1, b => b.SetFontSize(ContentService.FontSize.Size18));
+            }
+
+
+            _notificationFormattedLabel?.Dispose();
+
+            _notificationFormattedLabel = builder
+                             .SetWidth(_notificationsContainer.Width)
+                             .SetHeight(_notificationsContainer.Height)
+                             .SetHorizontalAlignment(HorizontalAlignment.Left)
+                             .SetVerticalAlignment(VerticalAlignment.Top)
+                             .Build();
+
+            _notificationFormattedLabel.Location = new(_loadingSpinner.Right + 5, _loadingSpinner.Top);
+            _notificationFormattedLabel.Parent = _notificationsContainer;
 
             if (!persistMessage)
             {
@@ -321,6 +373,8 @@ namespace KpRefresher.UI.Views
         {
             _notificationLabel.Text = string.Empty;
             _notificationLabel.Visible = false;
+
+            _notificationFormattedLabel?.Dispose();
         }
 
         private (FlowPanel panel, Label label, T control) CreateLabeledControl<T>(string labelText, string tooltipText, FlowPanel parent, int amount = 2, int ctrlWidth = 50) where T : Control, new()

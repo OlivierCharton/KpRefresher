@@ -3,10 +3,10 @@ using Blish_HUD.Controls;
 using KpRefresher.Domain;
 using KpRefresher.Domain.Attributes;
 using KpRefresher.Extensions;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -243,52 +243,53 @@ namespace KpRefresher.Services
             return new TimeSpan(0, 0, (int)seconds);
         }
 
-        /// <summary>
-        /// Compares the base raid clear from <c>Gw2ApiService.BaseRaidClears</c> with the current clear
-        /// </summary>
-        /// <returns>A list of the new kills formatted in a string</returns>
-        public async Task<string> GetDelta()
+        public async Task<List<(string, Color?)>> GetFullRaidStatus()
         {
             if (!await DataLoaded())
             {
                 ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
-                return string.Empty;
+                return null;
             }
 
             var baseClears = await _kpMeService.GetClearData(_kpId);
             var clears = await _gw2ApiService.GetClears();
 
-            if (clears == null || baseClears == null)
-                return string.Empty;
-
-            var formattedGw2ApiClears = new List<RaidBoss>();
+            var formattedGw2ApiClears = new List<string>();
             foreach (var clear in clears)
             {
                 Enum.TryParse(clear, out RaidBoss boss);
-                formattedGw2ApiClears.Add(boss);
+                formattedGw2ApiClears.Add(boss.GetDisplayName());
             }
 
-            var result = formattedGw2ApiClears.Where(p => !baseClears.Any(p2 => p2 == p.GetDisplayName()));
+            //TEST VALUE
+            //formattedGw2ApiClears.Add("Adina");
 
-            string msgToDisplay;
-            if (!result.Any())
+            var res = new List<(string, Color?)>();
+
+            var encounters = _raidBossNames.OrderBy(x => (int)x).ToList();
+            foreach (var wingNumber in encounters.Select(ob => ob.GetAttribute<WingAttribute>().WingNumber).Distinct())
             {
-                msgToDisplay = "No new clear.";
-            }
-            else
-            {
-                msgToDisplay = "New clears :\n";
+                res.Add(($"[Wing {wingNumber}]\n", Color.White));
 
-                var orderedBoss = result.OrderBy(x => (int)x).ToList();
+                var bossFromWing = encounters.Where(o => o.GetAttribute<WingAttribute>().WingNumber == wingNumber).Select(o => o.GetDisplayName());
 
-                foreach (var wingNumber in orderedBoss.Select(ob => ob.GetAttribute<WingAttribute>().WingNumber).Distinct())
+                for (var i = 0; i < bossFromWing.Count(); i++)
                 {
-                    var bossFromWing = orderedBoss.Where(o => o.GetAttribute<WingAttribute>().WingNumber == wingNumber).Select(o => o.GetDisplayName());
-                    msgToDisplay = $"{msgToDisplay}\n[Wing {wingNumber}]\n{string.Join("\n", bossFromWing)}\n";
+                    var boss = bossFromWing.ElementAt(i);
+
+                    Color bossColor = Colors.BaseColor;
+                    if (baseClears.Contains(boss))
+                        bossColor = Colors.KpRefreshedColor;
+                    else if (formattedGw2ApiClears.Contains(boss))
+                        bossColor = Colors.OnlyGw2;
+
+                    res.Add(($"{boss}{(i < bossFromWing.Count() - 1 ? " - " : string.Empty)}", bossColor));
                 }
+
+                res.Add(("\n", null));
             }
 
-            return msgToDisplay;
+            return res;
         }
 
         public async Task<string> DisplayCurrentKp()
