@@ -70,9 +70,9 @@ namespace KpRefresher.Services
             _getSpinner?.Invoke()?.Show();
 
             //Get accountName to refresh kp.me id
-            _accountName = await _gw2ApiService.GetAccountName();
+            await RefreshAccountName(true);
 
-            await RefreshKpMeData();
+            await RefreshKpMeData(true);
 
             _getSpinner?.Invoke()?.Hide();
         }
@@ -332,9 +332,28 @@ namespace KpRefresher.Services
         }
         #endregion UI Methods
 
-        private async Task RefreshKpMeData()
+        private async Task<bool> RefreshAccountName(bool isFromInit = false)
+        {
+            _accountName = await _gw2ApiService.GetAccountName();
+
+            if (string.IsNullOrWhiteSpace(_accountName) && isFromInit)
+                ScreenNotification.ShowNotification("[KpRefresher] Error while getting Account name from GW2 API.\nPlease retry later.", ScreenNotification.NotificationType.Error);
+
+            return !string.IsNullOrWhiteSpace(_accountName);
+        }
+
+        private async Task RefreshKpMeData(bool isFromInit = false)
         {
             _isRefreshingKpData = true;
+
+            if (string.IsNullOrWhiteSpace(_accountName))
+            {
+                if (!await RefreshAccountName())
+                {
+                    _isRefreshingKpData = false;
+                    return;
+                }
+            }
 
             //Reset stored data
             _kpId = string.Empty;
@@ -344,7 +363,10 @@ namespace KpRefresher.Services
             var accountData = await _kpMeService.GetAccountData(_accountName);
             if (accountData == null)
             {
-                ScreenNotification.ShowNotification("[KpRefresher] Error while loading KillProof.me profile.\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                if (isFromInit)
+                    ScreenNotification.ShowNotification("[KpRefresher] Error while loading KillProof.me profile.\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+
+                _isRefreshingKpData = false;
                 return;
             }
 
@@ -430,14 +452,17 @@ namespace KpRefresher.Services
 
             if (_isRefreshingKpData)
             {
-                retryCount++;
-
                 await Task.Delay(1000);
             }
             else
             {
+                if(retryCount > 0)
+                    await Task.Delay(1000);
+
                 await RefreshKpMeData();
             }
+
+            retryCount++;
 
             return await DataLoaded(retryCount);
         }

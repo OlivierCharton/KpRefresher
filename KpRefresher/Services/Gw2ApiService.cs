@@ -34,8 +34,16 @@ namespace KpRefresher.Services
                 return string.Empty;
             }
 
-            var account = await _gw2ApiManager.Gw2ApiClient.V2.Account.GetAsync();
-            return account?.Name;
+            try
+            {
+                var account = await _gw2ApiManager.Gw2ApiClient.V2.Account.GetAsync();
+                return account?.Name;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Error while getting account name : {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<List<string>> GetClears()

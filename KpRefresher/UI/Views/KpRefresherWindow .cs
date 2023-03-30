@@ -347,10 +347,10 @@ namespace KpRefresher.UI.Views
 
         private void ShowInsideNotification(string message, bool persistMessage = false)
         {
+            ClearNotifications();
+
             if (string.IsNullOrWhiteSpace(message))
                 return;
-
-            ClearNotifications();
 
             _notificationLabel.Text = message;
             _notificationLabel.Visible = true;
@@ -372,10 +372,10 @@ namespace KpRefresher.UI.Views
 
         private void ShowFormattedNotification(List<(string, Color?)> parts, bool persistMessage = false)
         {
+            ClearNotifications();
+
             if (parts == null || parts.Count == 0)
                 return;
-
-            ClearNotifications();
 
             var builder = new FormattedLabelBuilder();
 
