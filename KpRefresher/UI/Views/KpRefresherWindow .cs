@@ -293,6 +293,9 @@ namespace KpRefresher.UI.Views
 
         private void ShowInsideNotification(string message, bool persistMessage = false)
         {
+            if (string.IsNullOrWhiteSpace(message))
+                return;
+
             ClearNotifications();
 
             _notificationLabel.Text = message;
@@ -315,6 +318,9 @@ namespace KpRefresher.UI.Views
 
         private void ShowFormattedNotification(List<(string, Color?)> parts, bool persistMessage = false)
         {
+            if (parts == null || parts.Count == 0)
+                return;
+
             ClearNotifications();
 
             var builder = new FormattedLabelBuilder();
@@ -323,7 +329,7 @@ namespace KpRefresher.UI.Views
             {
                 if (part.Item2.HasValue)
                 {
-                    if(part.Item2.Value == Colors.OnlyGw2)
+                    if (part.Item2.Value == Colors.OnlyGw2)
                         builder = builder.CreatePart(part.Item1, b => b.SetFontSize(ContentService.FontSize.Size18)
                                          .SetTextColor(part.Item2.Value)
                                          .MakeBold());
