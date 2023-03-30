@@ -4,18 +4,21 @@ using Blish_HUD.Controls;
 using KpRefresher.Domain;
 using KpRefresher.Services;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace KpRefresher.UI.Views
 {
     public class KpRefresherWindow : StandardWindow
     {
+        
         private readonly ModuleSettings _moduleSettings;
         private readonly BusinessService _businessService;
         private readonly List<StandardButton> _buttons = new();
+
+        private static readonly Regex _regex = new("^[0-9]*$");
 
         private LoadingSpinner _loadingSpinner;
         private Panel _notificationsContainer;
@@ -23,6 +26,8 @@ namespace KpRefresher.UI.Views
         private FormattedLabel _notificationFormattedLabel;
         private Checkbox _showAutoRetryNotificationCheckbox;
         private Checkbox _onlyRefreshOnFinalBossKillCheckbox;
+
+        private bool _delayTextChangeFlag = false;
 
         public KpRefresherWindow(AsyncTexture2D background, Rectangle windowRegion, Rectangle contentRegion,
             AsyncTexture2D cornerIconTexture, ModuleSettings moduleSettings, BusinessService businessService) : base(background, windowRegion, contentRegion)
@@ -103,24 +108,73 @@ namespace KpRefresher.UI.Views
 
             var (panel, label, control) = CreateLabeledControl<TextBox>("Delay before refresh", "Time in minutes before refresh is triggered after map change (between 1 and 60)", configContainer);
             control.Text = _moduleSettings.DelayBeforeRefreshOnMapChange.Value.ToString();
-            control.TextChanged += (s, e) =>
+            control.InputFocusChanged += (s, e) =>
             {
+                //Prevents empty value
                 string txt = (s as TextBox).Text.Trim();
-
                 if (string.IsNullOrWhiteSpace(txt))
                 {
+                    _delayTextChangeFlag = true;
+
+                    control.Text = "1";
                     _moduleSettings.DelayBeforeRefreshOnMapChange.Value = 1;
+
+                    _delayTextChangeFlag = false;
                 }
-                else if (int.TryParse(txt, out int newValue))
+            };
+            control.TextChanged += (s, e) =>
+            {
+                //Prevent double change
+                if (_delayTextChangeFlag)
+                    return;
+
+                _delayTextChangeFlag = true;
+
+                string txt = (s as TextBox).Text.Trim();
+
+                //Prevent action on field empty
+                if (string.IsNullOrWhiteSpace(txt))
                 {
-                    //Only allow value between 1 and 60
-                    newValue = Math.Max(newValue, 1);
-                    newValue = Math.Min(newValue, 60);
+                    _delayTextChangeFlag = false;
+                    return;
+                }
 
-                    _moduleSettings.DelayBeforeRefreshOnMapChange.Value = newValue;
-                };
+                //Prevent action on wrong input
+                if (!_regex.IsMatch(txt))
+                {
+                    control.Text = ((ValueChangedEventArgs<string>)e).PreviousValue;
+                    control.CursorIndex = control.Text.Length;
 
-                control.Text = _moduleSettings.DelayBeforeRefreshOnMapChange.Value.ToString();
+                    _delayTextChangeFlag = false;
+                    return;
+                }
+
+                if (!int.TryParse(txt, out int newValue))
+                {
+                    //This should never happen
+                    control.Text = ((Blish_HUD.ValueChangedEventArgs<string>)e).PreviousValue;
+                    //control.CursorIndex--;
+
+                    _delayTextChangeFlag = false;
+                    return;
+                }
+
+                //Only allow value between 1 and 60
+                if (newValue < 1)
+                {
+                    newValue = 1;
+                    control.Text = "1";
+                    control.CursorIndex = 1;
+                }
+                else if (newValue > 60)
+                {
+                    newValue = 60;
+                    control.Text = "60";
+                    control.CursorIndex = 2;
+                }
+
+                _moduleSettings.DelayBeforeRefreshOnMapChange.Value = newValue;
+                _delayTextChangeFlag = false;
             };
             #endregion Config
 
