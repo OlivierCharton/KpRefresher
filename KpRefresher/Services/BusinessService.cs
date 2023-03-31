@@ -261,9 +261,6 @@ namespace KpRefresher.Services
                 formattedGw2ApiClears.Add(boss.GetDisplayName());
             }
 
-            //TEST VALUE
-            //formattedGw2ApiClears.Add("Adina");
-
             var res = new List<(string, Color?)>();
 
             var encounters = _raidBossNames.OrderBy(x => (int)x).ToList();
@@ -278,10 +275,14 @@ namespace KpRefresher.Services
                     var boss = bossFromWing.ElementAt(i);
 
                     Color bossColor = Colors.BaseColor;
-                    if (baseClears.Contains(boss))
+                    if (baseClears.Contains(boss, StringComparer.OrdinalIgnoreCase))
                         bossColor = Colors.KpRefreshedColor;
-                    else if (formattedGw2ApiClears.Contains(boss))
+                    else if (formattedGw2ApiClears.Contains(boss, StringComparer.OrdinalIgnoreCase))
                         bossColor = Colors.OnlyGw2;
+
+                    //Workaround for display size and friendly name
+                    if (boss == "Voice In The Void")
+                        boss = "Dhuum";
 
                     res.Add(($"{boss}{(i < bossFromWing.Count() - 1 ? " - " : string.Empty)}", bossColor));
                 }

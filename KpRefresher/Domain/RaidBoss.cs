@@ -54,16 +54,16 @@ namespace KpRefresher.Domain
         [Wing(4)]
         deimos,
 
-        [Display(Name = "Desmina")]
+        [Display(Name = "Soulless Horror")]
         [Wing(5)]
         soulless_horror,
-        [Display(Name = "River of Souls")]
+        [Display(Name = "River Of Souls")]
         [Wing(5)]
         river_of_souls,
-        [Display(Name = "Statues of Grenth")]
+        [Display(Name = "Statues Of Grenth")]
         [Wing(5)]
         statues_of_grenth,
-        [Display(Name = "Dhuum"), FinalBoss]
+        [Display(Name = "Voice In The Void"), FinalBoss]
         [Wing(5)]
         voice_in_the_void,
 
@@ -86,7 +86,7 @@ namespace KpRefresher.Domain
         [Display(Name = "Sabir")]
         [Wing(7)]
         sabir,
-        [Display(Name = "Qadim the Peerless"), FinalBoss]
+        [Display(Name = "Qadim The Peerless"), FinalBoss]
         [Wing(7)]
         qadim_the_peerless
     }
