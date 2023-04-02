@@ -142,5 +142,10 @@ namespace KpRefresher.Services
 
             return null;
         }
+
+        public string GetBaseUrl()
+        {
+            return _kpMeBaseUrl;
+        }
     }
 }

@@ -6,6 +6,7 @@ using KpRefresher.Extensions;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -191,6 +192,18 @@ namespace KpRefresher.Services
             {
                 ScreenNotification.ShowNotification("[KpRefresher] Id could not be loaded\nPlease try again later", ScreenNotification.NotificationType.Warning);
             }
+        }
+
+        public async Task OpenKpUrl()
+        {
+            if (!await DataLoaded())
+            {
+                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me id not loaded\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                return;
+            }
+
+            var url = $"{_kpMeService.GetBaseUrl()}proof/{_kpId}";
+            Process.Start(url);
         }
 
         #region Notification next refresh available

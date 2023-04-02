@@ -153,9 +153,16 @@ namespace KpRefresher
                 }
             };
 
+            var openKpUrl = new ContextMenuStripItem("Open KillProof.me website");
+            openKpUrl.Click += (s, e) =>
+            {
+                _ = BusinessService.OpenKpUrl();
+            };
+
             _cornerIconContextMenu.AddMenuItem(refeshKpMenuItem);
             _cornerIconContextMenu.AddMenuItem(copyKpToClipboard);
             _cornerIconContextMenu.AddMenuItem(_notificationNextRefreshAvailable);
+            _cornerIconContextMenu.AddMenuItem(openKpUrl);
 
             _cornerIcon.Menu = _cornerIconContextMenu;
 
