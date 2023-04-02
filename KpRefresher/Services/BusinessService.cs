@@ -293,7 +293,9 @@ namespace KpRefresher.Services
                     else if (formattedGw2ApiClears.Contains(boss, StringComparer.OrdinalIgnoreCase))
                         bossColor = Colors.OnlyGw2;
 
-                    //Workaround for display size and friendly name
+                    //Workaround for display size and friendly name (w5 only)
+                    if (boss == "Statues Of Grenth")
+                        boss = "Statues";
                     if (boss == "Voice In The Void")
                         boss = "Dhuum";
 
