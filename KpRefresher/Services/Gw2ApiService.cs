@@ -41,7 +41,7 @@ namespace KpRefresher.Services
             }
             catch (Exception ex)
             {
-                _logger.Error($"Error while getting account name : {ex.Message}");
+                _logger.Warn($"Error while getting account name : {ex.Message}");
                 return null;
             }
         }
@@ -61,7 +61,7 @@ namespace KpRefresher.Services
             }
             catch (Exception ex)
             {
-                _logger.Error($"Error while getting raid clears : {ex.Message}");
+                _logger.Warn($"Error while getting raid clears : {ex.Message}");
                 return null;
             }
         }
@@ -104,8 +104,7 @@ namespace KpRefresher.Services
             }
             catch (Exception ex)
             {
-                _logger.Warn("Failed to retrieve bank items.");
-                _logger.Warn($"{ex}");
+                _logger.Warn($"Failed to retrieve bank items : {ex}");
             }
 
             try
@@ -134,8 +133,7 @@ namespace KpRefresher.Services
             }
             catch (Exception ex)
             {
-                _logger.Warn("Failed to retrieve shared inventory items.");
-                _logger.Warn($"{ex}");
+                _logger.Warn($"Failed to retrieve shared inventory items : {ex}");
             }
 
             try
@@ -185,8 +183,7 @@ namespace KpRefresher.Services
             }
             catch (Exception ex)
             {
-                _logger.Warn("Failed to retrieve characters.");
-                _logger.Warn($"{ex}");
+                _logger.Warn($"Failed to retrieve characters : {ex}");
             }
 
             return res;

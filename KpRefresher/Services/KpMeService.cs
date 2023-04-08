@@ -45,12 +45,12 @@ namespace KpRefresher.Services
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                         ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {kpId} does not exist !", ScreenNotification.NotificationType.Error);
                     else
-                        _logger.Error($"Unknown status while getting account data : {response.StatusCode}");
+                        _logger.Warn($"Unknown status while getting account data : {response.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error($"Error while getting account info : {ex.Message}");
+                _logger.Warn($"Error while getting account info : {ex.Message}");
             }
 
             return null;
@@ -98,12 +98,12 @@ namespace KpRefresher.Services
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                         ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {kpId} does not exist !", ScreenNotification.NotificationType.Error);
                     else
-                        _logger.Error($"Unknown status while getting clear data : {response.StatusCode}");
+                        _logger.Warn($"Unknown status while getting clear data : {response.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error($"Error while refreshing kp.me : {ex.Message}");
+                _logger.Warn($"Error while refreshing kp.me : {ex.Message}");
             }
 
             return null;
@@ -132,12 +132,12 @@ namespace KpRefresher.Services
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                         ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {kpId} does not exist !", ScreenNotification.NotificationType.Error);
                     else
-                        _logger.Error($"Unknown status while refreshing kp.me : {response.StatusCode}");
+                        _logger.Warn($"Unknown status while refreshing kp.me : {response.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error($"Error while refreshing kp.me : {ex.Message}");
+                _logger.Warn($"Error while refreshing kp.me : {ex.Message}");
             }
 
             return null;
