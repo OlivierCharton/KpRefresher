@@ -116,7 +116,8 @@ namespace KpRefresher
                 Icon = _cornerIconTexture,
                 BasicTooltipText = $"{Name}",
                 Parent = GameService.Graphics.SpriteScreen,
-                HoverIcon = _cornerIconHoverTexture
+                HoverIcon = _cornerIconHoverTexture,
+                Priority = 1283537108
             };
 
             _cornerIcon.Click += delegate
