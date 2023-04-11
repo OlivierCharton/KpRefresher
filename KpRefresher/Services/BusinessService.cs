@@ -432,16 +432,15 @@ namespace KpRefresher.Services
             //Detects if we have a new final boss clear
             foreach (var res in result)
             {
-                if (Enum.TryParse(res, out RaidBoss raidBoss))
-                {
-                    if (raidBoss.HasAttribute<FinalBossAttribute>())
-                        return true;
-                }
-                else
+                if (!_raidBossNames.Any(r => r.GetDisplayName() == res))
                 {
                     //Boss unknown - what to do ? For now it's a joker
                     return true;
                 }
+
+                var raidBoss = _raidBossNames.FirstOrDefault(r => r.GetDisplayName() == res);
+                if (raidBoss.HasAttribute<FinalBossAttribute>())
+                    return true;
             }
 
             return false;
@@ -472,7 +471,7 @@ namespace KpRefresher.Services
             }
             else
             {
-                if(retryCount > 0)
+                if (retryCount > 0)
                     await Task.Delay(1000);
 
                 await RefreshKpMeData();
