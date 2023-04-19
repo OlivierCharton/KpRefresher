@@ -129,6 +129,8 @@ namespace KpRefresher.Services
                         return true;
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
                         return false;
+                    else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                        ScreenNotification.ShowNotification($"[KpRefresher] Refresh failed : please allow anonymous refresh\nin your KillProof.me settings", ScreenNotification.NotificationType.Error);
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                         ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {kpId} does not exist !", ScreenNotification.NotificationType.Error);
                     else
