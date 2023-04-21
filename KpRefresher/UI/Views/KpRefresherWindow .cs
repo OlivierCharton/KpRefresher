@@ -13,7 +13,7 @@ namespace KpRefresher.UI.Views
 {
     public class KpRefresherWindow : StandardWindow
     {
-        
+
         private readonly ModuleSettings _moduleSettings;
         private readonly BusinessService _businessService;
         private readonly List<StandardButton> _buttons = new();
@@ -258,6 +258,7 @@ namespace KpRefresher.UI.Views
                 Parent = mainContainer,
                 HeightSizingMode = SizingMode.Fill,
                 WidthSizingMode = SizingMode.Fill,
+                CanScroll = true,
             };
 
             #region Spinner
@@ -285,7 +286,8 @@ namespace KpRefresher.UI.Views
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Font = GameService.Content.DefaultFont18,
-                WrapText = true
+                WrapText = true,
+                AutoSizeHeight = true,
             };
             #endregion Notifications
         }
@@ -355,7 +357,6 @@ namespace KpRefresher.UI.Views
             _notificationLabel.Text = message;
             _notificationLabel.Visible = true;
             _notificationLabel.Width = _notificationsContainer.Width;
-            _notificationLabel.Height = _notificationsContainer.Height;
 
             if (!persistMessage)
             {
