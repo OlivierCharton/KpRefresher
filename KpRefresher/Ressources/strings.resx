@@ -126,6 +126,9 @@
   <data name="BusinessService_RefreshNotAvailable" xml:space="preserve">
     <value>Refresh not available</value>
   </data>
+  <data name="BusinessService_Wing" xml:space="preserve">
+    <value>Wing</value>
+  </data>
   <data name="CornerIcon_CancelNotify" xml:space="preserve">
     <value>Cancel notification for next refresh</value>
   </data>
@@ -150,23 +153,129 @@
   <data name="LoadingSpinner_Fetch" xml:space="preserve">
     <value>Fetching Api Data</value>
   </data>
+  <data name="MainWindow_Actions_Title" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="MainWindow_Button_ClearNotif_Label" xml:space="preserve">
+    <value>Clear notifications</value>
+  </data>
+  <data name="MainWindow_Button_ClearSchedule_Label" xml:space="preserve">
+    <value>Clear schedule</value>
+  </data>
+  <data name="MainWindow_Button_ClearSchedule_Tooltip" xml:space="preserve">
+    <value>Resets any scheduled refresh</value>
+  </data>
+  <data name="MainWindow_Button_RefreshLinkedAccounts_Label" xml:space="preserve">
+    <value>Refresh linked accounts</value>
+  </data>
+  <data name="MainWindow_Button_RefreshLinkedAccounts_Tooltip" xml:space="preserve">
+    <value>Attempts to refresh all linked KillProof.me accounts</value>
+  </data>
+  <data name="MainWindow_Button_Refresh_Label" xml:space="preserve">
+    <value>Refresh KillProof.me</value>
+  </data>
+  <data name="MainWindow_Button_Refresh_Tooltip" xml:space="preserve">
+    <value>Attempts to refresh KillProof.me
+If auto-retry is enable, a new refresh will be scheduled in case of failure</value>
+  </data>
+  <data name="MainWindow_Button_ShowClears_Label" xml:space="preserve">
+    <value>Show clears</value>
+  </data>
+  <data name="MainWindow_Button_ShowClears_Tooltip" xml:space="preserve">
+    <value>Displays current raid clears according to KillProof.me and GW2
+
+If the color is green, it means the clear has been registered on KillProof.me
+If the color is purple, it means that the clear is visible by GW2 API, and can be added to KillProof.me through refresh</value>
+  </data>
+  <data name="MainWindow_Button_ShowKP_Label" xml:space="preserve">
+    <value>Show current KP</value>
+  </data>
+  <data name="MainWindow_Button_ShowKP_Tooltip" xml:space="preserve">
+    <value>Scan your bank, shared slots and characters and displays current KP according GW2 API.
+Every kp in the list is able to be scanned by KillProof.me, if not already scanned. You can use this feature to check if a newly opened chest is already visible for KillProof.me.</value>
+  </data>
+  <data name="MainWindow_Configuration_Title" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="MainWindow_DelayBeforeRefreshOnMapChange_Label" xml:space="preserve">
+    <value>Delay before refresh</value>
+  </data>
+  <data name="MainWindow_DelayBeforeRefreshOnMapChange_Tooltip" xml:space="preserve">
+    <value>Time in minutes before refresh is triggered after map change (between 1 and 60)</value>
+  </data>
+  <data name="MainWindow_EnableAutoRetry_Label" xml:space="preserve">
+    <value>Enable auto-retry</value>
+  </data>
+  <data name="MainWindow_EnableAutoRetry_Tooltip" xml:space="preserve">
+    <value>Schedule automatically a new try when KillProof.me was not available for a refresh</value>
+  </data>
+  <data name="MainWindow_EnableRefreshOnKill_Label" xml:space="preserve">
+    <value>Condition refresh to clear</value>
+  </data>
+  <data name="MainWindow_EnableRefreshOnKill_Tooltip" xml:space="preserve">
+    <value>Only allow refresh if a clear was made and is visible by GW2 API</value>
+  </data>
+  <data name="MainWindow_Notif_LinkedAccounts" xml:space="preserve">
+    <value>{0} linked account{1} found!
+{2}</value>
+  </data>
+  <data name="MainWindow_Notif_Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="MainWindow_Notif_NoLinkedAccount" xml:space="preserve">
+    <value>No linked account found!</value>
+  </data>
+  <data name="MainWindow_Notif_NoSchedule" xml:space="preserve">
+    <value>No scheduled refresh</value>
+  </data>
+  <data name="MainWindow_Notif_ScheduleDisabled" xml:space="preserve">
+    <value>Scheduled refresh disabled!</value>
+  </data>
+  <data name="MainWindow_RefreshOnKillOnlyBoss_Label" xml:space="preserve">
+    <value>Refresh on final boss kill</value>
+  </data>
+  <data name="MainWindow_RefreshOnKillOnlyBoss_Tooltip" xml:space="preserve">
+    <value>Only refresh if a final raid wing boss was cleared (e.g. Sabetha)</value>
+  </data>
+  <data name="MainWindow_RefreshOnMapChange_Label" xml:space="preserve">
+    <value>Refresh on map change</value>
+  </data>
+  <data name="MainWindow_RefreshOnMapChange_Tooltip" xml:space="preserve">
+    <value>Schedule a refresh when leaving a raid or strike map</value>
+  </data>
+  <data name="MainWindow_ShowScheduleNotification_Label" xml:space="preserve">
+    <value>Show auto-retry notifications</value>
+  </data>
+  <data name="MainWindow_ShowScheduleNotification_Tooltip" xml:space="preserve">
+    <value>Display notification when retry is scheduled</value>
+  </data>
+  <data name="MainWindow_Spinner_Minutes" xml:space="preserve">
+    <value>Next retry in {0} minute{1}.</value>
+  </data>
+  <data name="MainWindow_Spinner_Seconds" xml:space="preserve">
+    <value>Next retry in {0} second{1}.</value>
+  </data>
   <data name="Notification_AccountNameFetchError" xml:space="preserve">
-    <value>[KpRefresher] Error while getting Account name from GW2 API.\nPlease retry later.</value>
+    <value>[KpRefresher] Error while getting Account name from GW2 API.
+Please retry later.</value>
   </data>
   <data name="Notification_CopiedToClipboard" xml:space="preserve">
     <value>[KpRefresher] Id copied to clipboard!</value>
   </data>
   <data name="Notification_DataNotAvailable" xml:space="preserve">
-    <value>[KpRefresher] KillProof.me data not available\nPlease retry later.</value>
+    <value>[KpRefresher] KillProof.me data not available
+Please retry later.</value>
   </data>
   <data name="Notification_KpAccountAnonymous" xml:space="preserve">
-    <value>[KpRefresher] Refresh failed : please allow anonymous refresh\nin your KillProof.me settings</value>
+    <value>[KpRefresher] Refresh failed : please allow anonymous refresh
+in your KillProof.me settings</value>
   </data>
   <data name="Notification_KpAccountUnknown" xml:space="preserve">
     <value>[KpRefresher] KillProof.me Id {0} does not exist!</value>
   </data>
   <data name="Notification_KPProfileFetchError" xml:space="preserve">
-    <value>[KpRefresher] Error while loading KillProof.me profile.\nPlease retry later.</value>
+    <value>[KpRefresher] Error while loading KillProof.me profile.
+Please retry later.</value>
   </data>
   <data name="Notification_NextRefreshAvailableIn" xml:space="preserve">
     <value>[KpRefresher] Next refresh available in {0} minute{1}</value>
@@ -175,13 +284,15 @@
     <value>[KpRefresher] No new clear validating settings, refresh aborted!</value>
   </data>
   <data name="Notification_NotifyScheduled" xml:space="preserve">
-    <value>[KpRefresher] You will be notified when next refresh is available,\nin approx. {0} minute{1}.</value>
+    <value>[KpRefresher] You will be notified when next refresh is available,
+in approx. {0} minute{1}.</value>
   </data>
   <data name="Notification_RefreshAvailable" xml:space="preserve">
     <value>[KpRefresher] Next refresh is available!</value>
   </data>
   <data name="Notification_RefreshNotAvailable" xml:space="preserve">
-    <value>[KpRefresher] KillProof.me refresh was not available\nPlease retry later.</value>
+    <value>[KpRefresher] KillProof.me refresh was not available
+Please retry later.</value>
   </data>
   <data name="Notification_RefreshNotAvailableRetry" xml:space="preserve">
     <value>[KpRefresher] KillProof.me refresh was not available\nAuto-retry in 5 minutes.</value>
@@ -190,7 +301,8 @@
     <value>[KpRefresher] KillProof.me refresh successful!</value>
   </data>
   <data name="Notification_TryScheduled" xml:space="preserve">
-    <value>{0]\nA new try has been scheduled.</value>
+    <value>{0}
+A new try has been scheduled.</value>
   </data>
   <data name="Notiication_InstanceExitDetected" xml:space="preserve">
     <value>[KpRefresher] Instance exit detected, refresh scheduled in {0} minute{1}</value>

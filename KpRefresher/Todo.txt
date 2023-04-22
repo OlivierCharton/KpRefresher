@@ -1,2 +1,1 @@
-﻿- static translation
-- api translation
+﻿- api translation

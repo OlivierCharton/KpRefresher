@@ -88,6 +88,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Wing.
+        /// </summary>
+        internal static string BusinessService_Wing {
+            get {
+                return ResourceManager.GetString("BusinessService_Wing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Cancel notification for next refresh.
         /// </summary>
         internal static string CornerIcon_CancelNotify {
@@ -160,7 +169,302 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à [KpRefresher] Error while getting Account name from GW2 API.\nPlease retry later..
+        ///   Recherche une chaîne localisée semblable à Actions.
+        /// </summary>
+        internal static string MainWindow_Actions_Title {
+            get {
+                return ResourceManager.GetString("MainWindow_Actions_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Clear notifications.
+        /// </summary>
+        internal static string MainWindow_Button_ClearNotif_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_ClearNotif_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Clear schedule.
+        /// </summary>
+        internal static string MainWindow_Button_ClearSchedule_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_ClearSchedule_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Resets any scheduled refresh.
+        /// </summary>
+        internal static string MainWindow_Button_ClearSchedule_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_ClearSchedule_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Refresh KillProof.me.
+        /// </summary>
+        internal static string MainWindow_Button_Refresh_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_Refresh_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Attempts to refresh KillProof.me
+        ///If auto-retry is enable, a new refresh will be scheduled in case of failure.
+        /// </summary>
+        internal static string MainWindow_Button_Refresh_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_Refresh_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Refresh linked accounts.
+        /// </summary>
+        internal static string MainWindow_Button_RefreshLinkedAccounts_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_RefreshLinkedAccounts_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Attempts to refresh all linked KillProof.me accounts.
+        /// </summary>
+        internal static string MainWindow_Button_RefreshLinkedAccounts_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_RefreshLinkedAccounts_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Show clears.
+        /// </summary>
+        internal static string MainWindow_Button_ShowClears_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_ShowClears_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Displays current raid clears according to KillProof.me and GW2
+        ///
+        ///If the color is green, it means the clear has been registered on KillProof.me
+        ///If the color is purple, it means that the clear is visible by GW2 API, and can be added to KillProof.me through refresh.
+        /// </summary>
+        internal static string MainWindow_Button_ShowClears_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_ShowClears_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Show current KP.
+        /// </summary>
+        internal static string MainWindow_Button_ShowKP_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_ShowKP_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Scan your bank, shared slots and characters and displays current KP according GW2 API.
+        ///Every kp in the list is able to be scanned by KillProof.me, if not already scanned. You can use this feature to check if a newly opened chest is already visible for KillProof.me..
+        /// </summary>
+        internal static string MainWindow_Button_ShowKP_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_Button_ShowKP_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Configuration.
+        /// </summary>
+        internal static string MainWindow_Configuration_Title {
+            get {
+                return ResourceManager.GetString("MainWindow_Configuration_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Delay before refresh.
+        /// </summary>
+        internal static string MainWindow_DelayBeforeRefreshOnMapChange_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_DelayBeforeRefreshOnMapChange_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Time in minutes before refresh is triggered after map change (between 1 and 60).
+        /// </summary>
+        internal static string MainWindow_DelayBeforeRefreshOnMapChange_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_DelayBeforeRefreshOnMapChange_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Enable auto-retry.
+        /// </summary>
+        internal static string MainWindow_EnableAutoRetry_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_EnableAutoRetry_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Schedule automatically a new try when KillProof.me was not available for a refresh.
+        /// </summary>
+        internal static string MainWindow_EnableAutoRetry_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_EnableAutoRetry_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Condition refresh to clear.
+        /// </summary>
+        internal static string MainWindow_EnableRefreshOnKill_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_EnableRefreshOnKill_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Only allow refresh if a clear was made and is visible by GW2 API.
+        /// </summary>
+        internal static string MainWindow_EnableRefreshOnKill_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_EnableRefreshOnKill_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à {0} linked account{1} found!
+        ///{2}.
+        /// </summary>
+        internal static string MainWindow_Notif_LinkedAccounts {
+            get {
+                return ResourceManager.GetString("MainWindow_Notif_LinkedAccounts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Loading....
+        /// </summary>
+        internal static string MainWindow_Notif_Loading {
+            get {
+                return ResourceManager.GetString("MainWindow_Notif_Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à No linked account found!.
+        /// </summary>
+        internal static string MainWindow_Notif_NoLinkedAccount {
+            get {
+                return ResourceManager.GetString("MainWindow_Notif_NoLinkedAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à No scheduled refresh.
+        /// </summary>
+        internal static string MainWindow_Notif_NoSchedule {
+            get {
+                return ResourceManager.GetString("MainWindow_Notif_NoSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Scheduled refresh disabled!.
+        /// </summary>
+        internal static string MainWindow_Notif_ScheduleDisabled {
+            get {
+                return ResourceManager.GetString("MainWindow_Notif_ScheduleDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Refresh on final boss kill.
+        /// </summary>
+        internal static string MainWindow_RefreshOnKillOnlyBoss_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_RefreshOnKillOnlyBoss_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Only refresh if a final raid wing boss was cleared (e.g. Sabetha).
+        /// </summary>
+        internal static string MainWindow_RefreshOnKillOnlyBoss_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_RefreshOnKillOnlyBoss_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Refresh on map change.
+        /// </summary>
+        internal static string MainWindow_RefreshOnMapChange_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_RefreshOnMapChange_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Schedule a refresh when leaving a raid or strike map.
+        /// </summary>
+        internal static string MainWindow_RefreshOnMapChange_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_RefreshOnMapChange_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Show auto-retry notifications.
+        /// </summary>
+        internal static string MainWindow_ShowScheduleNotification_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_ShowScheduleNotification_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Display notification when retry is scheduled.
+        /// </summary>
+        internal static string MainWindow_ShowScheduleNotification_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_ShowScheduleNotification_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Next retry in {0} minute{1}..
+        /// </summary>
+        internal static string MainWindow_Spinner_Minutes {
+            get {
+                return ResourceManager.GetString("MainWindow_Spinner_Minutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Next retry in {0} second{1}..
+        /// </summary>
+        internal static string MainWindow_Spinner_Seconds {
+            get {
+                return ResourceManager.GetString("MainWindow_Spinner_Seconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à [KpRefresher] Error while getting Account name from GW2 API.
+        ///Please retry later..
         /// </summary>
         internal static string Notification_AccountNameFetchError {
             get {
@@ -178,7 +482,8 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à [KpRefresher] KillProof.me data not available\nPlease retry later..
+        ///   Recherche une chaîne localisée semblable à [KpRefresher] KillProof.me data not available
+        ///Please retry later..
         /// </summary>
         internal static string Notification_DataNotAvailable {
             get {
@@ -187,7 +492,8 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à [KpRefresher] Refresh failed : please allow anonymous refresh\nin your KillProof.me settings.
+        ///   Recherche une chaîne localisée semblable à [KpRefresher] Refresh failed : please allow anonymous refresh
+        ///in your KillProof.me settings.
         /// </summary>
         internal static string Notification_KpAccountAnonymous {
             get {
@@ -205,7 +511,8 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à [KpRefresher] Error while loading KillProof.me profile.\nPlease retry later..
+        ///   Recherche une chaîne localisée semblable à [KpRefresher] Error while loading KillProof.me profile.
+        ///Please retry later..
         /// </summary>
         internal static string Notification_KPProfileFetchError {
             get {
@@ -232,7 +539,8 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à [KpRefresher] You will be notified when next refresh is available,\nin approx. {0} minute{1}..
+        ///   Recherche une chaîne localisée semblable à [KpRefresher] You will be notified when next refresh is available,
+        ///in approx. {0} minute{1}..
         /// </summary>
         internal static string Notification_NotifyScheduled {
             get {
@@ -250,7 +558,8 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à [KpRefresher] KillProof.me refresh was not available\nPlease retry later..
+        ///   Recherche une chaîne localisée semblable à [KpRefresher] KillProof.me refresh was not available
+        ///Please retry later..
         /// </summary>
         internal static string Notification_RefreshNotAvailable {
             get {
@@ -277,7 +586,8 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à {0]\nA new try has been scheduled..
+        ///   Recherche une chaîne localisée semblable à {0}
+        ///A new try has been scheduled..
         /// </summary>
         internal static string Notification_TryScheduled {
             get {

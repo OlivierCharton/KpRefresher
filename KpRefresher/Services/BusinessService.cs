@@ -282,7 +282,7 @@ namespace KpRefresher.Services
             var encounters = _raidBossNames.OrderBy(x => (int)x).ToList();
             foreach (var wingNumber in encounters.Select(ob => ob.GetAttribute<WingAttribute>().WingNumber).Distinct())
             {
-                res.Add(($"[Wing {wingNumber}]\n", Color.White));
+                res.Add(($"[{strings.BusinessService_Wing} {wingNumber}]\n", Color.White));
 
                 var bossFromWing = encounters.Where(o => o.GetAttribute<WingAttribute>().WingNumber == wingNumber).Select(o => o.GetDisplayName());
 

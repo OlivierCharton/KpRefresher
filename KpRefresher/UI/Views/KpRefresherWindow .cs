@@ -2,8 +2,10 @@
 using Blish_HUD.Content;
 using Blish_HUD.Controls;
 using KpRefresher.Domain;
+using KpRefresher.Ressources;
 using KpRefresher.Services;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -53,19 +55,19 @@ namespace KpRefresher.UI.Views
             };
 
             #region Config
-            FlowPanel configContainer = new()
+            Controls.FlowPanel configContainer = new()
             {
                 Parent = mainContainer,
                 WidthSizingMode = SizingMode.Fill,
                 HeightSizingMode = SizingMode.AutoSize,
-                Title = "Configuration",
+                SetLocalizedTitle = () => strings.MainWindow_Configuration_Title,
                 ShowBorder = true,
                 CanCollapse = true,
                 OuterControlPadding = new(5),
                 ControlPadding = new(5),
             };
 
-            var checkbox_controls = CreateLabeledControl<Checkbox>("Enable auto-retry", "Schedule automatically a new try when KillProof.me was not available for a refresh", configContainer);
+            var checkbox_controls = CreateLabeledControl<Checkbox>(() => strings.MainWindow_EnableAutoRetry_Label, () => strings.MainWindow_EnableAutoRetry_Tooltip, configContainer);
             checkbox_controls.control.Checked = _moduleSettings.EnableAutoRetry.Value;
             checkbox_controls.control.CheckedChanged += (s, e) =>
             {
@@ -73,7 +75,7 @@ namespace KpRefresher.UI.Views
                 _showAutoRetryNotificationCheckbox.Enabled = e.Checked;
             };
 
-            checkbox_controls = CreateLabeledControl<Checkbox>("Show auto-retry notifications", "Display notification when retry is scheduled", configContainer);
+            checkbox_controls = CreateLabeledControl<Checkbox>(() => strings.MainWindow_ShowScheduleNotification_Label, () => strings.MainWindow_ShowScheduleNotification_Tooltip, configContainer);
             _showAutoRetryNotificationCheckbox = checkbox_controls.control;
             checkbox_controls.control.Enabled = _moduleSettings.EnableAutoRetry.Value;
             checkbox_controls.control.Checked = _moduleSettings.ShowScheduleNotification.Value;
@@ -82,7 +84,7 @@ namespace KpRefresher.UI.Views
                 _moduleSettings.ShowScheduleNotification.Value = e.Checked;
             };
 
-            checkbox_controls = CreateLabeledControl<Checkbox>("Condition refresh to clear", "Only allow refresh if a clear was made and is visible by GW2 API", configContainer);
+            checkbox_controls = CreateLabeledControl<Checkbox>(() => strings.MainWindow_EnableRefreshOnKill_Label, () => strings.MainWindow_EnableRefreshOnKill_Tooltip, configContainer);
             checkbox_controls.control.Checked = _moduleSettings.EnableRefreshOnKill.Value;
             checkbox_controls.control.CheckedChanged += (s, e) =>
             {
@@ -90,7 +92,7 @@ namespace KpRefresher.UI.Views
                 _onlyRefreshOnFinalBossKillCheckbox.Enabled = e.Checked;
             };
 
-            checkbox_controls = CreateLabeledControl<Checkbox>("Refresh on final boss kill", "Only refresh if a final raid wing boss was cleared (e.g. Sabetha)", configContainer);
+            checkbox_controls = CreateLabeledControl<Checkbox>(() => strings.MainWindow_RefreshOnKillOnlyBoss_Label, () => strings.MainWindow_RefreshOnKillOnlyBoss_Tooltip, configContainer);
             _onlyRefreshOnFinalBossKillCheckbox = checkbox_controls.control;
             checkbox_controls.control.Enabled = _moduleSettings.EnableRefreshOnKill.Value;
             checkbox_controls.control.Checked = _moduleSettings.RefreshOnKillOnlyBoss.Value;
@@ -99,14 +101,14 @@ namespace KpRefresher.UI.Views
                 _moduleSettings.RefreshOnKillOnlyBoss.Value = e.Checked;
             };
 
-            checkbox_controls = CreateLabeledControl<Checkbox>("Refresh on map change", "Schedule a refresh when leaving a raid or strike map", configContainer);
+            checkbox_controls = CreateLabeledControl<Checkbox>(() => strings.MainWindow_RefreshOnMapChange_Label, () => strings.MainWindow_RefreshOnMapChange_Tooltip, configContainer);
             checkbox_controls.control.Checked = _moduleSettings.RefreshOnMapChange.Value;
             checkbox_controls.control.CheckedChanged += (s, e) =>
             {
                 _moduleSettings.RefreshOnMapChange.Value = e.Checked;
             };
 
-            var (panel, label, control) = CreateLabeledControl<TextBox>("Delay before refresh", "Time in minutes before refresh is triggered after map change (between 1 and 60)", configContainer);
+            var (panel, label, control) = CreateLabeledControl<TextBox>(() => strings.MainWindow_DelayBeforeRefreshOnMapChange_Label, () => strings.MainWindow_DelayBeforeRefreshOnMapChange_Tooltip, configContainer);
             control.Text = _moduleSettings.DelayBeforeRefreshOnMapChange.Value.ToString();
             control.InputFocusChanged += (s, e) =>
             {
@@ -152,7 +154,7 @@ namespace KpRefresher.UI.Views
                 if (!int.TryParse(txt, out int newValue))
                 {
                     //This should never happen
-                    control.Text = ((Blish_HUD.ValueChangedEventArgs<string>)e).PreviousValue;
+                    control.Text = ((ValueChangedEventArgs<string>)e).PreviousValue;
                     //control.CursorIndex--;
 
                     _delayTextChangeFlag = false;
@@ -179,12 +181,12 @@ namespace KpRefresher.UI.Views
             #endregion Config
 
             #region Actions
-            FlowPanel actionContainer = new()
+            Controls.FlowPanel actionContainer = new()
             {
                 Parent = mainContainer,
                 WidthSizingMode = SizingMode.Fill,
                 HeightSizingMode = SizingMode.AutoSize,
-                Title = "Actions",
+                SetLocalizedTitle = () => strings.MainWindow_Actions_Title,
                 ShowBorder = true,
                 CanCollapse = true,
                 OuterControlPadding = new(5),
@@ -193,18 +195,18 @@ namespace KpRefresher.UI.Views
             actionContainer.ContentResized += ActionContainer_ContentResized;
 
             StandardButton button;
-            _buttons.Add(button = new StandardButton()
+            _buttons.Add(button = new Controls.StandardButton()
             {
-                Text = "Refresh KillProof.me",
-                BasicTooltipText = "Attempts to refresh KillProof.me\nIf auto-retry is enable, a new refresh will be scheduled in case of failure",
+                SetLocalizedText = () => strings.MainWindow_Button_Refresh_Label,
+                SetLocalizedTooltip = () => strings.MainWindow_Button_Refresh_Tooltip,
                 Parent = actionContainer
             });
             button.Click += async (s, e) => await RefreshRaidClears();
 
-            _buttons.Add(button = new StandardButton()
+            _buttons.Add(button = new Controls.StandardButton()
             {
-                Text = "Refresh linked accounts",
-                BasicTooltipText = "Attempts to refresh all linked KillProof.me accounts",
+                SetLocalizedText = () => strings.MainWindow_Button_RefreshLinkedAccounts_Label,
+                SetLocalizedTooltip = () => strings.MainWindow_Button_RefreshLinkedAccounts_Tooltip,
                 Parent = actionContainer
             });
             button.Click += async (s, e) =>
@@ -212,41 +214,41 @@ namespace KpRefresher.UI.Views
                 if (_businessService.LinkedKpId?.Count > 0)
                 {
                     string res = await _businessService.RefreshLinkedAccounts();
-                    ShowInsideNotification($"{_businessService.LinkedKpId?.Count} linked account{(_businessService.LinkedKpId?.Count > 1 ? "s" : string.Empty)} found !\n{res}", true);
+                    ShowInsideNotification(string.Format(strings.MainWindow_Notif_LinkedAccounts, _businessService.LinkedKpId?.Count, _businessService.LinkedKpId?.Count > 1 ? "s" : string.Empty, res), true);
                 }
                 else
                 {
-                    ShowInsideNotification("No linked account found !");
+                    ShowInsideNotification(strings.MainWindow_Notif_NoLinkedAccount);
                 }
             };
 
-            _buttons.Add(button = new StandardButton()
+            _buttons.Add(button = new Controls.StandardButton()
             {
-                Text = "Show clears",
-                BasicTooltipText = "Displays current raid clears according to KillProof.me and GW2\n\nIf the color is green, it means the clear has been registered on KillProof.me\nIf the color is purple, it means that the clear is visible by GW2 API, and can be added to KillProof.me through refresh",
+                SetLocalizedText = () => strings.MainWindow_Button_ShowClears_Label,
+                SetLocalizedTooltip = () => strings.MainWindow_Button_ShowClears_Tooltip,
                 Parent = actionContainer
             });
             button.Click += async (s, e) => await DisplayRaidDifference();
 
-            _buttons.Add(button = new StandardButton()
+            _buttons.Add(button = new Controls.StandardButton()
             {
-                Text = "Show current KP",
-                BasicTooltipText = "Scan your bank, shared slots and characters and displays current KP according GW2 API.\nEvery kp in the list is able to be scanned by KillProof.me, if not already scanned. You can use this feature to check if a newly opened chest is already visible for KillProof.me.",
+                SetLocalizedText = () => strings.MainWindow_Button_ShowKP_Label,
+                SetLocalizedTooltip = () => strings.MainWindow_Button_ShowKP_Tooltip,
                 Parent = actionContainer
             });
             button.Click += async (s, e) => await DisplayCurrentKp();
 
-            _buttons.Add(button = new StandardButton()
+            _buttons.Add(button = new Controls.StandardButton()
             {
-                Text = "Clear schedule",
-                BasicTooltipText = "Resets any scheduled refresh",
+                SetLocalizedText = () => strings.MainWindow_Button_ClearSchedule_Label,
+                SetLocalizedTooltip = () => strings.MainWindow_Button_ClearSchedule_Tooltip,
                 Parent = actionContainer
             });
             button.Click += (s, e) => StopRetry();
 
-            _buttons.Add(button = new StandardButton()
+            _buttons.Add(button = new Controls.StandardButton()
             {
-                Text = "Clear notifications",
+                SetLocalizedText = () => strings.MainWindow_Button_ClearNotif_Label,
                 Parent = actionContainer
             });
             button.Click += (s, e) => ClearNotifications();
@@ -273,9 +275,9 @@ namespace KpRefresher.UI.Views
                 var nextRefresh = _businessService.GetNextScheduledTimer();
                 var totalMinutes = (int)nextRefresh.TotalMinutes;
                 if (totalMinutes >= 1)
-                    _loadingSpinner.BasicTooltipText = $"Next retry in {totalMinutes} minute{(totalMinutes > 1 ? "s" : string.Empty)}.";
+                    _loadingSpinner.BasicTooltipText = string.Format(strings.MainWindow_Spinner_Minutes, totalMinutes, totalMinutes > 1 ? "s" : string.Empty);
                 else
-                    _loadingSpinner.BasicTooltipText = $"Next retry in {(int)nextRefresh.TotalSeconds} second{((int)nextRefresh.TotalSeconds > 1 ? "s" : string.Empty)}.";
+                    _loadingSpinner.BasicTooltipText = string.Format(strings.MainWindow_Spinner_Seconds, (int)nextRefresh.TotalSeconds, (int)nextRefresh.TotalSeconds > 1 ? "s" : string.Empty);
             };
             #endregion Spinner
 
@@ -326,7 +328,7 @@ namespace KpRefresher.UI.Views
 
         private async Task DisplayRaidDifference()
         {
-            ShowInsideNotification("Loading ...", true);
+            ShowInsideNotification(strings.MainWindow_Notif_Loading, true);
 
             var data = await _businessService.GetFullRaidStatus();
             ShowFormattedNotification(data, true);
@@ -337,11 +339,11 @@ namespace KpRefresher.UI.Views
             if (_businessService.RefreshScheduled)
             {
                 _businessService.CancelSchedule();
-                ShowInsideNotification("Scheduled refresh disabled !");
+                ShowInsideNotification(strings.MainWindow_Notif_ScheduleDisabled);
             }
             else
             {
-                ShowInsideNotification("No scheduled refresh");
+                ShowInsideNotification(strings.MainWindow_Notif_NoSchedule);
             }
 
             _loadingSpinner.Visible = false;
@@ -424,7 +426,7 @@ namespace KpRefresher.UI.Views
 
         private async Task DisplayCurrentKp()
         {
-            ShowInsideNotification("Loading ...", true);
+            ShowInsideNotification(strings.MainWindow_Notif_Loading, true);
 
             var data = await _businessService.DisplayCurrentKp();
             ShowInsideNotification(data, true);
@@ -438,30 +440,29 @@ namespace KpRefresher.UI.Views
             _notificationFormattedLabel?.Dispose();
         }
 
-        private (FlowPanel panel, Label label, T control) CreateLabeledControl<T>(string labelText, string tooltipText, FlowPanel parent, int amount = 2, int ctrlWidth = 50) where T : Control, new()
+        private (FlowPanel panel, Label label, T control) CreateLabeledControl<T>(Func<string> labelText, Func<string> tooltipText, FlowPanel parent, int amount = 2, int ctrlWidth = 50) where T : Control, new()
         {
-            FlowPanel panel = new()
+            Controls.FlowPanel panel = new()
             {
                 Parent = parent,
                 FlowDirection = ControlFlowDirection.SingleLeftToRight,
                 ControlPadding = new(5),
-                BasicTooltipText = tooltipText,
+                SetLocalizedTooltip = tooltipText,
                 HeightSizingMode = SizingMode.AutoSize,
             };
 
-            Label label = new()
+            Controls.Label label = new()
             {
                 Parent = panel,
-                Text = labelText,
+                SetLocalizedText = labelText,
                 Height = 25,
                 VerticalAlignment = VerticalAlignment.Middle,
-                BasicTooltipText = tooltipText,
+                SetLocalizedTooltip = tooltipText,
             };
 
             T control = new()
             {
                 Parent = panel,
-                BasicTooltipText = tooltipText,
                 Height = label.Height,
                 Width = ctrlWidth,
             };

@@ -126,6 +126,9 @@
   <data name="BusinessService_RefreshNotAvailable" xml:space="preserve">
     <value>Rafraîchissement indisponible</value>
   </data>
+  <data name="BusinessService_Wing" xml:space="preserve">
+    <value>Aile</value>
+  </data>
   <data name="CornerIcon_CancelNotify" xml:space="preserve">
     <value>Annuler l'averissement du prochain rafraîchissement</value>
   </data>
@@ -150,23 +153,129 @@
   <data name="LoadingSpinner_Fetch" xml:space="preserve">
     <value>Récupération des données API</value>
   </data>
+  <data name="MainWindow_Actions_Title" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="MainWindow_Button_ClearNotif_Label" xml:space="preserve">
+    <value>Nettoyer les notifications</value>
+  </data>
+  <data name="MainWindow_Button_ClearSchedule_Label" xml:space="preserve">
+    <value>Annuler la programmation</value>
+  </data>
+  <data name="MainWindow_Button_ClearSchedule_Tooltip" xml:space="preserve">
+    <value>Annule tout rafraîchissement programmé</value>
+  </data>
+  <data name="MainWindow_Button_RefreshLinkedAccounts_Label" xml:space="preserve">
+    <value>Rafraîchir les comptes liés</value>
+  </data>
+  <data name="MainWindow_Button_RefreshLinkedAccounts_Tooltip" xml:space="preserve">
+    <value>Essaie de rafraîchir les autres comptes liés au profil KillProof.me</value>
+  </data>
+  <data name="MainWindow_Button_Refresh_Label" xml:space="preserve">
+    <value>Rafraîchir KillProof.me</value>
+  </data>
+  <data name="MainWindow_Button_Refresh_Tooltip" xml:space="preserve">
+    <value>Essaie de rafraîchir le profil KillProof.me
+Si les essais automatiques sont activés, un nouveau rafraîchissement sera programmé en cas d'échec</value>
+  </data>
+  <data name="MainWindow_Button_ShowClears_Label" xml:space="preserve">
+    <value>Afficher les clears</value>
+  </data>
+  <data name="MainWindow_Button_ShowClears_Tooltip" xml:space="preserve">
+    <value>Affiche les raids effectués selon KillProof.me and GW2
+
+Si la couleur est verte, cela veut dire que le clear a enregistré sur KillProof.me
+Si la couleur est violette, cela veut dire que le clear est visible depuis l'API GW2, et peut être enregistrée sur KillProof.me grâce à un rafraîchissement</value>
+  </data>
+  <data name="MainWindow_Button_ShowKP_Label" xml:space="preserve">
+    <value>Afficher les KP actuels</value>
+  </data>
+  <data name="MainWindow_Button_ShowKP_Tooltip" xml:space="preserve">
+    <value>Scanne la banque, l'inventaire partagé et les personnages, puis affiche les KP stockés selon l'API GW2.
+Chaque kp dans la liste peut-être ajouté sur KillProof.me, s'il n'a pas déjà été scanné. Cette fonctionnalité peut être utile pour vérifier si le contenu d'un coffre de raid est déjà visible pour KillProof.me, par exemple.</value>
+  </data>
+  <data name="MainWindow_Configuration_Title" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="MainWindow_DelayBeforeRefreshOnMapChange_Label" xml:space="preserve">
+    <value>Délai avant rafraîchissement</value>
+  </data>
+  <data name="MainWindow_DelayBeforeRefreshOnMapChange_Tooltip" xml:space="preserve">
+    <value>Temps en minutes avant qu'un rafraîchissement ne soit déclenché lors d'un changement de carte (entre 1 et 60)</value>
+  </data>
+  <data name="MainWindow_EnableAutoRetry_Label" xml:space="preserve">
+    <value>Nouvel essai automatique</value>
+  </data>
+  <data name="MainWindow_EnableAutoRetry_Tooltip" xml:space="preserve">
+    <value>Programme automatiquement un nouvel essai quand KillProof.me est indisponible</value>
+  </data>
+  <data name="MainWindow_EnableRefreshOnKill_Label" xml:space="preserve">
+    <value>Rafraîchissement conditionnel</value>
+  </data>
+  <data name="MainWindow_EnableRefreshOnKill_Tooltip" xml:space="preserve">
+    <value>Ne rafraîchit que si un clear a été effectué et est visible par l'API GW2</value>
+  </data>
+  <data name="MainWindow_Notif_LinkedAccounts" xml:space="preserve">
+    <value>{0} compte{1} lié{1} trouvé{1} !
+{2}</value>
+  </data>
+  <data name="MainWindow_Notif_Loading" xml:space="preserve">
+    <value>Chargement ...</value>
+  </data>
+  <data name="MainWindow_Notif_NoLinkedAccount" xml:space="preserve">
+    <value>Aucun compte lié trouvé !</value>
+  </data>
+  <data name="MainWindow_Notif_NoSchedule" xml:space="preserve">
+    <value>Aucun rafraîchissement programmé</value>
+  </data>
+  <data name="MainWindow_Notif_ScheduleDisabled" xml:space="preserve">
+    <value>Rafraîchissement annulé !</value>
+  </data>
+  <data name="MainWindow_RefreshOnKillOnlyBoss_Label" xml:space="preserve">
+    <value>Conditionne au kill de boss de fin</value>
+  </data>
+  <data name="MainWindow_RefreshOnKillOnlyBoss_Tooltip" xml:space="preserve">
+    <value>Rafraîchir uniquement quand un boss de fin d'aile de raid a été vaincu (ex: Sabetha)</value>
+  </data>
+  <data name="MainWindow_RefreshOnMapChange_Label" xml:space="preserve">
+    <value>Rafraîchir au changement de carte</value>
+  </data>
+  <data name="MainWindow_RefreshOnMapChange_Tooltip" xml:space="preserve">
+    <value>Programmer un rafraîchissement lors d'une sortie de carte de raid ou de mission d'attaque</value>
+  </data>
+  <data name="MainWindow_ShowScheduleNotification_Label" xml:space="preserve">
+    <value>Afficher les notifications</value>
+  </data>
+  <data name="MainWindow_ShowScheduleNotification_Tooltip" xml:space="preserve">
+    <value>Afficher les notifications pour les essais planifiés</value>
+  </data>
+  <data name="MainWindow_Spinner_Minutes" xml:space="preserve">
+    <value>Prochain essai dans {0} minute{1}.</value>
+  </data>
+  <data name="MainWindow_Spinner_Seconds" xml:space="preserve">
+    <value>Prochain essai dans {0} seconde{1}.</value>
+  </data>
   <data name="Notification_AccountNameFetchError" xml:space="preserve">
-    <value>[KpRefresher] Erreur lors de la récupération du nom de compte de l'API GW2I.\nVeuillez réessayer plus tard.</value>
+    <value>[KpRefresher] Erreur lors de la récupération du nom de compte de l'API GW2I.
+Veuillez réessayer plus tard.</value>
   </data>
   <data name="Notification_CopiedToClipboard" xml:space="preserve">
     <value>[KpRefresher] Identifiant copié dans le presse-papier !</value>
   </data>
   <data name="Notification_DataNotAvailable" xml:space="preserve">
-    <value>[KpRefresher] Les données KillProof.me ne sont pas disponibles\nVeuillez réessayer plus tard.</value>
+    <value>[KpRefresher] Les données KillProof.me ne sont pas disponibles
+Veuillez réessayer plus tard.</value>
   </data>
   <data name="Notification_KpAccountAnonymous" xml:space="preserve">
-    <value>[KpRefresher] Rafraîchissement échoué : veuillez autoriser le rafraîchissement anonyme\ndans les paramètres KillProof.me</value>
+    <value>[KpRefresher] Rafraîchissement échoué : veuillez autoriser le rafraîchissement anonyme
+dans les paramètres KillProof.me</value>
   </data>
   <data name="Notification_KpAccountUnknown" xml:space="preserve">
     <value>[KpRefresher] Le compte KillProof.me {0} n'existe pas !</value>
   </data>
   <data name="Notification_KPProfileFetchError" xml:space="preserve">
-    <value>[KpRefresher] Erreur lors de la récupération du profil KillProof.me.\nVeuillez réessayer plus tard.</value>
+    <value>[KpRefresher] Erreur lors de la récupération du profil KillProof.me.
+Veuillez réessayer plus tard.</value>
   </data>
   <data name="Notification_NextRefreshAvailableIn" xml:space="preserve">
     <value>[KpRefresher] Prochain rafraîchissement disponible dans {0} minute{1}</value>
@@ -175,22 +284,26 @@
     <value>[KpRefresher] Les conditions de clear ne sont pas validées, rafraîchissement annulé  !</value>
   </data>
   <data name="Notification_NotifyScheduled" xml:space="preserve">
-    <value>[KpRefresher] Vous serez averti quand le prochain rafraîchissement sera disponible,\ndans environ {0} minute{1}.</value>
+    <value>[KpRefresher] Vous serez averti quand le prochain rafraîchissement sera disponible,
+dans environ {0} minute{1}.</value>
   </data>
   <data name="Notification_RefreshAvailable" xml:space="preserve">
     <value>[KpRefresher] Le rafraîchissement est disponible !</value>
   </data>
   <data name="Notification_RefreshNotAvailable" xml:space="preserve">
-    <value>[KpRefresher] Le rafraîchissement de KillProof.me n'était pas disponible\nVeuillez réessayer plus tard.</value>
+    <value>[KpRefresher] Le rafraîchissement de KillProof.me n'était pas disponible
+Veuillez réessayer plus tard.</value>
   </data>
   <data name="Notification_RefreshNotAvailableRetry" xml:space="preserve">
-    <value>[KpRefresher] Le rafraîchissement de KillProof.me n'était pas disponible\nNouvel essai dans 5 minutes.</value>
+    <value>[KpRefresher] Le rafraîchissement de KillProof.me n'était pas disponible
+Nouvel essai dans 5 minutes.</value>
   </data>
   <data name="Notification_RefreshOk" xml:space="preserve">
     <value>[KpRefresher] Rafraîchissement de KillProof.me réussi !</value>
   </data>
   <data name="Notification_TryScheduled" xml:space="preserve">
-    <value>{0]\nUn nouvel essai a été planifié.</value>
+    <value>{0}
+Un nouvel essai a été planifié.</value>
   </data>
   <data name="Notiication_InstanceExitDetected" xml:space="preserve">
     <value>[KpRefresher] Sortie d'instance détectée, rafraîchissement programmé dans {0} minute{1}</value>
