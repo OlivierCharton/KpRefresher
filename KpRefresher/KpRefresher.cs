@@ -4,7 +4,9 @@ using Blish_HUD.Controls;
 using Blish_HUD.Modules;
 using Blish_HUD.Modules.Managers;
 using Blish_HUD.Settings;
+using Gw2Sharp.WebApi;
 using Gw2Sharp.WebApi.V2.Models;
+using KpRefresher.Ressources;
 using KpRefresher.Services;
 using KpRefresher.UI.Views;
 using Microsoft.Xna.Framework;
@@ -13,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+using Controls = KpRefresher.UI.Controls;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace KpRefresher
@@ -21,7 +24,7 @@ namespace KpRefresher
     public class KpRefresher : Module
     {
         private static readonly Logger Logger = Logger.GetLogger<KpRefresher>();
-        
+
         public static ModuleSettings ModuleSettings { get; private set; }
         public static Gw2ApiService Gw2ApiService { get; private set; }
         public static KpMeService KpMeService { get; private set; }
@@ -61,11 +64,18 @@ namespace KpRefresher
             BusinessService = new BusinessService(ModuleSettings, Gw2ApiService, KpMeService, () => _apiSpinner);
 
             Gw2ApiManager.SubtokenUpdated += OnApiSubTokenUpdated;
+
+            GameService.Overlay.UserLocale.SettingChanged += OnLocaleChanged;
         }
 
         private async void OnApiSubTokenUpdated(object sender, ValueEventArgs<IEnumerable<TokenPermission>> e)
         {
             await BusinessService.RefreshBaseData();
+        }
+
+        private void OnLocaleChanged(object sender, ValueChangedEventArgs<Locale> eventArgs)
+        {
+            LocalizingService.OnLocaleChanged(sender, eventArgs);
         }
 
         protected override async Task LoadAsync()
@@ -127,34 +137,47 @@ namespace KpRefresher
 
             _cornerIconContextMenu = new ContextMenuStrip();
 
-            var refeshKpMenuItem = new ContextMenuStripItem("Refresh KillProof.me data");
+            var refeshKpMenuItem = new Controls.ContextMenuStripItem()
+            {
+                SetLocalizedText = () => strings.CornerIcon_Refresh,
+            };
             refeshKpMenuItem.Click += async (s, e) =>
             {
                 await BusinessService.RefreshKillproofMe();
             };
 
-            var copyKpToClipboard = new ContextMenuStripItem("Copy KillProof.me Id to clipboard");
+            var copyKpToClipboard = new Controls.ContextMenuStripItem()
+            {
+                SetLocalizedText = () => strings.CornerIcon_Copy,
+            };
             copyKpToClipboard.Click += (s, e) =>
             {
                 _ = BusinessService.CopyKpToClipboard();
             };
 
-            _notificationNextRefreshAvailable = new ContextMenuStripItem("Notify when refresh available");
+            _notificationNextRefreshAvailable = new Controls.ContextMenuStripItem
+            {
+                SetLocalizedText = () => strings.CornerIcon_Notify,
+            };
             _notificationNextRefreshAvailable.Click += async (s, e) =>
             {
                 if (!BusinessService.NotificationNextRefreshAvailabledActivated)
                 {
-                    await BusinessService.ActivateNotificationNextRefreshAvailable();
-                    _notificationNextRefreshAvailable.Text = "Cancel notification for next refresh";
+                    var notificationPlanned = await BusinessService.ActivateNotificationNextRefreshAvailable();
+                    if (notificationPlanned)
+                        _notificationNextRefreshAvailable.SetLocalizedText = () => strings.CornerIcon_CancelNotify;
                 }
                 else
                 {
                     BusinessService.ResetNotificationNextRefreshAvailable();
-                    _notificationNextRefreshAvailable.Text = "Notify when refresh available";
+                    _notificationNextRefreshAvailable.SetLocalizedText = () => strings.CornerIcon_Notify;
                 }
             };
 
-            var openKpUrl = new ContextMenuStripItem("Open KillProof.me website");
+            var openKpUrl = new Controls.ContextMenuStripItem
+            {
+                SetLocalizedText = () => strings.CornerIcon_OpenWebsite,
+            };
             openKpUrl.Click += (s, e) =>
             {
                 _ = BusinessService.OpenKpUrl();
@@ -167,12 +190,12 @@ namespace KpRefresher
 
             _cornerIcon.Menu = _cornerIconContextMenu;
 
-            _apiSpinner = new LoadingSpinner()
+            _apiSpinner = new Controls.LoadingSpinner()
             {
                 Location = new Point(_cornerIcon.Left, _cornerIcon.Bottom + 3),
                 Parent = GameService.Graphics.SpriteScreen,
                 Size = new Point(_cornerIcon.Width, _cornerIcon.Height),
-                BasicTooltipText = "Fetching Api Data",
+                SetLocalizedTooltip = () => strings.LoadingSpinner_Fetch,
                 Visible = false
             };
         }
@@ -194,7 +217,7 @@ namespace KpRefresher
                 if (BusinessService.NotificationNextRefreshAvailabledTimer > BusinessService.NotificationNextRefreshAvailabledTimerEndValue)
                 {
                     BusinessService.NextRefreshIsAvailable();
-                    _notificationNextRefreshAvailable.Text = "Notify when refresh available";
+                    _notificationNextRefreshAvailable.SetLocalizedText = () => strings.CornerIcon_Notify;
                 }
             }
         }
@@ -230,8 +253,8 @@ namespace KpRefresher
         private Texture2D _cornerIconHoverTexture;
         private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
-        private LoadingSpinner _apiSpinner;
+        private Controls.LoadingSpinner _apiSpinner;
         private KpRefresherWindow _mainWindow;
-        private ContextMenuStripItem _notificationNextRefreshAvailable;
+        private Controls.ContextMenuStripItem _notificationNextRefreshAvailable;
     }
 }

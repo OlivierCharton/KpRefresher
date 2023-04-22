@@ -1,6 +1,7 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Controls;
 using KpRefresher.Domain;
+using KpRefresher.Ressources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -43,7 +44,7 @@ namespace KpRefresher.Services
                         return JsonConvert.DeserializeObject<KpApiModel>(content);
                     }
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {kpId} does not exist !", ScreenNotification.NotificationType.Error);
+                        ScreenNotification.ShowNotification(string.Format(strings.Notification_KpAccountUnknown, kpId), ScreenNotification.NotificationType.Error);
                     else
                         _logger.Warn($"Unknown status while getting account data : {response.StatusCode}");
                 }
@@ -96,7 +97,7 @@ namespace KpRefresher.Services
                         return res;
                     }
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {kpId} does not exist !", ScreenNotification.NotificationType.Error);
+                        ScreenNotification.ShowNotification(string.Format(strings.Notification_KpAccountUnknown, kpId), ScreenNotification.NotificationType.Error);
                     else
                         _logger.Warn($"Unknown status while getting clear data : {response.StatusCode}");
                 }
@@ -130,9 +131,9 @@ namespace KpRefresher.Services
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
                         return false;
                     else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
-                        ScreenNotification.ShowNotification($"[KpRefresher] Refresh failed : please allow anonymous refresh\nin your KillProof.me settings", ScreenNotification.NotificationType.Error);
+                        ScreenNotification.ShowNotification(strings.Notification_KpAccountAnonymous, ScreenNotification.NotificationType.Error);
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        ScreenNotification.ShowNotification($"[KpRefresher] KillProof.me Id {kpId} does not exist !", ScreenNotification.NotificationType.Error);
+                        ScreenNotification.ShowNotification(string.Format(strings.Notification_KpAccountUnknown, kpId), ScreenNotification.NotificationType.Error);
                     else
                         _logger.Warn($"Unknown status while refreshing kp.me : {response.StatusCode}");
                 }

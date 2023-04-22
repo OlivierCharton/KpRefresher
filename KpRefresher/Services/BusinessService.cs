@@ -3,6 +3,7 @@ using Blish_HUD.Controls;
 using KpRefresher.Domain;
 using KpRefresher.Domain.Attributes;
 using KpRefresher.Extensions;
+using KpRefresher.Ressources;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -88,7 +89,7 @@ namespace KpRefresher.Services
 
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
                 return;
             }
 
@@ -98,13 +99,13 @@ namespace KpRefresher.Services
                 //Rounding up is a safety mesure to prevent early refresh
                 var minutesUntilRefreshAvailable = Math.Ceiling((_refreshAvailable.Value - DateTime.UtcNow).TotalMinutes);
 
-                string baseMsg = $"[KpRefresher] Next refresh available in {minutesUntilRefreshAvailable} minutes";
+                string baseMsg = string.Format(strings.Notification_NextRefreshAvailableIn, minutesUntilRefreshAvailable, minutesUntilRefreshAvailable > 1 ? "s" : string.Empty);
                 if (_moduleSettings.EnableAutoRetry.Value)
                 {
                     ScheduleRefresh(minutesUntilRefreshAvailable);
 
                     if (!fromUpdateLoop || _moduleSettings.ShowScheduleNotification.Value)
-                        ScreenNotification.ShowNotification($"{baseMsg}\nA new try has been scheduled.", ScreenNotification.NotificationType.Warning);
+                        ScreenNotification.ShowNotification(string.Format(strings.Notification_TryScheduled, baseMsg), ScreenNotification.NotificationType.Warning);
                 }
                 else
                 {
@@ -119,7 +120,7 @@ namespace KpRefresher.Services
                 var hasNewClear = await CheckRaidClears();
                 if (!hasNewClear)
                 {
-                    ScreenNotification.ShowNotification("[KpRefresher] No new clear validating settings, refresh aborted !", ScreenNotification.NotificationType.Info);
+                    ScreenNotification.ShowNotification(strings.Notification_NoClearRefreshAborted, ScreenNotification.NotificationType.Info);
                     return;
                 }
             }
@@ -130,7 +131,7 @@ namespace KpRefresher.Services
                 //Replace clears stored with updated clears and disable auto-retry
                 _lastRefresh = DateTime.UtcNow;
 
-                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh successful !", ScreenNotification.NotificationType.Info);
+                ScreenNotification.ShowNotification(strings.Notification_RefreshOk, ScreenNotification.NotificationType.Info);
             }
             else if (refreshed.HasValue && !refreshed.Value)
             {
@@ -142,11 +143,11 @@ namespace KpRefresher.Services
                     ScheduleRefresh();
 
                     if (_moduleSettings.ShowScheduleNotification.Value)
-                        ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nAuto-retry in 5 minutes.", ScreenNotification.NotificationType.Warning);
+                        ScreenNotification.ShowNotification(strings.Notification_RefreshNotAvailableRetry, ScreenNotification.NotificationType.Warning);
                 }
                 else
                 {
-                    ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                    ScreenNotification.ShowNotification(strings.Notification_RefreshNotAvailable, ScreenNotification.NotificationType.Warning);
                 }
             }
         }
@@ -177,7 +178,7 @@ namespace KpRefresher.Services
 
                 ScheduleRefresh(_moduleSettings.DelayBeforeRefreshOnMapChange.Value);
 
-                ScreenNotification.ShowNotification($"[KpRefresher] Instance exit detected, refresh scheduled in {_moduleSettings.DelayBeforeRefreshOnMapChange.Value} minute{(_moduleSettings.DelayBeforeRefreshOnMapChange.Value > 1 ? "s" : string.Empty)}", ScreenNotification.NotificationType.Info);
+                ScreenNotification.ShowNotification(string.Format(strings.Notiication_InstanceExitDetected, _moduleSettings.DelayBeforeRefreshOnMapChange.Value, _moduleSettings.DelayBeforeRefreshOnMapChange.Value > 1 ? "s" : string.Empty), ScreenNotification.NotificationType.Info);
             }
         }
 
@@ -185,12 +186,12 @@ namespace KpRefresher.Services
         {
             if (await DataLoaded())
             {
-                Clipboard.SetText($"KpMe id : {_kpId}");
-                ScreenNotification.ShowNotification("[KpRefresher] Id copied to clipboard !", ScreenNotification.NotificationType.Info);
+                Clipboard.SetText($"KillProof.me id : {_kpId}");
+                ScreenNotification.ShowNotification(strings.Notification_CopiedToClipboard, ScreenNotification.NotificationType.Info);
             }
             else
             {
-                ScreenNotification.ShowNotification("[KpRefresher] Id could not be loaded\nPlease try again later", ScreenNotification.NotificationType.Warning);
+                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
             }
         }
 
@@ -198,7 +199,7 @@ namespace KpRefresher.Services
         {
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me id not loaded\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
                 return;
             }
 
@@ -207,18 +208,18 @@ namespace KpRefresher.Services
         }
 
         #region Notification next refresh available
-        public async Task ActivateNotificationNextRefreshAvailable()
+        public async Task<bool> ActivateNotificationNextRefreshAvailable()
         {
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
-                return;
+                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
+                return false;
             }
 
             if (DateTime.UtcNow > _refreshAvailable.Value)
             {
-                ScreenNotification.ShowNotification($"[KpRefresher] Next refresh is available !", ScreenNotification.NotificationType.Info);
-                return;
+                ScreenNotification.ShowNotification(strings.Notification_RefreshAvailable, ScreenNotification.NotificationType.Info);
+                return false;
             }
 
             //Rounding up is a safety mesure to prevent early refresh
@@ -228,7 +229,9 @@ namespace KpRefresher.Services
             NotificationNextRefreshAvailabledTimer = 0;
             NotificationNextRefreshAvailabledTimerEndValue = minutesUntilRefreshAvailable * 60 * 1000;
 
-            ScreenNotification.ShowNotification($"[KpRefresher] You will be notified when next refresh is available,\nin approx. {minutesUntilRefreshAvailable - 1} minutes.", ScreenNotification.NotificationType.Info);
+            ScreenNotification.ShowNotification(string.Format(strings.Notification_NotifyScheduled, minutesUntilRefreshAvailable - 1, minutesUntilRefreshAvailable - 1 > 1 ? "s" : string.Empty), ScreenNotification.NotificationType.Info);
+
+            return true;
         }
 
         public void ResetNotificationNextRefreshAvailable()
@@ -240,7 +243,7 @@ namespace KpRefresher.Services
 
         public void NextRefreshIsAvailable()
         {
-            ScreenNotification.ShowNotification($"[KpRefresher] Next refresh is available !", ScreenNotification.NotificationType.Info);
+            ScreenNotification.ShowNotification(strings.Notification_RefreshAvailable, ScreenNotification.NotificationType.Info);
 
             ResetNotificationNextRefreshAvailable();
         }
@@ -260,7 +263,7 @@ namespace KpRefresher.Services
         {
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
                 return null;
             }
 
@@ -312,7 +315,7 @@ namespace KpRefresher.Services
         {
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
                 return string.Empty;
             }
 
@@ -325,7 +328,7 @@ namespace KpRefresher.Services
         {
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification("[KpRefresher] KillProof.me refresh was not available\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
                 return string.Empty;
             }
 
@@ -337,7 +340,7 @@ namespace KpRefresher.Services
                 Task tt = Task.Run(async () =>
                 {
                     var refreshRes = await _kpMeService.RefreshApi(acc);
-                    res = $"{res}- {acc} : {(refreshRes == true ? "Refreshed" : refreshRes == false ? "Refresh not available" : "Error")}\n";
+                    res = $"{res}- {acc} : {(refreshRes == true ? strings.BusinessService_Refreshed : refreshRes == false ? strings.BusinessService_RefreshNotAvailable : strings.BusinessService_Error)}\n";
                 });
                 tasks.Add(tt);
             }
@@ -353,7 +356,7 @@ namespace KpRefresher.Services
             _accountName = await _gw2ApiService.GetAccountName();
 
             if (string.IsNullOrWhiteSpace(_accountName) && isFromInit)
-                ScreenNotification.ShowNotification("[KpRefresher] Error while getting Account name from GW2 API.\nPlease retry later.", ScreenNotification.NotificationType.Error);
+                ScreenNotification.ShowNotification(strings.Notification_AccountNameFetchError, ScreenNotification.NotificationType.Error);
 
             return !string.IsNullOrWhiteSpace(_accountName);
         }
@@ -380,7 +383,7 @@ namespace KpRefresher.Services
             if (accountData == null)
             {
                 if (isFromInit)
-                    ScreenNotification.ShowNotification("[KpRefresher] Error while loading KillProof.me profile.\nPlease retry later.", ScreenNotification.NotificationType.Warning);
+                    ScreenNotification.ShowNotification(strings.Notification_KPProfileFetchError, ScreenNotification.NotificationType.Warning);
 
                 _isRefreshingKpData = false;
                 return;

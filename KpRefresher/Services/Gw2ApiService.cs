@@ -2,6 +2,7 @@
 using Blish_HUD.Modules.Managers;
 using KpRefresher.Domain;
 using KpRefresher.Extensions;
+using KpRefresher.Ressources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,7 +96,7 @@ namespace KpRefresher.Services
                     }
 
                     if (bankHasData)
-                        res = $"{res}[Bank]\n{bankData}\n";
+                        res = $"{res}[{strings.GW2APIService_Bank}]\n{bankData}\n";
                 }
                 else
                 {
@@ -124,7 +125,7 @@ namespace KpRefresher.Services
                     }
 
                     if (sharedInventoryHasData)
-                        res = $"{res}[Shared Slots]\n{sharedInventoryData}\n";
+                        res = $"{res}[{strings.GW2APIService_SharedSlots}]\n{sharedInventoryData}\n";
                 }
                 else
                 {
