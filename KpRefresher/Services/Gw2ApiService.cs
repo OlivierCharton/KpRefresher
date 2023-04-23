@@ -98,7 +98,7 @@ namespace KpRefresher.Services
                         var bankData = string.Empty;
                         foreach (var token in bankTokens.OrderBy(t => t.Item1))
                         {
-                            bankData = $"{bankData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
+                            bankData = $"{bankData}{token.Item2}   {token.Item1.GetDisplayNameLocalized()}\n";
                         }
 
                         res = $"{res}[{strings.GW2APIService_Bank}]\n{bankData}\n";
@@ -134,7 +134,7 @@ namespace KpRefresher.Services
                         var sharedInventoryData = string.Empty;
                         foreach (var token in sharedInventoryTokens.OrderBy(t => t.Item1))
                         {
-                            sharedInventoryData = $"{sharedInventoryData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
+                            sharedInventoryData = $"{sharedInventoryData}{token.Item2}   {token.Item1.GetDisplayNameLocalized()}\n";
                         }
 
                         res = $"{res}[{strings.GW2APIService_SharedSlots}]\n{sharedInventoryData}\n";
@@ -184,7 +184,7 @@ namespace KpRefresher.Services
                             var characterData = string.Empty;
                             foreach (var token in characterTokens.OrderBy(t => t.Item1))
                             {
-                                characterData = $"{characterData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
+                                characterData = $"{characterData}{token.Item2}   {token.Item1.GetDisplayNameLocalized()}\n";
                             }
 
                             res = $"{res}[{character.Name}]\n{characterData}\n";
