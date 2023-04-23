@@ -22,6 +22,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Ressources\raidboss.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>raidboss.resx</DependentUpon>
+	  </Compile>
 	  <Compile Update="Ressources\strings.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -35,6 +40,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <EmbeddedResource Update="Ressources\raidboss.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>raidboss.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	  <EmbeddedResource Update="Ressources\strings.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>strings.Designer.cs</LastGenOutput>

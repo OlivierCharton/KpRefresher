@@ -97,7 +97,7 @@ namespace KpRefresher
                 BusinessService)
             {
                 //Resize the window to prevent background texture to overflow
-                Size = new Point(500, 700)
+                Size = new Point(520, 700)
             };
             _mainWindow.BuildUi();
         }

@@ -492,6 +492,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à [KpRefresher] Instance exit detected, refresh scheduled in {0} minute{1}.
+        /// </summary>
+        internal static string Notification_InstanceExitDetected {
+            get {
+                return ResourceManager.GetString("Notification_InstanceExitDetected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à [KpRefresher] Refresh failed : please allow anonymous refresh
         ///in your KillProof.me settings.
         /// </summary>
@@ -592,15 +601,6 @@ namespace KpRefresher.Ressources {
         internal static string Notification_TryScheduled {
             get {
                 return ResourceManager.GetString("Notification_TryScheduled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à [KpRefresher] Instance exit detected, refresh scheduled in {0} minute{1}.
-        /// </summary>
-        internal static string Notiication_InstanceExitDetected {
-            get {
-                return ResourceManager.GetString("Notiication_InstanceExitDetected", resourceCulture);
             }
         }
     }

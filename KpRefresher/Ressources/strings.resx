@@ -266,6 +266,9 @@ Please retry later.</value>
     <value>[KpRefresher] KillProof.me data not available
 Please retry later.</value>
   </data>
+  <data name="Notification_InstanceExitDetected" xml:space="preserve">
+    <value>[KpRefresher] Instance exit detected, refresh scheduled in {0} minute{1}</value>
+  </data>
   <data name="Notification_KpAccountAnonymous" xml:space="preserve">
     <value>[KpRefresher] Refresh failed : please allow anonymous refresh
 in your KillProof.me settings</value>
@@ -303,8 +306,5 @@ Please retry later.</value>
   <data name="Notification_TryScheduled" xml:space="preserve">
     <value>{0}
 A new try has been scheduled.</value>
-  </data>
-  <data name="Notiication_InstanceExitDetected" xml:space="preserve">
-    <value>[KpRefresher] Instance exit detected, refresh scheduled in {0} minute{1}</value>
   </data>
 </root>

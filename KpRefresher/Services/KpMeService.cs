@@ -1,6 +1,7 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Controls;
 using KpRefresher.Domain;
+using KpRefresher.Extensions;
 using KpRefresher.Ressources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -57,7 +58,7 @@ namespace KpRefresher.Services
             return null;
         }
 
-        public async Task<List<string>> GetClearData(string kpId)
+        public async Task<List<RaidBoss>> GetClearData(string kpId)
         {
             if (string.IsNullOrWhiteSpace(kpId))
                 return null;
@@ -70,7 +71,7 @@ namespace KpRefresher.Services
 
                 using var client = new HttpClient();
 
-                var res = new List<string>();
+                var res = new List<RaidBoss>();
 
                 var response = await client.GetAsync(url);
                 if (response != null)
@@ -90,7 +91,7 @@ namespace KpRefresher.Services
                                 var encounterValue = (bool)((JProperty)encounter).Value;
 
                                 if (encounterValue)
-                                    res.Add(encounterName);
+                                    res.Add(encounterName.GetValueFromName<RaidBoss>());
                             }
                         }
 

@@ -47,7 +47,7 @@ namespace KpRefresher.Services
             }
         }
 
-        public async Task<List<string>> GetClears()
+        public async Task<List<RaidBoss>> GetClears()
         {
             if (_gw2ApiManager.HasPermissions(_gw2ApiManager.Permissions) == false)
             {
@@ -58,7 +58,11 @@ namespace KpRefresher.Services
             try
             {
                 var data = await _gw2ApiManager.Gw2ApiClient.V2.Account.Raids.GetAsync();
-                return data?.ToList();
+
+                if (data == null)
+                    return null;
+
+                return data.Select(d => (RaidBoss)Enum.Parse(typeof(RaidBoss), d)).ToList();
             }
             catch (Exception ex)
             {
@@ -98,7 +102,7 @@ namespace KpRefresher.Services
                         var bankData = string.Empty;
                         foreach (var token in bankTokens.OrderBy(t => t.Item1))
                         {
-                            bankData = $"{bankData}{token.Item2}   {token.Item1.GetDisplayNameLocalized()}\n";
+                            bankData = $"{bankData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
                         }
 
                         res = $"{res}[{strings.GW2APIService_Bank}]\n{bankData}\n";
@@ -134,7 +138,7 @@ namespace KpRefresher.Services
                         var sharedInventoryData = string.Empty;
                         foreach (var token in sharedInventoryTokens.OrderBy(t => t.Item1))
                         {
-                            sharedInventoryData = $"{sharedInventoryData}{token.Item2}   {token.Item1.GetDisplayNameLocalized()}\n";
+                            sharedInventoryData = $"{sharedInventoryData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
                         }
 
                         res = $"{res}[{strings.GW2APIService_SharedSlots}]\n{sharedInventoryData}\n";
@@ -184,7 +188,7 @@ namespace KpRefresher.Services
                             var characterData = string.Empty;
                             foreach (var token in characterTokens.OrderBy(t => t.Item1))
                             {
-                                characterData = $"{characterData}{token.Item2}   {token.Item1.GetDisplayNameLocalized()}\n";
+                                characterData = $"{characterData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
                             }
 
                             res = $"{res}[{character.Name}]\n{characterData}\n";
