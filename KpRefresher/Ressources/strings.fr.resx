@@ -256,7 +256,8 @@ Chaque kp dans la liste peut-être ajouté sur KillProof.me, s'il n'a pas déjà
     <value>Prochain essai dans {0} seconde{1}.</value>
   </data>
   <data name="Notification_AccountNameFetchError" xml:space="preserve">
-    <value>[KpRefresher] Erreur lors de la récupération du nom de compte de l'API GW2I.
+    <value>[KpRefresher] Erreur lors de la récupération du
+nom de compte de l'API GW2I.
 Veuillez réessayer plus tard.</value>
   </data>
   <data name="Notification_CopiedToClipboard" xml:space="preserve">
@@ -267,10 +268,12 @@ Veuillez réessayer plus tard.</value>
 Veuillez réessayer plus tard.</value>
   </data>
   <data name="Notification_InstanceExitDetected" xml:space="preserve">
-    <value>[KpRefresher] Sortie d'instance détectée, rafraîchissement programmé dans {0} minute{1}</value>
+    <value>[KpRefresher] Sortie d'instance détectée
+Rafraîchissement programmé dans {0} minute{1}</value>
   </data>
   <data name="Notification_KpAccountAnonymous" xml:space="preserve">
-    <value>[KpRefresher] Rafraîchissement échoué : veuillez autoriser le rafraîchissement anonyme
+    <value>[KpRefresher] Rafraîchissement échoué
+Veuillez autoriser le rafraîchissement anonyme
 dans les paramètres KillProof.me</value>
   </data>
   <data name="Notification_KpAccountUnknown" xml:space="preserve">
@@ -284,21 +287,22 @@ Veuillez réessayer plus tard.</value>
     <value>[KpRefresher] Prochain rafraîchissement disponible dans {0} minute{1}</value>
   </data>
   <data name="Notification_NoClearRefreshAborted" xml:space="preserve">
-    <value>[KpRefresher] Les conditions de clear ne sont pas validées, rafraîchissement annulé  !</value>
+    <value>[KpRefresher] Les conditions de clear ne sont pas validées
+Rafraîchissement annulé  !</value>
   </data>
   <data name="Notification_NotifyScheduled" xml:space="preserve">
-    <value>[KpRefresher] Vous serez averti quand le prochain rafraîchissement sera disponible,
-dans environ {0} minute{1}.</value>
+    <value>[KpRefresher] Vous serez averti quand le prochain rafraîchissement
+sera disponible, dans environ {0} minute{1}.</value>
   </data>
   <data name="Notification_RefreshAvailable" xml:space="preserve">
     <value>[KpRefresher] Le rafraîchissement est disponible !</value>
   </data>
   <data name="Notification_RefreshNotAvailable" xml:space="preserve">
-    <value>[KpRefresher] Le rafraîchissement de KillProof.me n'était pas disponible
+    <value>[KpRefresher] Le rafraîchissement de KillProof.me n'est pas disponible
 Veuillez réessayer plus tard.</value>
   </data>
   <data name="Notification_RefreshNotAvailableRetry" xml:space="preserve">
-    <value>[KpRefresher] Le rafraîchissement de KillProof.me n'était pas disponible
+    <value>[KpRefresher] Le rafraîchissement de KillProof.me n'est pas disponible
 Nouvel essai dans 5 minutes.</value>
   </data>
   <data name="Notification_RefreshOk" xml:space="preserve">
