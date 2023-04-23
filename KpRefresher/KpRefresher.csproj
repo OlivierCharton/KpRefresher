@@ -27,12 +27,21 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>strings.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="Ressources\tokens.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>tokens.resx</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <EmbeddedResource Update="Ressources\strings.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>strings.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Ressources\tokens.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>tokens.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	</ItemGroup>
 

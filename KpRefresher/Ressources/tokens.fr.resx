@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Adina" xml:space="preserve">
+    <value>Coupon de la cardinale Adina</value>
+  </data>
+  <data name="AetherbladeHideout" xml:space="preserve">
+    <value>Malle de Mai Trin</value>
+  </data>
+  <data name="AetherbladeHideoutCM" xml:space="preserve">
+    <value>Malle magnifiques de Mai Trin</value>
+  </data>
+  <data name="Boneskinner" xml:space="preserve">
+    <value>Fiole du rituel du désosseur</value>
+  </data>
+  <data name="Cairn" xml:space="preserve">
+    <value>Fragment de Cairn</value>
+  </data>
+  <data name="ConjuredAmalgamate" xml:space="preserve">
+    <value>Coupon d'amalgame conjuré</value>
+  </data>
+  <data name="Deimos" xml:space="preserve">
+    <value>Fragment du fardeau de Saul</value>
+  </data>
+  <data name="Desmina" xml:space="preserve">
+    <value>Coupon de Desmina</value>
+  </data>
+  <data name="Dhuum" xml:space="preserve">
+    <value>Coupon de Dhuum</value>
+  </data>
+  <data name="Escort" xml:space="preserve">
+    <value>Fragment de tourelle</value>
+  </data>
+  <data name="Gorseval" xml:space="preserve">
+    <value>Morceau de tentacule de Gorseval</value>
+  </data>
+  <data name="HarvestTemple" xml:space="preserve">
+    <value>Malle du Vide</value>
+  </data>
+  <data name="HarvestTempleCM" xml:space="preserve">
+    <value>Malle magnifiques du Vide</value>
+  </data>
+  <data name="KainengOverlook" xml:space="preserve">
+    <value>Malle du ministre Li</value>
+  </data>
+  <data name="KainengOverlookCM" xml:space="preserve">
+    <value>Malle magnifiques du ministre Li</value>
+  </data>
+  <data name="KeepConstruct" xml:space="preserve">
+    <value>Gravats de Titan du fort</value>
+  </data>
+  <data name="Matthias" xml:space="preserve">
+    <value>Cristal d'abomination du Blanc-Manteau</value>
+  </data>
+  <data name="MursaatOverseer" xml:space="preserve">
+    <value>Fragment de sol de salle de jeux</value>
+  </data>
+  <data name="OldLionsCourt" xml:space="preserve">
+    <value>Coffre des chevaliers d'assaut</value>
+  </data>
+  <data name="OldLionsCourtCM" xml:space="preserve">
+    <value>Coffre magnifique des chevaliers d'assaut</value>
+  </data>
+  <data name="Qadim" xml:space="preserve">
+    <value>Coupon de Qadim</value>
+  </data>
+  <data name="QTP" xml:space="preserve">
+    <value>Coupon de djinn éthéré</value>
+  </data>
+  <data name="River" xml:space="preserve">
+    <value>Coupon de la Rivière des âmes</value>
+  </data>
+  <data name="Sabetha" xml:space="preserve">
+    <value>Fragment du lance-flammes de Sabetha</value>
+  </data>
+  <data name="Sabir" xml:space="preserve">
+    <value>Coupon du cardinal Sabir</value>
+  </data>
+  <data name="Samarog" xml:space="preserve">
+    <value>Coupon de prisonnier empalé</value>
+  </data>
+  <data name="Slothasor" xml:space="preserve">
+    <value>Champignon de Paressor</value>
+  </data>
+  <data name="Statue" xml:space="preserve">
+    <value>Coupon de statue</value>
+  </data>
+  <data name="TwinLargos" xml:space="preserve">
+    <value>Coupon des jumeaux largos</value>
+  </data>
+  <data name="Vale" xml:space="preserve">
+    <value>Morceau de Gardien de la Vallée</value>
+  </data>
+  <data name="Xera" xml:space="preserve">
+    <value>Morceau de ruban</value>
+  </data>
+  <data name="XunlaiJadeJunkyard" xml:space="preserve">
+    <value>Malle d'Ankka</value>
+  </data>
+  <data name="XunlaiJadeJunkyardCM" xml:space="preserve">
+    <value>Malle magnifiques d'Ankka</value>
+  </data>
+</root>

@@ -84,19 +84,25 @@ namespace KpRefresher.Services
 
                 if (bankItems != null)
                 {
-                    var bankHasData = false;
-                    var bankData = string.Empty;
+                    List<(Token, int)> bankTokens = new();
                     foreach (var item in bankItems)
                     {
                         if (item != null && tokensId.Contains(item.Id))
                         {
-                            bankHasData = true;
-                            bankData = $"{bankData}{item.Count}   {((Token)item.Id).GetDisplayName()}\n";
+                            bankTokens.Add(((Token)item.Id, item.Count));
                         }
                     }
 
-                    if (bankHasData)
+                    if (bankTokens.Count > 0)
+                    {
+                        var bankData = string.Empty;
+                        foreach (var token in bankTokens.OrderBy(t => t.Item1))
+                        {
+                            bankData = $"{bankData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
+                        }
+
                         res = $"{res}[{strings.GW2APIService_Bank}]\n{bankData}\n";
+                    }
                 }
                 else
                 {
@@ -111,21 +117,28 @@ namespace KpRefresher.Services
             try
             {
                 var sharedInventoryItems = await _gw2ApiManager.Gw2ApiClient.V2.Account.Inventory.GetAsync();
+
                 if (sharedInventoryItems != null)
                 {
-                    var sharedInventoryHasData = false;
-                    var sharedInventoryData = string.Empty;
+                    List<(Token, int)> sharedInventoryTokens = new();
                     foreach (var item in sharedInventoryItems)
                     {
                         if (item != null && tokensId.Contains(item.Id))
                         {
-                            sharedInventoryHasData = true;
-                            sharedInventoryData = $"{sharedInventoryData}{item.Count}   {((Token)item.Id).GetDisplayName()}\n";
+                            sharedInventoryTokens.Add(((Token)item.Id, item.Count));
                         }
                     }
 
-                    if (sharedInventoryHasData)
+                    if (sharedInventoryTokens.Count > 0)
+                    {
+                        var sharedInventoryData = string.Empty;
+                        foreach (var token in sharedInventoryTokens.OrderBy(t => t.Item1))
+                        {
+                            sharedInventoryData = $"{sharedInventoryData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
+                        }
+
                         res = $"{res}[{strings.GW2APIService_SharedSlots}]\n{sharedInventoryData}\n";
+                    }
                 }
                 else
                 {
@@ -142,8 +155,7 @@ namespace KpRefresher.Services
                 var characters = await _gw2ApiManager.Gw2ApiClient.V2.Characters.AllAsync();
                 if (characters != null)
                 {
-                    var characterHasData = false;
-                    var characterData = string.Empty;
+                    List<(Token, int)> characterTokens = new();
                     foreach (var character in characters)
                     {
                         if (character.Bags != null)
@@ -156,8 +168,7 @@ namespace KpRefresher.Services
                                     {
                                         if (item != null && tokensId.Contains(item.Id))
                                         {
-                                            characterHasData = true;
-                                            characterData = $"{characterData}{item.Count}   {((Token)item.Id).GetDisplayName()}\n";
+                                            characterTokens.Add(((Token)item.Id, item.Count));
                                         }
                                     }
                                 }
@@ -168,12 +179,17 @@ namespace KpRefresher.Services
                             _logger.Warn("Failed to retrieve character bags");
                         }
 
-                        if (characterHasData)
+                        if (characterTokens.Count > 0)
                         {
+                            var characterData = string.Empty;
+                            foreach (var token in characterTokens.OrderBy(t => t.Item1))
+                            {
+                                characterData = $"{characterData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
+                            }
+
                             res = $"{res}[{character.Name}]\n{characterData}\n";
 
-                            characterHasData = false;
-                            characterData = string.Empty;
+                            characterTokens.Clear();
                         }
                     }
                 }

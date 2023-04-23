@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -33,8 +34,9 @@ namespace KpRefresher.Extensions
         {
             return enumValue.GetType()
                             .GetMember(enumValue.ToString())
-                            .First()
-                            .GetCustomAttribute<DisplayAttribute>().Name;
+                            .FirstOrDefault()?
+                            .GetCustomAttribute<DisplayAttribute>()
+                            .GetDescription() ?? "unknown";
         }
     }
 }

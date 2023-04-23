@@ -1,86 +1,87 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KpRefresher.Ressources;
+using System.ComponentModel.DataAnnotations;
 
 namespace KpRefresher.Domain
 {
     public enum Token
     {
         #region Raids
-        [Display(Name = "Vale Guardian Fragment")]
+        [Display(Description = "Vale", ResourceType = typeof(tokens))]
         Vale = 77705,
-        [Display(Name = "Gorseval Tentacle Piece")]
+        [Display(Description = "Gorseval", ResourceType = typeof(tokens))]
         Gorseval = 77751,
-        [Display(Name = "Sabetha Flamethrower Fragment Piece")]
+        [Display(Description = "Sabetha", ResourceType = typeof(tokens))]
         Sabetha = 77728,
 
-        [Display(Name = "Slothasor Mushroom")]
+        [Display(Description = "Slothasor", ResourceType = typeof(tokens))]
         Slothasor = 77706,
-        [Display(Name = "White Mantle Abomination Crystal")]
+        [Display(Description = "Matthias", ResourceType = typeof(tokens))]
         Matthias = 77679,
 
-        [Display(Name = "Turret Fragment")]
+        [Display(Description = "Escort", ResourceType = typeof(tokens))]
         Escort = 78873,
-        [Display(Name = "Keep Construct Rubble")]
+        [Display(Description = "KeepConstruct", ResourceType = typeof(tokens))]
         KeepConstruct = 78902,
-        [Display(Name = "Ribbon Scrap")]
+        [Display(Description = "Xera", ResourceType = typeof(tokens))]
         Xera = 78942,
 
-        [Display(Name = "Cairn Fragment")]
+        [Display(Description = "Cairn", ResourceType = typeof(tokens))]
         Cairn = 80623,
-        [Display(Name = "Recreation Room Floor Fragment")]
+        [Display(Description = "MursaatOverseer", ResourceType = typeof(tokens))]
         MursaatOverseer = 80269,
-        [Display(Name = "Impaled Prisoner Token")]
+        [Display(Description = "Samarog", ResourceType = typeof(tokens))]
         Samarog = 80087,
-        [Display(Name = "Fragment of Saul's Burden")]
+        [Display(Description = "Deimos", ResourceType = typeof(tokens))]
         Deimos = 80542,
 
-        [Display(Name = "Desmina's Token")]
+        [Display(Description = "Desmina", ResourceType = typeof(tokens))]
         Desmina = 85993,
-        [Display(Name = "River of Souls Token")]
+        [Display(Description = "River", ResourceType = typeof(tokens))]
         River = 85785,
-        [Display(Name = "Statue Token")]
+        [Display(Description = "Statue", ResourceType = typeof(tokens))]
         Statue = 85800,
-        [Display(Name = "Dhuum's Token")]
+        [Display(Description = "Dhuum", ResourceType = typeof(tokens))]
         Dhuum = 85633,
 
-        [Display(Name = "Conjured Amalgamate Token")]
+        [Display(Description = "ConjuredAmalgamate", ResourceType = typeof(tokens))]
         ConjuredAmalgamate = 88543,
-        [Display(Name = "Twin Largos Token")]
+        [Display(Description = "TwinLargos", ResourceType = typeof(tokens))]
         TwinLargos = 88860,
-        [Display(Name = "Qadim's Token")]
+        [Display(Description = "Qadim", ResourceType = typeof(tokens))]
         Qadim = 88645,
 
-        [Display(Name = "Cardinal Adina's Token")]
+        [Display(Description = "Adina", ResourceType = typeof(tokens))]
         Adina = 91246,
-        [Display(Name = "Cardinal Sabir's Token")]
+        [Display(Description = "Sabir", ResourceType = typeof(tokens))]
         Sabir = 91270,
-        [Display(Name = "Ether Djinn's Token")]
+        [Display(Description = "QTP", ResourceType = typeof(tokens))]
         QTP = 91175,
         #endregion Raids
 
         #region Strikes
-        [Display(Name = "Boneskinner Ritual Vial")]
-        Boneskinner= 93781,
+        [Display(Description = "Boneskinner", ResourceType = typeof(tokens))]
+        Boneskinner = 93781,
 
-        [Display(Name = "Mai Trin's Coffer")]
+        [Display(Description = "AetherbladeHideout", ResourceType = typeof(tokens))]
         AetherbladeHideout = 95638,
-        [Display(Name = "Ankka's Coffer")]
+        [Display(Description = "XunlaiJadeJunkyard", ResourceType = typeof(tokens))]
         XunlaiJadeJunkyard = 95982,
-        [Display(Name = "Minister Li's Coffer")]
+        [Display(Description = "KainengOverlook", ResourceType = typeof(tokens))]
         KainengOverlook = 97451,
-        [Display(Name = "Void's Coffer")]
+        [Display(Description = "HarvestTemple", ResourceType = typeof(tokens))]
         HarvestTemple = 97132,
-        [Display(Name = "Assault Knights' Coffer")]
+        [Display(Description = "OldLionsCourt", ResourceType = typeof(tokens))]
         OldLionsCourt = 99165,
 
-        [Display(Name = "Mai Trin's Magnificent Coffer")]
+        [Display(Description = "AetherbladeHideoutCM", ResourceType = typeof(tokens))]
         AetherbladeHideoutCM = 97269,
-        [Display(Name = "Ankka's Magnificent Coffer")]
+        [Display(Description = "XunlaiJadeJunkyardCM", ResourceType = typeof(tokens))]
         XunlaiJadeJunkyardCM = 96638,
-        [Display(Name = "Minister Li's Magnificent Coffer")]
+        [Display(Description = "KainengOverlookCM", ResourceType = typeof(tokens))]
         KainengOverlookCM = 96419,
-        [Display(Name = "Void's Magnificent Coffer")]
+        [Display(Description = "HarvestTempleCM", ResourceType = typeof(tokens))]
         HarvestTempleCM = 95986,
-        [Display(Name = "Assault Knights' Magnificent Coffer")]
+        [Display(Description = "OldLionsCourtCM", ResourceType = typeof(tokens))]
         OldLionsCourtCM = 99204
         #endregion Strikes
     }
