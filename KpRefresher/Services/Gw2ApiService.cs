@@ -1,6 +1,7 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Modules.Managers;
 using KpRefresher.Domain;
+using KpRefresher.Domain.Attributes;
 using KpRefresher.Extensions;
 using KpRefresher.Ressources;
 using System;
@@ -100,7 +101,7 @@ namespace KpRefresher.Services
                     if (bankTokens.Count > 0)
                     {
                         var bankData = string.Empty;
-                        foreach (var token in bankTokens.OrderBy(t => t.Item1))
+                        foreach (var token in bankTokens.OrderBy(t => t.Item1.GetAttribute<OrderAttribute>().Order))
                         {
                             bankData = $"{bankData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
                         }
@@ -136,7 +137,7 @@ namespace KpRefresher.Services
                     if (sharedInventoryTokens.Count > 0)
                     {
                         var sharedInventoryData = string.Empty;
-                        foreach (var token in sharedInventoryTokens.OrderBy(t => t.Item1))
+                        foreach (var token in sharedInventoryTokens.OrderBy(t => t.Item1.GetAttribute<OrderAttribute>().Order))
                         {
                             sharedInventoryData = $"{sharedInventoryData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
                         }
@@ -186,7 +187,7 @@ namespace KpRefresher.Services
                         if (characterTokens.Count > 0)
                         {
                             var characterData = string.Empty;
-                            foreach (var token in characterTokens.OrderBy(t => t.Item1))
+                            foreach (var token in characterTokens.OrderBy(t => t.Item1.GetAttribute<OrderAttribute>().Order))
                             {
                                 characterData = $"{characterData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
                             }
