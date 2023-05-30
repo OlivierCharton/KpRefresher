@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BusinessService_CustomIdAccountNotMatching" xml:space="preserve">
+    <value>KillProof.me account {0} does not match with current GW2 account {1}.</value>
+  </data>
+  <data name="BusinessService_CustomIdNoAccountFound" xml:space="preserve">
+    <value>KillProof.me account {0} does not exist.</value>
+  </data>
+  <data name="BusinessService_CustomIdSet" xml:space="preserve">
+    <value>Custom Id set!</value>
+  </data>
   <data name="BusinessService_Error" xml:space="preserve">
     <value>Error</value>
   </data>
@@ -197,6 +206,15 @@ Every kp in the list is able to be scanned by KillProof.me, if not already scann
   <data name="MainWindow_Configuration_Title" xml:space="preserve">
     <value>Configuration</value>
   </data>
+  <data name="MainWindow_CustomId_EditNotif" xml:space="preserve">
+    <value>Please press enter to save value.</value>
+  </data>
+  <data name="MainWindow_CustomId_Label" xml:space="preserve">
+    <value>Custom Id</value>
+  </data>
+  <data name="MainWindow_CustomId_Tooltip" xml:space="preserve">
+    <value>Overrides the GW2 account name. Only use this option if the default configuration does not work for you.</value>
+  </data>
   <data name="MainWindow_DelayBeforeRefreshOnMapChange_Label" xml:space="preserve">
     <value>Delay before refresh</value>
   </data>
@@ -262,6 +280,10 @@ Please retry later.</value>
   <data name="Notification_CopiedToClipboard" xml:space="preserve">
     <value>[KpRefresher] Id copied to clipboard!</value>
   </data>
+  <data name="Notification_CustomIdAccountNotMatching" xml:space="preserve">
+    <value>[KpRefresher] KillProof.me account {0} does not match
+with current GW2 account {1}.</value>
+  </data>
   <data name="Notification_DataNotAvailable" xml:space="preserve">
     <value>[KpRefresher] KillProof.me data not available
 Please retry later.</value>
@@ -298,7 +320,8 @@ in approx. {0} minute{1}.</value>
 Please retry later.</value>
   </data>
   <data name="Notification_RefreshNotAvailableRetry" xml:space="preserve">
-    <value>[KpRefresher] KillProof.me refresh was not available\nAuto-retry in 5 minutes.</value>
+    <value>[KpRefresher] KillProof.me refresh was not available
+Auto-retry in 5 minutes.</value>
   </data>
   <data name="Notification_RefreshOk" xml:space="preserve">
     <value>[KpRefresher] KillProof.me refresh successful!</value>

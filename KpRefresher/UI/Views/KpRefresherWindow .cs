@@ -178,6 +178,24 @@ namespace KpRefresher.UI.Views
                 _moduleSettings.DelayBeforeRefreshOnMapChange.Value = newValue;
                 _delayTextChangeFlag = false;
             };
+
+            var (panelCustomId, labelCustomId, controlCustomId) = CreateLabeledControl<TextBox>(() => strings.MainWindow_CustomId_Label, () => strings.MainWindow_CustomId_Tooltip, configContainer);
+            controlCustomId.Text = _moduleSettings.CustomId.Value;
+            controlCustomId.TextChanged += (s, e) =>
+            {
+                var value = (s as TextBox).Text.Trim();
+                if (value == _moduleSettings.CustomId.Value || string.IsNullOrEmpty(value))
+                    ClearNotifications();
+                else
+                    ShowInsideNotification(strings.MainWindow_CustomId_EditNotif, true);
+            };
+            controlCustomId.EnterPressed += async (s, e) =>
+            {
+                var value = (s as TextBox).Text.Trim();
+                var result = await _businessService.SetCustomId(value);
+
+                ShowInsideNotification(result.Item2, true);
+            };
             #endregion Config
 
             #region Actions

@@ -61,6 +61,33 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à KillProof.me account {0} does not match with current GW2 account {1}..
+        /// </summary>
+        internal static string BusinessService_CustomIdAccountNotMatching {
+            get {
+                return ResourceManager.GetString("BusinessService_CustomIdAccountNotMatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à KillProof.me account {0} does not exist..
+        /// </summary>
+        internal static string BusinessService_CustomIdNoAccountFound {
+            get {
+                return ResourceManager.GetString("BusinessService_CustomIdNoAccountFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Custom Id set!.
+        /// </summary>
+        internal static string BusinessService_CustomIdSet {
+            get {
+                return ResourceManager.GetString("BusinessService_CustomIdSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Error.
         /// </summary>
         internal static string BusinessService_Error {
@@ -291,6 +318,33 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Please press enter to save value..
+        /// </summary>
+        internal static string MainWindow_CustomId_EditNotif {
+            get {
+                return ResourceManager.GetString("MainWindow_CustomId_EditNotif", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Custom Id.
+        /// </summary>
+        internal static string MainWindow_CustomId_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_CustomId_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Overrides the GW2 account name. Only use this option if the default configuration does not work for you..
+        /// </summary>
+        internal static string MainWindow_CustomId_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_CustomId_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Delay before refresh.
         /// </summary>
         internal static string MainWindow_DelayBeforeRefreshOnMapChange_Label {
@@ -482,6 +536,16 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à [KpRefresher] KillProof.me account {0} does not match
+        ///with current GW2 account {1}..
+        /// </summary>
+        internal static string Notification_CustomIdAccountNotMatching {
+            get {
+                return ResourceManager.GetString("Notification_CustomIdAccountNotMatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à [KpRefresher] KillProof.me data not available
         ///Please retry later..
         /// </summary>
@@ -577,7 +641,8 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à [KpRefresher] KillProof.me refresh was not available\nAuto-retry in 5 minutes..
+        ///   Recherche une chaîne localisée semblable à [KpRefresher] KillProof.me refresh was not available
+        ///Auto-retry in 5 minutes..
         /// </summary>
         internal static string Notification_RefreshNotAvailableRetry {
             get {

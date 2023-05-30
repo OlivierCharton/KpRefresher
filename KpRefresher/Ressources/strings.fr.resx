@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BusinessService_CustomIdAccountNotMatching" xml:space="preserve">
+    <value>Le compte KillProof.me {0} ne correspond pas avec le compte GW2 actuel {1}.</value>
+  </data>
+  <data name="BusinessService_CustomIdNoAccountFound" xml:space="preserve">
+    <value>Le compte KillProof.me {0} n'existe pas.</value>
+  </data>
+  <data name="BusinessService_CustomIdSet" xml:space="preserve">
+    <value>Id personnalisé configuré !</value>
+  </data>
   <data name="BusinessService_Error" xml:space="preserve">
     <value>Erreur</value>
   </data>
@@ -197,6 +206,15 @@ Chaque kp dans la liste peut-être ajouté sur KillProof.me, s'il n'a pas déjà
   <data name="MainWindow_Configuration_Title" xml:space="preserve">
     <value>Configuration</value>
   </data>
+  <data name="MainWindow_CustomId_EditNotif" xml:space="preserve">
+    <value>Appuyer sur entrée pour sauvegarder.</value>
+  </data>
+  <data name="MainWindow_CustomId_Label" xml:space="preserve">
+    <value>Id personnalisé</value>
+  </data>
+  <data name="MainWindow_CustomId_Tooltip" xml:space="preserve">
+    <value>Remplace le nom de compte GW2. A n'utiliser que si la configuration par défaut ne fonctionne pas pour vous.</value>
+  </data>
   <data name="MainWindow_DelayBeforeRefreshOnMapChange_Label" xml:space="preserve">
     <value>Délai avant rafraîchissement</value>
   </data>
@@ -262,6 +280,10 @@ Veuillez réessayer plus tard.</value>
   </data>
   <data name="Notification_CopiedToClipboard" xml:space="preserve">
     <value>[KpRefresher] Identifiant copié dans le presse-papier !</value>
+  </data>
+  <data name="Notification_CustomIdAccountNotMatching" xml:space="preserve">
+    <value>[KpRefresher] Le compte KillProof.me {0} ne correspond pas
+avec le compte GW2 actuel {1}.</value>
   </data>
   <data name="Notification_DataNotAvailable" xml:space="preserve">
     <value>[KpRefresher] Les données KillProof.me ne sont pas disponibles

@@ -23,7 +23,7 @@ namespace KpRefresher.Services
             _logger = logger;
         }
 
-        public async Task<KpApiModel> GetAccountData(string kpId)
+        public async Task<KpApiModel> GetAccountData(string kpId, bool showNotification = true)
         {
             if (string.IsNullOrWhiteSpace(kpId))
                 return null;
@@ -44,7 +44,7 @@ namespace KpRefresher.Services
                         var content = await response.Content.ReadAsStringAsync();
                         return JsonConvert.DeserializeObject<KpApiModel>(content);
                     }
-                    else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    else if (response.StatusCode == System.Net.HttpStatusCode.NotFound && showNotification)
                         ScreenNotification.ShowNotification(string.Format(strings.Notification_KpAccountUnknown, kpId), ScreenNotification.NotificationType.Error);
                     else
                         _logger.Warn($"Unknown status while getting account data : {response.StatusCode}");
