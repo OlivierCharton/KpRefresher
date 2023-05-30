@@ -184,7 +184,7 @@ namespace KpRefresher.UI.Views
             controlCustomId.TextChanged += (s, e) =>
             {
                 var value = (s as TextBox).Text.Trim();
-                if (value == _moduleSettings.CustomId.Value || string.IsNullOrEmpty(value))
+                if (value == _moduleSettings.CustomId.Value)
                     ClearNotifications();
                 else
                     ShowInsideNotification(strings.MainWindow_CustomId_EditNotif, true);
