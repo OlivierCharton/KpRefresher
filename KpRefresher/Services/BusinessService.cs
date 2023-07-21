@@ -16,6 +16,8 @@ namespace KpRefresher.Services
 {
     public class BusinessService
     {
+        const double MaxRefreshValue = 3600;
+
         private readonly ModuleSettings _moduleSettings;
         private readonly Gw2ApiService _gw2ApiService;
         private readonly KpMeService _kpMeService;
@@ -28,8 +30,7 @@ namespace KpRefresher.Services
 
         private List<RaidBoss> _raidBossNames { get; set; }
 
-        private DateTime? _lastRefresh { get; set; }
-        private DateTime? _refreshAvailable => _lastRefresh?.AddMinutes(61);
+        private double _nextRefresh { get; set; }
 
         private List<int> _raidMapIds { get; set; }
         private List<int> _strikeMapIds { get; set; }
@@ -96,15 +97,14 @@ namespace KpRefresher.Services
             }
 
             //Prevents spamming KP.me api
-            if (DateTime.UtcNow < _refreshAvailable.Value)
+            if (_nextRefresh > 0)
             {
-                //Rounding up is a safety mesure to prevent early refresh
-                var minutesUntilRefreshAvailable = Math.Ceiling((_refreshAvailable.Value - DateTime.UtcNow).TotalMinutes);
+                var minutesUntilRefreshAvailable = (int)new TimeSpan(0, 0, (int)_nextRefresh).TotalMinutes;
 
                 string baseMsg = string.Format(strings.Notification_NextRefreshAvailableIn, minutesUntilRefreshAvailable, minutesUntilRefreshAvailable > 1 ? "s" : string.Empty);
                 if (_moduleSettings.EnableAutoRetry.Value)
                 {
-                    ScheduleRefresh(minutesUntilRefreshAvailable);
+                    ScheduleRefresh(_nextRefresh);
 
                     if (!fromUpdateLoop || _moduleSettings.ShowScheduleNotification.Value)
                         ScreenNotification.ShowNotification(string.Format(strings.Notification_TryScheduled, baseMsg), ScreenNotification.NotificationType.Warning);
@@ -131,14 +131,26 @@ namespace KpRefresher.Services
             if (refreshed.HasValue && refreshed.Value)
             {
                 //Replace clears stored with updated clears and disable auto-retry
-                _lastRefresh = DateTime.UtcNow;
+                _nextRefresh = MaxRefreshValue;
+
+                //Update next refresh date 20s later (and every 20s if refreshed not done)
+                _ = Task.Run(async () =>
+                {
+                    var profileNotRefreshed = true;
+                    while (profileNotRefreshed)
+                    {
+                        await Task.Delay(20000);
+                        await UpdateNextRefresh();
+                        profileNotRefreshed = _nextRefresh == 0;
+                    }
+                });
 
                 ScreenNotification.ShowNotification(strings.Notification_RefreshOk, ScreenNotification.NotificationType.Info);
             }
             else if (refreshed.HasValue && !refreshed.Value)
             {
                 //Although we checked refresh date, we couldn't update, retry later
-                await UpdateLastRefresh(); //Necessary ?
+                await UpdateNextRefresh(); //Necessary ?
 
                 if (_moduleSettings.EnableAutoRetry.Value)
                 {
@@ -178,7 +190,7 @@ namespace KpRefresher.Services
                 //Trigger refresh on instance exit
                 _playerWasInInstance = false;
 
-                ScheduleRefresh(_moduleSettings.DelayBeforeRefreshOnMapChange.Value);
+                ScheduleRefresh(_moduleSettings.DelayBeforeRefreshOnMapChange.Value * 60);
 
                 ScreenNotification.ShowNotification(string.Format(strings.Notification_InstanceExitDetected, _moduleSettings.DelayBeforeRefreshOnMapChange.Value, _moduleSettings.DelayBeforeRefreshOnMapChange.Value > 1 ? "s" : string.Empty), ScreenNotification.NotificationType.Info);
             }
@@ -209,6 +221,12 @@ namespace KpRefresher.Services
             Process.Start(url);
         }
 
+        public void DecrementNextRefresh()
+        {
+            if (_nextRefresh > 0)
+                _nextRefresh--;
+        }
+
         #region Notification next refresh available
         public async Task<bool> ActivateNotificationNextRefreshAvailable()
         {
@@ -218,20 +236,19 @@ namespace KpRefresher.Services
                 return false;
             }
 
-            if (DateTime.UtcNow > _refreshAvailable.Value)
+            if (_nextRefresh == 0)
             {
                 ScreenNotification.ShowNotification(strings.Notification_RefreshAvailable, ScreenNotification.NotificationType.Info);
                 return false;
             }
 
-            //Rounding up is a safety mesure to prevent early refresh
-            var minutesUntilRefreshAvailable = Math.Ceiling((_refreshAvailable.Value - DateTime.UtcNow).TotalMinutes);
+            var minutesUntilRefreshAvailable = (int)new TimeSpan(0, 0, (int)_nextRefresh).TotalMinutes;
 
             NotificationNextRefreshAvailabledActivated = true;
             NotificationNextRefreshAvailabledTimer = 0;
-            NotificationNextRefreshAvailabledTimerEndValue = minutesUntilRefreshAvailable * 60 * 1000;
+            NotificationNextRefreshAvailabledTimerEndValue = _nextRefresh * 1000;
 
-            ScreenNotification.ShowNotification(string.Format(strings.Notification_NotifyScheduled, minutesUntilRefreshAvailable - 1, minutesUntilRefreshAvailable - 1 > 1 ? "s" : string.Empty), ScreenNotification.NotificationType.Info);
+            ScreenNotification.ShowNotification(string.Format(strings.Notification_NotifyScheduled, minutesUntilRefreshAvailable, minutesUntilRefreshAvailable > 1 ? "s" : string.Empty), ScreenNotification.NotificationType.Info);
 
             return true;
         }
@@ -390,7 +407,7 @@ namespace KpRefresher.Services
 
             //Reset stored data
             _kpId = string.Empty;
-            _lastRefresh = null;
+            _nextRefresh = MaxRefreshValue;
             LinkedKpId = null;
 
             var accountName = string.IsNullOrEmpty(_moduleSettings.CustomId.Value) ? _accountName : _moduleSettings.CustomId.Value;
@@ -411,17 +428,17 @@ namespace KpRefresher.Services
             }
 
             _kpId = accountData.Id;
-            _lastRefresh = accountData.LastRefresh;
+            _nextRefresh = accountData.NextRefresh;
             LinkedKpId = accountData.LinkedAccounts?.Select(l => l.Id)?.ToList();
 
             _isRefreshingKpData = false;
         }
 
-        private void ScheduleRefresh(double minutes = 5)
+        private void ScheduleRefresh(double seconds = 300)
         {
             RefreshScheduled = true;
             ScheduleTimer = 0;
-            ScheduleTimerEndValue = minutes * 60 * 1000;
+            ScheduleTimerEndValue = seconds * 1000;
         }
 
         /// <summary>
@@ -463,15 +480,10 @@ namespace KpRefresher.Services
             return false;
         }
 
-        private async Task UpdateLastRefresh(DateTime? date = null)
+        private async Task UpdateNextRefresh()
         {
-            if (date == null)
-            {
-                var accountData = await _kpMeService.GetAccountData(KpId);
-                date = accountData?.LastRefresh;
-            }
-
-            _lastRefresh = date.GetValueOrDefault();
+            var accountData = await _kpMeService.GetAccountData(KpId);
+            _nextRefresh = accountData?.NextRefresh ?? MaxRefreshValue;
         }
 
         private async Task<bool> DataLoaded(int retryCount = 0)
