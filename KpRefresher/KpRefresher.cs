@@ -202,14 +202,6 @@ namespace KpRefresher
 
         protected override void Update(GameTime gameTime)
         {
-            _runningTime += gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (_runningTime > 1000)
-            {
-                _runningTime -= 1000;
-                BusinessService.DecrementNextRefresh();
-            }
-
             if (BusinessService.RefreshScheduled)
             {
                 BusinessService.ScheduleTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -264,6 +256,5 @@ namespace KpRefresher
         private Controls.LoadingSpinner _apiSpinner;
         private KpRefresherWindow _mainWindow;
         private Controls.ContextMenuStripItem _notificationNextRefreshAvailable;
-        private double _runningTime;
     }
 }

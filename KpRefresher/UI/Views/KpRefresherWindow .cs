@@ -291,9 +291,9 @@ namespace KpRefresher.UI.Views
             _loadingSpinner.MouseEntered += (s, e) =>
             {
                 var nextRefresh = _businessService.GetNextScheduledTimer();
-                var totalMinutes = (int)nextRefresh.TotalMinutes;
+                var totalMinutes = nextRefresh.TotalMinutes;
                 if (totalMinutes >= 1)
-                    _loadingSpinner.BasicTooltipText = string.Format(strings.MainWindow_Spinner_Minutes, totalMinutes, totalMinutes > 1 ? "s" : string.Empty);
+                    _loadingSpinner.BasicTooltipText = string.Format(strings.MainWindow_Spinner_Minutes, totalMinutes.ToString("0"), totalMinutes > 1 ? "s" : string.Empty);
                 else
                     _loadingSpinner.BasicTooltipText = string.Format(strings.MainWindow_Spinner_Seconds, (int)nextRefresh.TotalSeconds, (int)nextRefresh.TotalSeconds > 1 ? "s" : string.Empty);
             };
