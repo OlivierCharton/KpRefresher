@@ -36,6 +36,7 @@ namespace KpRefresher.Services
 
         private TimeSpan _nextRefreshInterval => _nextRefresh - DateTime.UtcNow;
         private bool _canRefreshByDates => _nextRefreshInterval.Ticks < 0;
+        private double _nextRefreshSeconds { get; set; }
 
         public List<string> LinkedKpId { get; set; }
 
@@ -137,10 +138,12 @@ namespace KpRefresher.Services
                 //Update next refresh date 20s later (and every 20s if refreshed not done)
                 _ = Task.Run(async () =>
                 {
-                    while (_canRefreshByDates)
+                    var profileNotRefreshed = true;
+                    while (profileNotRefreshed)
                     {
                         await Task.Delay(20000);
                         await UpdateNextRefresh();
+                        profileNotRefreshed = _nextRefreshSeconds == 0;
                     }
                 });
 
@@ -422,6 +425,7 @@ namespace KpRefresher.Services
 
             _kpId = accountData.Id;
             _nextRefresh = accountData.NextRefresh;
+            _nextRefreshSeconds = accountData.NextRefreshSeconds;
             LinkedKpId = accountData.LinkedAccounts?.Select(l => l.Id)?.ToList();
 
             _isRefreshingKpData = false;
@@ -477,6 +481,7 @@ namespace KpRefresher.Services
         {
             var accountData = await _kpMeService.GetAccountData(KpId);
             _nextRefresh = accountData?.NextRefresh ?? DateTime.Now.AddHours(1);
+            _nextRefreshSeconds = accountData?.NextRefreshSeconds ?? 3600;
         }
 
         private async Task<bool> DataLoaded(int retryCount = 0)
