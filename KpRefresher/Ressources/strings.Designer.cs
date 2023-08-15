@@ -169,6 +169,24 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à KpRefresher.
+        /// </summary>
+        internal static string CornerIcon_Tooltip {
+            get {
+                return ResourceManager.GetString("CornerIcon_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à KpRefresher - api error, please wait.
+        /// </summary>
+        internal static string CornerIcon_Tooltip_Warning {
+            get {
+                return ResourceManager.GetString("CornerIcon_Tooltip_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Bank.
         /// </summary>
         internal static string GW2APIService_Bank {
@@ -513,16 +531,6 @@ namespace KpRefresher.Ressources {
         internal static string MainWindow_Spinner_Seconds {
             get {
                 return ResourceManager.GetString("MainWindow_Spinner_Seconds", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à [KpRefresher] Error while getting Account name from GW2 API.
-        ///Please retry later..
-        /// </summary>
-        internal static string Notification_AccountNameFetchError {
-            get {
-                return ResourceManager.GetString("Notification_AccountNameFetchError", resourceCulture);
             }
         }
         

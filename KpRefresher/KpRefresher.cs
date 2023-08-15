@@ -29,6 +29,7 @@ namespace KpRefresher
         public static Gw2ApiService Gw2ApiService { get; private set; }
         public static KpMeService KpMeService { get; private set; }
         public static BusinessService BusinessService { get; private set; }
+        public static Controls.CornerIcon CornerIcon { get; private set; }
 
         #region Service Managers
 
@@ -59,9 +60,15 @@ namespace KpRefresher
         // and render loop, so be sure to not do anything here that takes too long.
         protected override void Initialize()
         {
+            CornerIcon = new Controls.CornerIcon(ContentsManager)
+            {
+                Parent = GameService.Graphics.SpriteScreen,
+                Priority = 1283537108
+            };
+
             Gw2ApiService = new Gw2ApiService(Gw2ApiManager, Logger);
             KpMeService = new KpMeService(Logger);
-            BusinessService = new BusinessService(ModuleSettings, Gw2ApiService, KpMeService, () => _apiSpinner);
+            BusinessService = new BusinessService(ModuleSettings, Gw2ApiService, KpMeService, () => _apiSpinner, CornerIcon);
 
             Gw2ApiManager.SubtokenUpdated += OnApiSubTokenUpdated;
 
@@ -84,8 +91,6 @@ namespace KpRefresher
 
             // Load textures
             _emblemTexture = ContentsManager.GetTexture("emblem.png");
-            _cornerIconTexture = ContentsManager.GetTexture("corner.png");
-            _cornerIconHoverTexture = ContentsManager.GetTexture("corner-hover.png");
             _windowBackgroundTexture = AsyncTexture2D.FromAssetId(155985);
 
             _mainWindow = new(
@@ -121,16 +126,7 @@ namespace KpRefresher
 
         private void HandleCornerIcon()
         {
-            _cornerIcon = new CornerIcon()
-            {
-                Icon = _cornerIconTexture,
-                BasicTooltipText = $"{Name}",
-                Parent = GameService.Graphics.SpriteScreen,
-                HoverIcon = _cornerIconHoverTexture,
-                Priority = 1283537108
-            };
-
-            _cornerIcon.Click += delegate
+            CornerIcon.Click += delegate
             {
                 _mainWindow.ToggleWindow();
             };
@@ -188,13 +184,13 @@ namespace KpRefresher
             _cornerIconContextMenu.AddMenuItem(_notificationNextRefreshAvailable);
             _cornerIconContextMenu.AddMenuItem(openKpUrl);
 
-            _cornerIcon.Menu = _cornerIconContextMenu;
+            CornerIcon.Menu = _cornerIconContextMenu;
 
             _apiSpinner = new Controls.LoadingSpinner()
             {
-                Location = new Point(_cornerIcon.Left, _cornerIcon.Bottom + 3),
+                Location = new Point(CornerIcon.Left, CornerIcon.Bottom + 3),
                 Parent = GameService.Graphics.SpriteScreen,
-                Size = new Point(_cornerIcon.Width, _cornerIcon.Height),
+                Size = new Point(CornerIcon.Width, CornerIcon.Height),
                 SetLocalizedTooltip = () => strings.LoadingSpinner_Fetch,
                 Visible = false
             };
@@ -231,14 +227,12 @@ namespace KpRefresher
 
             GameService.Gw2Mumble.CurrentMap.MapChanged -= CurrentMap_MapChanged;
 
-            _cornerIcon?.Dispose();
+            CornerIcon?.Dispose();
             _cornerIconContextMenu?.Dispose();
             _apiSpinner?.Dispose();
             _mainWindow?.Dispose();
             _windowBackgroundTexture?.Dispose();
             _emblemTexture?.Dispose();
-            _cornerIconTexture?.Dispose();
-            _cornerIconHoverTexture?.Dispose();
 
             // All static members must be manually unset
             // Static members are not automatically cleared and will keep a reference to your,
@@ -249,9 +243,6 @@ namespace KpRefresher
         internal static KpRefresher KpRefresherInstance;
         private AsyncTexture2D _windowBackgroundTexture;
         private Texture2D _emblemTexture;
-        private Texture2D _cornerIconTexture;
-        private Texture2D _cornerIconHoverTexture;
-        private CornerIcon _cornerIcon;
         private ContextMenuStrip _cornerIconContextMenu;
         private Controls.LoadingSpinner _apiSpinner;
         private KpRefresherWindow _mainWindow;

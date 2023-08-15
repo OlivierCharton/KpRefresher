@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Controls = KpRefresher.UI.Controls;
 
 namespace KpRefresher.Services
 {
@@ -20,6 +21,7 @@ namespace KpRefresher.Services
         private readonly Gw2ApiService _gw2ApiService;
         private readonly KpMeService _kpMeService;
         private readonly Func<LoadingSpinner> _getSpinner;
+        private readonly Controls.CornerIcon _cornerIcon;
 
         private string _accountName { get; set; }
         private string _kpId { get; set; }
@@ -50,12 +52,13 @@ namespace KpRefresher.Services
 
         public string KpId => string.IsNullOrEmpty(_moduleSettings.CustomId.Value) ? _kpId : _moduleSettings.CustomId.Value;
 
-        public BusinessService(ModuleSettings moduleSettings, Gw2ApiService gw2ApiService, KpMeService kpMeService, Func<LoadingSpinner> getSpinner)
+        public BusinessService(ModuleSettings moduleSettings, Gw2ApiService gw2ApiService, KpMeService kpMeService, Func<LoadingSpinner> getSpinner, Controls.CornerIcon cornerIcon)
         {
             _moduleSettings = moduleSettings;
             _gw2ApiService = gw2ApiService;
             _kpMeService = kpMeService;
             _getSpinner = getSpinner;
+            _cornerIcon = cornerIcon;
 
             _raidBossNames = Enum.GetValues(typeof(RaidBoss))
                             .Cast<RaidBoss>()
@@ -77,7 +80,7 @@ namespace KpRefresher.Services
             _getSpinner?.Invoke()?.Show();
 
             //Get accountName to refresh kp.me id
-            await RefreshAccountName(true);
+            await RefreshAccountName();
 
             await RefreshKpMeData(true);
 
@@ -378,12 +381,11 @@ namespace KpRefresher.Services
         }
         #endregion UI Methods
 
-        private async Task<bool> RefreshAccountName(bool isFromInit = false)
+        private async Task<bool> RefreshAccountName()
         {
             _accountName = await _gw2ApiService.GetAccountName();
 
-            if (string.IsNullOrWhiteSpace(_accountName) && isFromInit)
-                ScreenNotification.ShowNotification(strings.Notification_AccountNameFetchError, ScreenNotification.NotificationType.Error);
+            _cornerIcon.UpdateWarningState(string.IsNullOrWhiteSpace(_accountName));
 
             return !string.IsNullOrWhiteSpace(_accountName);
         }

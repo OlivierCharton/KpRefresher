@@ -153,6 +153,12 @@
   <data name="CornerIcon_Refresh" xml:space="preserve">
     <value>Refresh KillProof.me data</value>
   </data>
+  <data name="CornerIcon_Tooltip" xml:space="preserve">
+    <value>KpRefresher</value>
+  </data>
+  <data name="CornerIcon_Tooltip_Warning" xml:space="preserve">
+    <value>KpRefresher - api error, please wait</value>
+  </data>
   <data name="GW2APIService_Bank" xml:space="preserve">
     <value>Bank</value>
   </data>
@@ -272,10 +278,6 @@ Every kp in the list is able to be scanned by KillProof.me, if not already scann
   </data>
   <data name="MainWindow_Spinner_Seconds" xml:space="preserve">
     <value>Next retry in {0} second{1}.</value>
-  </data>
-  <data name="Notification_AccountNameFetchError" xml:space="preserve">
-    <value>[KpRefresher] Error while getting Account name from GW2 API.
-Please retry later.</value>
   </data>
   <data name="Notification_CopiedToClipboard" xml:space="preserve">
     <value>[KpRefresher] Id copied to clipboard!</value>
