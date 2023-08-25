@@ -11,7 +11,12 @@
         XunlaiJadeJunkyard = 1450,
         KainengOverlook = 1451,
         HarvestTemple = 1437,
-        OldLionsCourt = 1485
+        OldLionsCourt = 1485,
         #endregion EoD
+
+        #region SotO
+        CosmicObservatory = 1515,
+        TempleOfFebe = 1520
+        #endregion SotO
     }
 }

@@ -135,6 +135,9 @@
   <data name="ConjuredAmalgamate" xml:space="preserve">
     <value>Coupon d'amalgame conjuré</value>
   </data>
+  <data name="CosmicObservatory" xml:space="preserve">
+    <value>Malle de Dagda</value>
+  </data>
   <data name="Deimos" xml:space="preserve">
     <value>Fragment du fardeau de Saul</value>
   </data>
@@ -200,6 +203,9 @@
   </data>
   <data name="Statue" xml:space="preserve">
     <value>Coupon de statue</value>
+  </data>
+  <data name="TempleOfFebe" xml:space="preserve">
+    <value>Malle de Cérus</value>
   </data>
   <data name="TwinLargos" xml:space="preserve">
     <value>Coupon des jumeaux largos</value>

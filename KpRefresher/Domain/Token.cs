@@ -83,7 +83,12 @@ namespace KpRefresher.Domain
         [Display(Description = "HarvestTempleCM", ResourceType = typeof(tokens)), Order(32)]
         HarvestTempleCM = 95986,
         [Display(Description = "OldLionsCourtCM", ResourceType = typeof(tokens)), Order(33)]
-        OldLionsCourtCM = 99204
+        OldLionsCourtCM = 99204,
+
+        [Display(Description = "CosmicObservatory", ResourceType = typeof(tokens)), Order(34)]
+        CosmicObservatory = 100068,
+        [Display(Description = "TempleOfFebe", ResourceType = typeof(tokens)), Order(35)]
+        TempleOfFebe = 100858,
         #endregion Strikes
     }
 }

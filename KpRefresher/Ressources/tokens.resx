@@ -135,6 +135,9 @@
   <data name="ConjuredAmalgamate" xml:space="preserve">
     <value>Conjured Amalgamate Token</value>
   </data>
+  <data name="CosmicObservatory" xml:space="preserve">
+    <value>Dagda's Coffer</value>
+  </data>
   <data name="Deimos" xml:space="preserve">
     <value>Fragment of Saul's Burden</value>
   </data>
@@ -200,6 +203,9 @@
   </data>
   <data name="Statue" xml:space="preserve">
     <value>Statue Token</value>
+  </data>
+  <data name="TempleOfFebe" xml:space="preserve">
+    <value>Cerus's Coffer</value>
   </data>
   <data name="TwinLargos" xml:space="preserve">
     <value>Twin Largos Token</value>
