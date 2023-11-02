@@ -3,7 +3,8 @@
     public enum StrikeMap
     {
         #region IBS
-        Boneskinner = 1351,
+        Boneskinner_Squad = 1339,
+        Boneskinner_Public = 1351,
         #endregion IBS
 
         #region EoD
