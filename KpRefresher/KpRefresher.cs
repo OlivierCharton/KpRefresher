@@ -1,6 +1,7 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Content;
 using Blish_HUD.Controls;
+using Blish_HUD.GameIntegration;
 using Blish_HUD.Modules;
 using Blish_HUD.Modules.Managers;
 using Blish_HUD.Settings;
@@ -60,6 +61,17 @@ namespace KpRefresher
         // and render loop, so be sure to not do anything here that takes too long.
         protected override void Initialize()
         {
+            // SOTO Fix
+            if (Program.OverlayVersion < new SemVer.Version(1, 1, 0))
+            {
+                try
+                {
+                    var tacoActive = typeof(TacOIntegration).GetProperty(nameof(TacOIntegration.TacOIsRunning)).GetSetMethod(true);
+                    tacoActive?.Invoke(GameService.GameIntegration.TacO, new object[] { true });
+                }
+                catch { /* NOOP */ }
+            }
+
             CornerIcon = new Controls.CornerIcon(ContentsManager)
             {
                 Parent = GameService.Graphics.SpriteScreen,
