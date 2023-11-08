@@ -138,6 +138,9 @@
   <data name="CosmicObservatory" xml:space="preserve">
     <value>Dagda's Coffer</value>
   </data>
+  <data name="CosmicObservatoryCM" xml:space="preserve">
+    <value>Dagda's Magnificent Coffer</value>
+  </data>
   <data name="Deimos" xml:space="preserve">
     <value>Fragment of Saul's Burden</value>
   </data>
@@ -205,6 +208,9 @@
     <value>Statue Token</value>
   </data>
   <data name="TempleOfFebe" xml:space="preserve">
+    <value>Cerus's Magnificent Coffer</value>
+  </data>
+  <data name="TempleOfFebeCM" xml:space="preserve">
     <value>Cerus's Coffer</value>
   </data>
   <data name="TwinLargos" xml:space="preserve">

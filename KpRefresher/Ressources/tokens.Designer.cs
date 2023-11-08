@@ -124,6 +124,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Dagda&apos;s Magnificent Coffer.
+        /// </summary>
+        public static string CosmicObservatoryCM {
+            get {
+                return ResourceManager.GetString("CosmicObservatoryCM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Fragment of Saul&apos;s Burden.
         /// </summary>
         public static string Deimos {
@@ -322,11 +331,20 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Cerus&apos;s Coffer.
+        ///   Recherche une chaîne localisée semblable à Cerus&apos;s Magnificent Coffer.
         /// </summary>
         public static string TempleOfFebe {
             get {
                 return ResourceManager.GetString("TempleOfFebe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cerus&apos;s Coffer.
+        /// </summary>
+        public static string TempleOfFebeCM {
+            get {
+                return ResourceManager.GetString("TempleOfFebeCM", resourceCulture);
             }
         }
         

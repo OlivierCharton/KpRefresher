@@ -124,7 +124,7 @@
     <value>Malle de Mai Trin</value>
   </data>
   <data name="AetherbladeHideoutCM" xml:space="preserve">
-    <value>Malle magnifiques de Mai Trin</value>
+    <value>Malle magnifique de Mai Trin</value>
   </data>
   <data name="Boneskinner" xml:space="preserve">
     <value>Fiole du rituel du désosseur</value>
@@ -137,6 +137,9 @@
   </data>
   <data name="CosmicObservatory" xml:space="preserve">
     <value>Malle de Dagda</value>
+  </data>
+  <data name="CosmicObservatoryCM" xml:space="preserve">
+    <value>Malle magnifique de Dagda</value>
   </data>
   <data name="Deimos" xml:space="preserve">
     <value>Fragment du fardeau de Saul</value>
@@ -157,13 +160,13 @@
     <value>Malle du Vide</value>
   </data>
   <data name="HarvestTempleCM" xml:space="preserve">
-    <value>Malle magnifiques du Vide</value>
+    <value>Malle magnifique du Vide</value>
   </data>
   <data name="KainengOverlook" xml:space="preserve">
     <value>Malle du ministre Li</value>
   </data>
   <data name="KainengOverlookCM" xml:space="preserve">
-    <value>Malle magnifiques du ministre Li</value>
+    <value>Malle magnifique du ministre Li</value>
   </data>
   <data name="KeepConstruct" xml:space="preserve">
     <value>Gravats de Titan du fort</value>
@@ -207,6 +210,9 @@
   <data name="TempleOfFebe" xml:space="preserve">
     <value>Malle de Cérus</value>
   </data>
+  <data name="TempleOfFebeCM" xml:space="preserve">
+    <value>Malle magnifique de Cérus</value>
+  </data>
   <data name="TwinLargos" xml:space="preserve">
     <value>Coupon des jumeaux largos</value>
   </data>
@@ -220,6 +226,6 @@
     <value>Malle d'Ankka</value>
   </data>
   <data name="XunlaiJadeJunkyardCM" xml:space="preserve">
-    <value>Malle magnifiques d'Ankka</value>
+    <value>Malle magnifique d'Ankka</value>
   </data>
 </root>
