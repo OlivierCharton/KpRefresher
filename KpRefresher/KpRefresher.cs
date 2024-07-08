@@ -243,7 +243,6 @@ namespace KpRefresher
             _cornerIconContextMenu?.Dispose();
             _apiSpinner?.Dispose();
             _mainWindow?.Dispose();
-            _windowBackgroundTexture?.Dispose();
             _emblemTexture?.Dispose();
 
             // All static members must be manually unset
