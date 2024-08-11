@@ -80,7 +80,7 @@ namespace KpRefresher
 
             Gw2ApiService = new Gw2ApiService(Gw2ApiManager, Logger);
             KpMeService = new KpMeService(Logger);
-            BusinessService = new BusinessService(ModuleSettings, Gw2ApiService, KpMeService, () => _apiSpinner, CornerIcon);
+            BusinessService = new BusinessService(ModuleSettings, Gw2ApiService, KpMeService, () => _apiSpinner, CornerIcon, Logger);
 
             Gw2ApiManager.SubtokenUpdated += OnApiSubTokenUpdated;
 

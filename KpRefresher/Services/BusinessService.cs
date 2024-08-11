@@ -22,6 +22,7 @@ namespace KpRefresher.Services
         private readonly KpMeService _kpMeService;
         private readonly Func<LoadingSpinner> _getSpinner;
         private readonly Controls.CornerIcon _cornerIcon;
+        private readonly Logger _logger;
 
         private string _accountName { get; set; }
         private string _kpId { get; set; }
@@ -52,13 +53,14 @@ namespace KpRefresher.Services
 
         public string KpId => string.IsNullOrEmpty(_moduleSettings.CustomId.Value) ? _kpId : _moduleSettings.CustomId.Value;
 
-        public BusinessService(ModuleSettings moduleSettings, Gw2ApiService gw2ApiService, KpMeService kpMeService, Func<LoadingSpinner> getSpinner, Controls.CornerIcon cornerIcon)
+        public BusinessService(ModuleSettings moduleSettings, Gw2ApiService gw2ApiService, KpMeService kpMeService, Func<LoadingSpinner> getSpinner, Controls.CornerIcon cornerIcon, Logger logger)
         {
             _moduleSettings = moduleSettings;
             _gw2ApiService = gw2ApiService;
             _kpMeService = kpMeService;
             _getSpinner = getSpinner;
             _cornerIcon = cornerIcon;
+            _logger = logger;
 
             _raidBossNames = Enum.GetValues(typeof(RaidBoss))
                             .Cast<RaidBoss>()
@@ -183,21 +185,29 @@ namespace KpRefresher.Services
 
         public void MapChanged()
         {
-            var mapId = GameService.Gw2Mumble.CurrentMap.Id;
-
-            if (_raidMapIds.Contains(mapId) || _strikeMapIds.Contains(mapId))
+            try
             {
-                //Activate the map change watcher
-                _playerWasInInstance = true;
+                var mapId = GameService.Gw2Mumble.CurrentMap.Id;
+
+                if (_raidMapIds.Contains(mapId) || _strikeMapIds.Contains(mapId))
+                {
+                    //Activate the map change watcher
+                    _playerWasInInstance = true;
+                }
+                else if (_playerWasInInstance)
+                {
+                    //Trigger refresh on instance exit
+                    _playerWasInInstance = false;
+
+                    ScheduleRefresh(_moduleSettings.DelayBeforeRefreshOnMapChange.Value * 60);
+
+                    ScreenNotification.ShowNotification(string.Format(strings.Notification_InstanceExitDetected, _moduleSettings.DelayBeforeRefreshOnMapChange.Value, _moduleSettings.DelayBeforeRefreshOnMapChange.Value > 1 ? "s" : string.Empty), ScreenNotification.NotificationType.Info);
+                }
             }
-            else if (_playerWasInInstance)
+            catch (Exception e)
             {
-                //Trigger refresh on instance exit
-                _playerWasInInstance = false;
-
-                ScheduleRefresh(_moduleSettings.DelayBeforeRefreshOnMapChange.Value * 60);
-
-                ScreenNotification.ShowNotification(string.Format(strings.Notification_InstanceExitDetected, _moduleSettings.DelayBeforeRefreshOnMapChange.Value, _moduleSettings.DelayBeforeRefreshOnMapChange.Value > 1 ? "s" : string.Empty), ScreenNotification.NotificationType.Info);
+                //This may happen when user start gw2 while Blish is already running (eg: gw2 starting with blish, closed gw2 then restarted it)
+                _logger.Warn($"Error while changing map : {e.Message}");
             }
         }
 
