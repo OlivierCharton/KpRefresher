@@ -196,6 +196,13 @@ namespace KpRefresher.UI.Views
 
                 ShowInsideNotification(result.Item2, true);
             };
+
+            checkbox_controls = CreateLabeledControl<Checkbox>(() => strings.MainWindow_HideAllMessages_Label, () => strings.MainWindow_HideAllMessages_Tooltip, configContainer);
+            checkbox_controls.control.Checked = _moduleSettings.HideAllMessages.Value;
+            checkbox_controls.control.CheckedChanged += (s, e) =>
+            {
+                _moduleSettings.HideAllMessages.Value = e.Checked;
+            };
             #endregion Config
 
             #region Actions

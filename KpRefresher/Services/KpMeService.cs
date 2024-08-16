@@ -9,18 +9,21 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using static Blish_HUD.Controls.ScreenNotification;
 
 namespace KpRefresher.Services
 {
     public class KpMeService
     {
         private readonly Logger _logger;
+        private readonly ModuleSettings _moduleSettings;
 
         private const string _kpMeBaseUrl = "https://killproof.me/";
 
-        public KpMeService(Logger logger)
+        public KpMeService(Logger logger, ModuleSettings moduleSettings)
         {
             _logger = logger;
+            _moduleSettings = moduleSettings;
         }
 
         public async Task<KpApiModel> GetAccountData(string kpId, bool showNotification = true)
@@ -45,7 +48,7 @@ namespace KpRefresher.Services
                         return JsonConvert.DeserializeObject<KpApiModel>(content);
                     }
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound && showNotification)
-                        ScreenNotification.ShowNotification(string.Format(strings.Notification_KpAccountUnknown, kpId), ScreenNotification.NotificationType.Error);
+                        ShowNotification(string.Format(strings.Notification_KpAccountUnknown, kpId), NotificationType.Error);
                     else
                         _logger.Warn($"Unknown status while getting account data : {response.StatusCode}");
                 }
@@ -98,7 +101,7 @@ namespace KpRefresher.Services
                         return res;
                     }
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        ScreenNotification.ShowNotification(string.Format(strings.Notification_KpAccountUnknown, kpId), ScreenNotification.NotificationType.Error);
+                        ShowNotification(string.Format(strings.Notification_KpAccountUnknown, kpId), NotificationType.Error);
                     else
                         _logger.Warn($"Unknown status while getting clear data : {response.StatusCode}");
                 }
@@ -132,9 +135,9 @@ namespace KpRefresher.Services
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
                         return false;
                     else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
-                        ScreenNotification.ShowNotification(strings.Notification_KpAccountAnonymous, ScreenNotification.NotificationType.Error);
+                        ShowNotification(strings.Notification_KpAccountAnonymous, NotificationType.Error);
                     else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        ScreenNotification.ShowNotification(string.Format(strings.Notification_KpAccountUnknown, kpId), ScreenNotification.NotificationType.Error);
+                        ShowNotification(string.Format(strings.Notification_KpAccountUnknown, kpId), NotificationType.Error);
                     else
                         _logger.Warn($"Unknown status while refreshing kp.me : {response.StatusCode}");
                 }
@@ -150,6 +153,12 @@ namespace KpRefresher.Services
         public string GetBaseUrl()
         {
             return _kpMeBaseUrl;
+        }
+
+        private void ShowNotification(string message, NotificationType notificationType)
+        {
+            if (!_moduleSettings.HideAllMessages.Value)
+                ScreenNotification.ShowNotification(message, notificationType);
         }
     }
 }

@@ -239,6 +239,12 @@ Every kp in the list is able to be scanned by KillProof.me, if not already scann
   <data name="MainWindow_EnableRefreshOnKill_Tooltip" xml:space="preserve">
     <value>Only allow refresh if a clear was made and is visible by GW2 API</value>
   </data>
+  <data name="MainWindow_HideAllMessages_Label" xml:space="preserve">
+    <value>Hide All Messages</value>
+  </data>
+  <data name="MainWindow_HideAllMessages_Tooltip" xml:space="preserve">
+    <value>Hide all notifications, useful when API down</value>
+  </data>
   <data name="MainWindow_Notif_LinkedAccounts" xml:space="preserve">
     <value>{0} linked account{1} found!
 {2}</value>

@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Blish_HUD.Controls.ScreenNotification;
 using Controls = KpRefresher.UI.Controls;
 
 namespace KpRefresher.Services
@@ -99,7 +100,7 @@ namespace KpRefresher.Services
 
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
+                ShowNotification(strings.Notification_DataNotAvailable, NotificationType.Warning);
                 return;
             }
 
@@ -114,11 +115,11 @@ namespace KpRefresher.Services
                     ScheduleRefresh(Math.Ceiling(_nextRefreshInterval.TotalSeconds));
 
                     if (!fromUpdateLoop || _moduleSettings.ShowScheduleNotification.Value)
-                        ScreenNotification.ShowNotification(string.Format(strings.Notification_TryScheduled, baseMsg), ScreenNotification.NotificationType.Warning);
+                        ShowNotification(string.Format(strings.Notification_TryScheduled, baseMsg), NotificationType.Warning);
                 }
                 else
                 {
-                    ScreenNotification.ShowNotification(baseMsg, ScreenNotification.NotificationType.Warning);
+                    ShowNotification(baseMsg, NotificationType.Warning);
                 }
 
                 return;
@@ -129,7 +130,7 @@ namespace KpRefresher.Services
                 var hasNewClear = await CheckRaidClears();
                 if (!hasNewClear)
                 {
-                    ScreenNotification.ShowNotification(strings.Notification_NoClearRefreshAborted, ScreenNotification.NotificationType.Info);
+                    ShowNotification(strings.Notification_NoClearRefreshAborted, NotificationType.Info);
                     return;
                 }
             }
@@ -152,7 +153,7 @@ namespace KpRefresher.Services
                     }
                 });
 
-                ScreenNotification.ShowNotification(strings.Notification_RefreshOk, ScreenNotification.NotificationType.Info);
+                ShowNotification(strings.Notification_RefreshOk, NotificationType.Info);
             }
             else if (refreshed.HasValue && !refreshed.Value)
             {
@@ -164,11 +165,11 @@ namespace KpRefresher.Services
                     ScheduleRefresh();
 
                     if (_moduleSettings.ShowScheduleNotification.Value)
-                        ScreenNotification.ShowNotification(strings.Notification_RefreshNotAvailableRetry, ScreenNotification.NotificationType.Warning);
+                        ShowNotification(strings.Notification_RefreshNotAvailableRetry, NotificationType.Warning);
                 }
                 else
                 {
-                    ScreenNotification.ShowNotification(strings.Notification_RefreshNotAvailable, ScreenNotification.NotificationType.Warning);
+                    ShowNotification(strings.Notification_RefreshNotAvailable, NotificationType.Warning);
                 }
             }
         }
@@ -201,7 +202,7 @@ namespace KpRefresher.Services
 
                     ScheduleRefresh(_moduleSettings.DelayBeforeRefreshOnMapChange.Value * 60);
 
-                    ScreenNotification.ShowNotification(string.Format(strings.Notification_InstanceExitDetected, _moduleSettings.DelayBeforeRefreshOnMapChange.Value, _moduleSettings.DelayBeforeRefreshOnMapChange.Value > 1 ? "s" : string.Empty), ScreenNotification.NotificationType.Info);
+                    ShowNotification(string.Format(strings.Notification_InstanceExitDetected, _moduleSettings.DelayBeforeRefreshOnMapChange.Value, _moduleSettings.DelayBeforeRefreshOnMapChange.Value > 1 ? "s" : string.Empty), NotificationType.Info);
                 }
             }
             catch (Exception e)
@@ -216,11 +217,11 @@ namespace KpRefresher.Services
             if (await DataLoaded())
             {
                 Clipboard.SetText($"KillProof.me id : {KpId}");
-                ScreenNotification.ShowNotification(strings.Notification_CopiedToClipboard, ScreenNotification.NotificationType.Info);
+                ShowNotification(strings.Notification_CopiedToClipboard, NotificationType.Info);
             }
             else
             {
-                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
+                ShowNotification(strings.Notification_DataNotAvailable, NotificationType.Warning);
             }
         }
 
@@ -228,7 +229,7 @@ namespace KpRefresher.Services
         {
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
+                ShowNotification(strings.Notification_DataNotAvailable, NotificationType.Warning);
                 return;
             }
 
@@ -241,13 +242,13 @@ namespace KpRefresher.Services
         {
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
+                ShowNotification(strings.Notification_DataNotAvailable, NotificationType.Warning);
                 return false;
             }
 
             if (_canRefreshByDates)
             {
-                ScreenNotification.ShowNotification(strings.Notification_RefreshAvailable, ScreenNotification.NotificationType.Info);
+                ShowNotification(strings.Notification_RefreshAvailable, NotificationType.Info);
                 return false;
             }
 
@@ -257,7 +258,7 @@ namespace KpRefresher.Services
             NotificationNextRefreshAvailabledTimer = 0;
             NotificationNextRefreshAvailabledTimerEndValue = Math.Ceiling(_nextRefreshInterval.TotalSeconds) * 1000;
 
-            ScreenNotification.ShowNotification(string.Format(strings.Notification_NotifyScheduled, minutesUntilRefreshAvailable.ToString("0"), minutesUntilRefreshAvailable > 1 ? "s" : string.Empty), ScreenNotification.NotificationType.Info);
+            ShowNotification(string.Format(strings.Notification_NotifyScheduled, minutesUntilRefreshAvailable.ToString("0"), minutesUntilRefreshAvailable > 1 ? "s" : string.Empty), NotificationType.Info);
 
             return true;
         }
@@ -271,7 +272,7 @@ namespace KpRefresher.Services
 
         public void NextRefreshIsAvailable()
         {
-            ScreenNotification.ShowNotification(strings.Notification_RefreshAvailable, ScreenNotification.NotificationType.Info);
+            ShowNotification(strings.Notification_RefreshAvailable, NotificationType.Info);
 
             ResetNotificationNextRefreshAvailable();
         }
@@ -291,7 +292,7 @@ namespace KpRefresher.Services
         {
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
+                ShowNotification(strings.Notification_DataNotAvailable, NotificationType.Warning);
                 return null;
             }
 
@@ -331,7 +332,7 @@ namespace KpRefresher.Services
         {
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
+                ShowNotification(strings.Notification_DataNotAvailable, NotificationType.Warning);
                 return string.Empty;
             }
 
@@ -344,7 +345,7 @@ namespace KpRefresher.Services
         {
             if (!await DataLoaded())
             {
-                ScreenNotification.ShowNotification(strings.Notification_DataNotAvailable, ScreenNotification.NotificationType.Warning);
+                ShowNotification(strings.Notification_DataNotAvailable, NotificationType.Warning);
                 return string.Empty;
             }
 
@@ -423,7 +424,7 @@ namespace KpRefresher.Services
             if (accountData == null)
             {
                 if (isFromInit)
-                    ScreenNotification.ShowNotification(strings.Notification_KPProfileFetchError, ScreenNotification.NotificationType.Warning);
+                    ShowNotification(strings.Notification_KPProfileFetchError, NotificationType.Warning);
 
                 _isRefreshingKpData = false;
                 return;
@@ -432,7 +433,7 @@ namespace KpRefresher.Services
             if (!string.IsNullOrEmpty(_moduleSettings.CustomId.Value) && accountData.AccountName != _accountName)
             {
                 _moduleSettings.CustomId.Value = string.Empty;
-                ScreenNotification.ShowNotification(string.Format(strings.Notification_CustomIdAccountNotMatching, _moduleSettings.CustomId.Value, _accountName), ScreenNotification.NotificationType.Warning);
+                ShowNotification(string.Format(strings.Notification_CustomIdAccountNotMatching, _moduleSettings.CustomId.Value, _accountName), NotificationType.Warning);
             }
 
             _kpId = accountData.Id;
@@ -519,6 +520,12 @@ namespace KpRefresher.Services
             retryCount++;
 
             return await DataLoaded(retryCount);
+        }
+
+        private void ShowNotification(string message, NotificationType notificationType)
+        {
+            if (!_moduleSettings.HideAllMessages.Value)
+                ScreenNotification.ShowNotification(message, notificationType);
         }
     }
 }

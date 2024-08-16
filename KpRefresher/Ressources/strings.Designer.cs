@@ -417,6 +417,24 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Hide All Messages.
+        /// </summary>
+        internal static string MainWindow_HideAllMessages_Label {
+            get {
+                return ResourceManager.GetString("MainWindow_HideAllMessages_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Hide all notifications, useful when API down.
+        /// </summary>
+        internal static string MainWindow_HideAllMessages_Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_HideAllMessages_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à {0} linked account{1} found!
         ///{2}.
         /// </summary>

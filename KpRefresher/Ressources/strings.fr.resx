@@ -239,6 +239,12 @@ Chaque kp dans la liste peut-être ajouté sur KillProof.me, s'il n'a pas déjà
   <data name="MainWindow_EnableRefreshOnKill_Tooltip" xml:space="preserve">
     <value>Ne rafraîchit que si un clear a été effectué et est visible par l'API GW2</value>
   </data>
+  <data name="MainWindow_HideAllMessages_Label" xml:space="preserve">
+    <value>Masquer tous les messages</value>
+  </data>
+  <data name="MainWindow_HideAllMessages_Tooltip" xml:space="preserve">
+    <value>Cache toutes les notifications, utile quand l'api est KO</value>
+  </data>
   <data name="MainWindow_Notif_LinkedAccounts" xml:space="preserve">
     <value>{0} compte{1} lié{1} trouvé{1} !
 {2}</value>
