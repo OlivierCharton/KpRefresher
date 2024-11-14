@@ -8,6 +8,7 @@
         BastionOfThePenitent = 1188,
         HallOfChains = 1264,
         MythwrightGambit = 1303,
-        TheKeyOfAhdashim = 1323
+        TheKeyOfAhdashim = 1323,
+        MountBalrior = 9999
     }
 }

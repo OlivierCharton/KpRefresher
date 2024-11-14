@@ -195,4 +195,13 @@
   <data name="xera" xml:space="preserve">
     <value>Xera</value>
   </data>
+  <data name="ura" xml:space="preserve">
+    <value>Ura</value>
+  </data>
+  <data name="decima" xml:space="preserve">
+    <value>Decima</value>
+  </data>
+  <data name="greer" xml:space="preserve">
+    <value>Greer</value>
+  </data>
 </root>

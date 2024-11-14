@@ -133,6 +133,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Decima Token.
+        /// </summary>
+        public static string Decima {
+            get {
+                return ResourceManager.GetString("Decima", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Fragment of Saul&apos;s Burden.
         /// </summary>
         public static string Deimos {
@@ -174,6 +183,15 @@ namespace KpRefresher.Ressources {
         public static string Gorseval {
             get {
                 return ResourceManager.GetString("Gorseval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Greer Token.
+        /// </summary>
+        public static string Greer {
+            get {
+                return ResourceManager.GetString("Greer", resourceCulture);
             }
         }
         
@@ -354,6 +372,15 @@ namespace KpRefresher.Ressources {
         public static string TwinLargos {
             get {
                 return ResourceManager.GetString("TwinLargos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ura Token.
+        /// </summary>
+        public static string Ura {
+            get {
+                return ResourceManager.GetString("Ura", resourceCulture);
             }
         }
         

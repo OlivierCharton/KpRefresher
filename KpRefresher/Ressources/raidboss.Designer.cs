@@ -97,6 +97,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Decima.
+        /// </summary>
+        public static string decima {
+            get {
+                return ResourceManager.GetString("decima", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Deimos.
         /// </summary>
         public static string deimos {
@@ -129,6 +138,15 @@ namespace KpRefresher.Ressources {
         public static string gorseval {
             get {
                 return ResourceManager.GetString("gorseval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Greer.
+        /// </summary>
+        public static string greer {
+            get {
+                return ResourceManager.GetString("greer", resourceCulture);
             }
         }
         
@@ -264,6 +282,15 @@ namespace KpRefresher.Ressources {
         public static string twisted_castle {
             get {
                 return ResourceManager.GetString("twisted_castle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ura.
+        /// </summary>
+        public static string ura {
+            get {
+                return ResourceManager.GetString("ura", resourceCulture);
             }
         }
         

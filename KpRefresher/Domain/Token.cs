@@ -57,6 +57,13 @@ namespace KpRefresher.Domain
         Sabir = 91270,
         [Display(Description = "QTP", ResourceType = typeof(tokens)), Order(22)]
         QTP = 91175,
+
+        [Display(Description = "Decima", ResourceType = typeof(tokens)), Order(23)]
+        Decima = 99997,
+        [Display(Description = "Greer", ResourceType = typeof(tokens)), Order(24)]
+        Greer = 99998,
+        [Display(Description = "Ura", ResourceType = typeof(tokens)), Order(25)]
+        Ura = 99999,
         #endregion Raids
 
         #region Strikes

@@ -228,4 +228,13 @@
   <data name="XunlaiJadeJunkyardCM" xml:space="preserve">
     <value>Malle magnifique d'Ankka</value>
   </data>
+  <data name="Ura" xml:space="preserve">
+    <value>Ura Token</value>
+  </data>
+  <data name="Greer" xml:space="preserve">
+    <value>Greer Token</value>
+  </data>
+  <data name="Decima" xml:space="preserve">
+    <value>Decima Token</value>
+  </data>
 </root>

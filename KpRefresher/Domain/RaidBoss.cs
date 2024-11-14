@@ -89,6 +89,16 @@ namespace KpRefresher.Domain
         sabir,
         [Display(Name = "Qadim The Peerless", Description = "qadim_the_peerless", ResourceType = typeof(raidboss)), FinalBoss]
         [Wing(7)]
-        qadim_the_peerless
+        qadim_the_peerless,
+
+        [Display(Name = "Greer", Description = "greer", ResourceType = typeof(raidboss))]
+        [Wing(8)]
+        greer,
+        [Display(Name = "Decima", Description = "decima", ResourceType = typeof(raidboss))]
+        [Wing(8)]
+        decima,
+        [Display(Name = "Ura", Description = "ura", ResourceType = typeof(raidboss)), FinalBoss]
+        [Wing(8)]
+        ura,
     }
 }
