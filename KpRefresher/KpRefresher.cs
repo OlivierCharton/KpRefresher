@@ -107,7 +107,7 @@ namespace KpRefresher
 
             _mainWindow = new(
                 _windowBackgroundTexture,
-                new Rectangle(40, 26, 913, 691),
+                new Rectangle(40, 26, 903, 681),
                 new Rectangle(50, 26, 893, 681),
                 _emblemTexture,
                 ModuleSettings,
