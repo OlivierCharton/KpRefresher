@@ -229,12 +229,12 @@
     <value>Malle magnifique d'Ankka</value>
   </data>
   <data name="Ura" xml:space="preserve">
-    <value>Ura Token</value>
+    <value>Coupon d'Ura</value>
   </data>
   <data name="Greer" xml:space="preserve">
-    <value>Greer Token</value>
+    <value>Coupon de Greer</value>
   </data>
   <data name="Decima" xml:space="preserve">
-    <value>Decima Token</value>
+    <value>Coupon de Decima</value>
   </data>
 </root>

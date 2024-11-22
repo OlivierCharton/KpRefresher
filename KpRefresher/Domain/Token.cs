@@ -58,48 +58,49 @@ namespace KpRefresher.Domain
         [Display(Description = "QTP", ResourceType = typeof(tokens)), Order(22)]
         QTP = 91175,
 
-        [Display(Description = "Decima", ResourceType = typeof(tokens)), Order(23)]
-        Decima = 99997,
-        [Display(Description = "Greer", ResourceType = typeof(tokens)), Order(24)]
-        Greer = 99998,
+        
+        [Display(Description = "Greer", ResourceType = typeof(tokens)), Order(23)]
+        Greer = 104047,
+        [Display(Description = "Decima", ResourceType = typeof(tokens)), Order(24)]
+        Decima = 103754,
         [Display(Description = "Ura", ResourceType = typeof(tokens)), Order(25)]
-        Ura = 99999,
+        Ura = 103996,
         #endregion Raids
 
         #region Strikes
-        [Display(Description = "Boneskinner", ResourceType = typeof(tokens)), Order(23)]
+        [Display(Description = "Boneskinner", ResourceType = typeof(tokens)), Order(26)]
         Boneskinner = 93781,
 
-        [Display(Description = "AetherbladeHideout", ResourceType = typeof(tokens)), Order(24)]
+        [Display(Description = "AetherbladeHideout", ResourceType = typeof(tokens)), Order(27)]
         AetherbladeHideout = 95638,
-        [Display(Description = "XunlaiJadeJunkyard", ResourceType = typeof(tokens)), Order(25)]
+        [Display(Description = "XunlaiJadeJunkyard", ResourceType = typeof(tokens)), Order(28)]
         XunlaiJadeJunkyard = 95982,
-        [Display(Description = "KainengOverlook", ResourceType = typeof(tokens)), Order(26)]
+        [Display(Description = "KainengOverlook", ResourceType = typeof(tokens)), Order(29)]
         KainengOverlook = 97451,
-        [Display(Description = "HarvestTemple", ResourceType = typeof(tokens)), Order(27)]
+        [Display(Description = "HarvestTemple", ResourceType = typeof(tokens)), Order(30)]
         HarvestTemple = 97132,
-        [Display(Description = "OldLionsCourt", ResourceType = typeof(tokens)), Order(28)]
+        [Display(Description = "OldLionsCourt", ResourceType = typeof(tokens)), Order(31)]
         OldLionsCourt = 99165,
 
-        [Display(Description = "AetherbladeHideoutCM", ResourceType = typeof(tokens)), Order(29)]
+        [Display(Description = "AetherbladeHideoutCM", ResourceType = typeof(tokens)), Order(32)]
         AetherbladeHideoutCM = 97269,
-        [Display(Description = "XunlaiJadeJunkyardCM", ResourceType = typeof(tokens)), Order(30)]
+        [Display(Description = "XunlaiJadeJunkyardCM", ResourceType = typeof(tokens)), Order(33)]
         XunlaiJadeJunkyardCM = 96638,
-        [Display(Description = "KainengOverlookCM", ResourceType = typeof(tokens)), Order(31)]
+        [Display(Description = "KainengOverlookCM", ResourceType = typeof(tokens)), Order(34)]
         KainengOverlookCM = 96419,
-        [Display(Description = "HarvestTempleCM", ResourceType = typeof(tokens)), Order(32)]
+        [Display(Description = "HarvestTempleCM", ResourceType = typeof(tokens)), Order(35)]
         HarvestTempleCM = 95986,
-        [Display(Description = "OldLionsCourtCM", ResourceType = typeof(tokens)), Order(33)]
+        [Display(Description = "OldLionsCourtCM", ResourceType = typeof(tokens)), Order(36)]
         OldLionsCourtCM = 99204,
 
-        [Display(Description = "CosmicObservatory", ResourceType = typeof(tokens)), Order(34)]
+        [Display(Description = "CosmicObservatory", ResourceType = typeof(tokens)), Order(37)]
         CosmicObservatory = 100068,
-        [Display(Description = "TempleOfFebe", ResourceType = typeof(tokens)), Order(35)]
+        [Display(Description = "TempleOfFebe", ResourceType = typeof(tokens)), Order(38)]
         TempleOfFebe = 100858,
 
-        [Display(Description = "CosmicObservatoryCM", ResourceType = typeof(tokens)), Order(36)]
+        [Display(Description = "CosmicObservatoryCM", ResourceType = typeof(tokens)), Order(39)]
         CosmicObservatoryCM = 101172,
-        [Display(Description = "TempleOfFebeCM", ResourceType = typeof(tokens)), Order(37)]
+        [Display(Description = "TempleOfFebeCM", ResourceType = typeof(tokens)), Order(40)]
         TempleOfFebeCM = 101542,
         #endregion Strikes
     }

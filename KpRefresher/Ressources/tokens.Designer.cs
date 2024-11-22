@@ -133,7 +133,7 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Decima Token.
+        ///   Recherche une chaîne localisée semblable à Decima&apos;s Token.
         /// </summary>
         public static string Decima {
             get {
@@ -187,7 +187,7 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Greer Token.
+        ///   Recherche une chaîne localisée semblable à Greer&apos;s Token.
         /// </summary>
         public static string Greer {
             get {
@@ -376,7 +376,7 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Ura Token.
+        ///   Recherche une chaîne localisée semblable à Ura&apos;s Token.
         /// </summary>
         public static string Ura {
             get {
