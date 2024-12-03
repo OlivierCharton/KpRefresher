@@ -91,6 +91,9 @@ namespace KpRefresher.Domain
         [Wing(7)]
         qadim_the_peerless,
 
+        [Display(Name = "Camp", Description = "camp", ResourceType = typeof(raidboss))]
+        [Wing(8)]
+        camp,
         [Display(Name = "Greer", Description = "greer", ResourceType = typeof(raidboss))]
         [Wing(8)]
         greer,

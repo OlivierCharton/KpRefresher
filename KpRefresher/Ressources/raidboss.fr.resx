@@ -204,4 +204,7 @@
   <data name="greer" xml:space="preserve">
     <value>Greer</value>
   </data>
+  <data name="camp" xml:space="preserve">
+    <value>Camp</value>
+  </data>
 </root>

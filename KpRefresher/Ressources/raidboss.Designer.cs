@@ -88,6 +88,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Camp.
+        /// </summary>
+        public static string camp {
+            get {
+                return ResourceManager.GetString("camp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Conjured Amalgamate.
         /// </summary>
         public static string conjured_amalgamate {
