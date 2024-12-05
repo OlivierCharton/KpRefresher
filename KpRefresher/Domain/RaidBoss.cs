@@ -91,16 +91,16 @@ namespace KpRefresher.Domain
         [Wing(7)]
         qadim_the_peerless,
 
-        [Display(Name = "Camp", Description = "camp", ResourceType = typeof(raidboss))]
+        [Display(Name = "Ruined Camp", Description = "camp", ResourceType = typeof(raidboss))]
         [Wing(8)]
         camp,
-        [Display(Name = "Greer", Description = "greer", ResourceType = typeof(raidboss))]
+        [Display(Name = "Greer, the Blightbringer", Description = "greer", ResourceType = typeof(raidboss))]
         [Wing(8)]
         greer,
-        [Display(Name = "Decima", Description = "decima", ResourceType = typeof(raidboss))]
+        [Display(Name = "Decima, the Stormsinger", Description = "decima", ResourceType = typeof(raidboss))]
         [Wing(8)]
         decima,
-        [Display(Name = "Ura", Description = "ura", ResourceType = typeof(raidboss)), FinalBoss]
+        [Display(Name = "Ura, the Steamshrieker", Description = "ura", ResourceType = typeof(raidboss)), FinalBoss]
         [Wing(8)]
         ura,
     }
