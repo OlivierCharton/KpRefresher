@@ -296,10 +296,28 @@ namespace KpRefresher.Services
                 return null;
             }
 
+            bool isError = false;
             var baseClears = await _kpMeService.GetClearData(KpId);
             var clears = await _gw2ApiService.GetClears();
 
             var res = new List<(string, Color?)>();
+
+            if (baseClears == null)
+            {
+                isError = true;
+                res.Add(("Error while fetching Kp.Me API\n", Colors.Error));
+            }
+
+            if (clears == null)
+            {
+                isError = true;
+                res.Add(("Error while fetching GW2 API\n", Colors.Error));
+            }
+
+            if (isError)
+            {
+                return res;
+            }
 
             var encounters = _raidBossNames.OrderBy(x => (int)x).ToList();
             foreach (var wingNumber in encounters.Select(ob => ob.GetAttribute<WingAttribute>().WingNumber).Distinct())
