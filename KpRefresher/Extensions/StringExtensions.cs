@@ -13,13 +13,13 @@ namespace KpRefresher.Extensions
             {
                 if (Attribute.GetCustomAttribute(field, typeof(DisplayAttribute)) is DisplayAttribute attribute)
                 {
-                    if (attribute.Name == name)
+                    if (string.Equals(attribute.Name, name, StringComparison.InvariantCultureIgnoreCase))
                     {
                         return (T)field.GetValue(null);
                     }
                 }
 
-                if (field.Name == name)
+                if (string.Equals(field.Name, name, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return (T)field.GetValue(null);
                 }

@@ -81,10 +81,10 @@ namespace KpRefresher.Domain
         [Display(Name = "Gate", Description = "gate", ResourceType = typeof(raidboss))]
         [Wing(7)]
         gate,
-        [Display(Name = "Adina",  Description = "adina", ResourceType = typeof(raidboss))]
+        [Display(Name = "Cardinal Adina",  Description = "adina", ResourceType = typeof(raidboss))]
         [Wing(7)]
         adina,
-        [Display(Name = "Sabir", Description = "sabir", ResourceType = typeof(raidboss))]
+        [Display(Name = "Cardinal Sabir", Description = "sabir", ResourceType = typeof(raidboss))]
         [Wing(7)]
         sabir,
         [Display(Name = "Qadim The Peerless", Description = "qadim_the_peerless", ResourceType = typeof(raidboss)), FinalBoss]
