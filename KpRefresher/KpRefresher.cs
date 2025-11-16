@@ -99,8 +99,6 @@ namespace KpRefresher
 
         protected override async Task LoadAsync()
         {
-            GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
-
             // Load textures
             _emblemTexture = ContentsManager.GetTexture("emblem.png");
             _windowBackgroundTexture = AsyncTexture2D.FromAssetId(155985);
@@ -117,6 +115,8 @@ namespace KpRefresher
                 Size = new Point(520, 700)
             };
             _mainWindow.BuildUi();
+
+            GameService.Gw2Mumble.CurrentMap.MapChanged += CurrentMap_MapChanged;
         }
 
         private void CurrentMap_MapChanged(object sender, ValueEventArgs<int> e)
