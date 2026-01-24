@@ -1,7 +1,8 @@
 ﻿using Blish_HUD;
 using Blish_HUD.Modules.Managers;
+using Gw2Sharp.WebApi.V2;
+using Gw2Sharp.WebApi.V2.Models;
 using KpRefresher.Domain;
-using KpRefresher.Domain.Attributes;
 using KpRefresher.Extensions;
 using KpRefresher.Ressources;
 using System;
@@ -89,25 +90,7 @@ namespace KpRefresher.Services
 
                 if (bankItems != null)
                 {
-                    List<(Token, int)> bankTokens = new();
-                    foreach (var item in bankItems)
-                    {
-                        if (item != null && tokensId.Contains(item.Id))
-                        {
-                            bankTokens.Add(((Token)item.Id, item.Count));
-                        }
-                    }
-
-                    if (bankTokens.Count > 0)
-                    {
-                        var bankData = string.Empty;
-                        foreach (var token in bankTokens.OrderBy(t => t.Item1.GetAttribute<OrderAttribute>().Order))
-                        {
-                            bankData = $"{bankData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
-                        }
-
-                        res = $"{res}[{strings.GW2APIService_Bank}]\n{bankData}\n";
-                    }
+                    res = $"{res}{GetFormatedResult(bankItems, strings.GW2APIService_Bank)}";
                 }
                 else
                 {
@@ -125,25 +108,7 @@ namespace KpRefresher.Services
 
                 if (sharedInventoryItems != null)
                 {
-                    List<(Token, int)> sharedInventoryTokens = new();
-                    foreach (var item in sharedInventoryItems)
-                    {
-                        if (item != null && tokensId.Contains(item.Id))
-                        {
-                            sharedInventoryTokens.Add(((Token)item.Id, item.Count));
-                        }
-                    }
-
-                    if (sharedInventoryTokens.Count > 0)
-                    {
-                        var sharedInventoryData = string.Empty;
-                        foreach (var token in sharedInventoryTokens.OrderBy(t => t.Item1.GetAttribute<OrderAttribute>().Order))
-                        {
-                            sharedInventoryData = $"{sharedInventoryData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
-                        }
-
-                        res = $"{res}[{strings.GW2APIService_SharedSlots}]\n{sharedInventoryData}\n";
-                    }
+                    res = $"{res}{GetFormatedResult(sharedInventoryItems, strings.GW2APIService_SharedSlots)}";
                 }
                 else
                 {
@@ -187,7 +152,7 @@ namespace KpRefresher.Services
                         if (characterTokens.Count > 0)
                         {
                             var characterData = string.Empty;
-                            foreach (var token in characterTokens.OrderBy(t => t.Item1.GetAttribute<OrderAttribute>().Order))
+                            foreach (var token in ListExtensions.SortByEncounter(characterTokens))
                             {
                                 characterData = $"{characterData}{token.Item2}   {token.Item1.GetDisplayName()}\n";
                             }
@@ -209,6 +174,33 @@ namespace KpRefresher.Services
             }
 
             return res;
+        }
+
+        private string GetFormatedResult(IApiV2ObjectList<AccountItem> items, string category)
+        {
+            var tokensId = _tokens.Select(c => (int)c).ToList();
+
+            List<(Token, int)> tokens = new();
+            foreach (var item in items)
+            {
+                if (item != null && tokensId.Contains(item.Id))
+                {
+                    tokens.Add(((Token)item.Id, item.Count));
+                }
+            }
+
+            if (tokens.Count > 0)
+            {
+                var data = string.Empty;
+                foreach (var token in ListExtensions.SortByEncounter(tokens))
+                {
+                    data = $"{data}{token.Item2}   {token.Item1.GetDisplayName()}\n";
+                }
+
+                return $"[{category}]\n{data}\n";
+            }
+
+            return string.Empty;
         }
     }
 }
