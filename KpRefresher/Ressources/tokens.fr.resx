@@ -123,8 +123,14 @@
   <data name="AetherbladeHideout" xml:space="preserve">
     <value>Malle de Mai Trin</value>
   </data>
+  <data name="AetherbladeHideout_Old" xml:space="preserve">
+    <value>Malle de Mai Trin (ancien)</value>
+  </data>
   <data name="AetherbladeHideoutCM" xml:space="preserve">
     <value>Malle magnifique de Mai Trin</value>
+  </data>
+  <data name="AetherbladeHideoutCM_Old" xml:space="preserve">
+    <value>Malle magnifique de Mai Trin (ancien)</value>
   </data>
   <data name="Boneskinner" xml:space="preserve">
     <value>Fiole du rituel du désosseur</value>
@@ -138,8 +144,14 @@
   <data name="CosmicObservatory" xml:space="preserve">
     <value>Malle de Dagda</value>
   </data>
+  <data name="CosmicObservatory_Old" xml:space="preserve">
+    <value>Malle de Dagda (ancien)</value>
+  </data>
   <data name="CosmicObservatoryCM" xml:space="preserve">
     <value>Malle magnifique de Dagda</value>
+  </data>
+  <data name="CosmicObservatoryCM_Old" xml:space="preserve">
+    <value>Malle magnifique de Dagda (ancien)</value>
   </data>
   <data name="Deimos" xml:space="preserve">
     <value>Fragment du fardeau de Saul</value>
@@ -159,14 +171,26 @@
   <data name="HarvestTemple" xml:space="preserve">
     <value>Malle du Vide</value>
   </data>
+  <data name="HarvestTemple_Old" xml:space="preserve">
+    <value>Malle du Vide (ancien)</value>
+  </data>
   <data name="HarvestTempleCM" xml:space="preserve">
     <value>Malle magnifique du Vide</value>
+  </data>
+  <data name="HarvestTempleCM_Old" xml:space="preserve">
+    <value>Malle magnifique du Vide (ancien)</value>
   </data>
   <data name="KainengOverlook" xml:space="preserve">
     <value>Malle du ministre Li</value>
   </data>
+  <data name="KainengOverlook_Old" xml:space="preserve">
+    <value>Malle du ministre Li (ancien)</value>
+  </data>
   <data name="KainengOverlookCM" xml:space="preserve">
     <value>Malle magnifique du ministre Li</value>
+  </data>
+  <data name="KainengOverlookCM_Old" xml:space="preserve">
+    <value>Malle magnifique du ministre Li (ancien)</value>
   </data>
   <data name="KeepConstruct" xml:space="preserve">
     <value>Gravats de Titan du fort</value>
@@ -180,8 +204,14 @@
   <data name="OldLionsCourt" xml:space="preserve">
     <value>Coffre des chevaliers d'assaut</value>
   </data>
+  <data name="OldLionsCourt_Old" xml:space="preserve">
+    <value>Coffre des chevaliers d'assaut (ancien)</value>
+  </data>
   <data name="OldLionsCourtCM" xml:space="preserve">
     <value>Coffre magnifique des chevaliers d'assaut</value>
+  </data>
+  <data name="OldLionsCourtCM_Old" xml:space="preserve">
+    <value>Coffre magnifique des chevaliers d'assaut (ancien)</value>
   </data>
   <data name="Qadim" xml:space="preserve">
     <value>Coupon de Qadim</value>
@@ -210,8 +240,14 @@
   <data name="TempleOfFebe" xml:space="preserve">
     <value>Malle de Cérus</value>
   </data>
+  <data name="TempleOfFebe_Old" xml:space="preserve">
+    <value>Malle de Cérus (ancien)</value>
+  </data>
   <data name="TempleOfFebeCM" xml:space="preserve">
     <value>Malle magnifique de Cérus</value>
+  </data>
+  <data name="TempleOfFebeCM_Old" xml:space="preserve">
+    <value>Malle magnifique de Cérus (ancien)</value>
   </data>
   <data name="TwinLargos" xml:space="preserve">
     <value>Coupon des jumeaux largos</value>
@@ -225,8 +261,14 @@
   <data name="XunlaiJadeJunkyard" xml:space="preserve">
     <value>Malle d'Ankka</value>
   </data>
+  <data name="XunlaiJadeJunkyard_Old" xml:space="preserve">
+    <value>Malle d'Ankka (ancien)</value>
+  </data>
   <data name="XunlaiJadeJunkyardCM" xml:space="preserve">
     <value>Malle magnifique d'Ankka</value>
+  </data>
+  <data name="XunlaiJadeJunkyardCM_Old" xml:space="preserve">
+    <value>Malle magnifique d'Ankka (ancien)</value>
   </data>
   <data name="Ura" xml:space="preserve">
     <value>Coupon d'Ura</value>
@@ -236,5 +278,14 @@
   </data>
   <data name="Decima" xml:space="preserve">
     <value>Coupon de Decima</value>
+  </data>
+  <data name="GuardiansGlade" xml:space="preserve">
+    <value>Malle de Kela</value>
+  </data>
+  <data name="IcebroodCoffer" xml:space="preserve">
+    <value>Coffre de combat de raid de l'Épopée du givre</value>
+  </data>
+  <data name="WeeklyQuickplayRaidCache" xml:space="preserve">
+    <value>Cache de raid en session rapide hebdomadaire</value>
   </data>
 </root>

@@ -68,42 +68,76 @@ namespace KpRefresher.Domain
         #endregion Raids
 
         #region Strikes
-        //[Display(Description = "WhisperOfJormag", ResourceType = typeof(tokens)), Sort(9, 1)]
-        //WhisperOfJormag = 99999,
         [Display(Description = "Boneskinner", ResourceType = typeof(tokens)), Sort(9, 2)]
         Boneskinner = 93781,
 
-        [Display(Description = "AetherbladeHideout", ResourceType = typeof(tokens)), Sort(10, 1)]
-        AetherbladeHideout = 95638,
-        [Display(Description = "XunlaiJadeJunkyard", ResourceType = typeof(tokens)), Sort(10, 3)]
-        XunlaiJadeJunkyard = 95982,
-        [Display(Description = "KainengOverlook", ResourceType = typeof(tokens)), Sort(10, 5)]
-        KainengOverlook = 97451,
-        [Display(Description = "HarvestTemple", ResourceType = typeof(tokens)), Sort(10, 7)]
-        HarvestTemple = 97132,
-        [Display(Description = "OldLionsCourt", ResourceType = typeof(tokens)), Sort(10, 9)]
-        OldLionsCourt = 99165,
+        [Display(Description = "AetherbladeHideout_Old", ResourceType = typeof(tokens)), Sort(10, 1)]
+        AetherbladeHideout_Old = 95638,
+        [Display(Description = "AetherbladeHideout", ResourceType = typeof(tokens)), Sort(10, 2)]
+        AetherbladeHideout = 107067,
+        [Display(Description = "XunlaiJadeJunkyard_Old", ResourceType = typeof(tokens)), Sort(10, 5)]
+        XunlaiJadeJunkyard_Old = 95982,
+        [Display(Description = "XunlaiJadeJunkyard", ResourceType = typeof(tokens)), Sort(10, 6)]
+        XunlaiJadeJunkyard = 106954,
+        [Display(Description = "KainengOverlook_Old", ResourceType = typeof(tokens)), Sort(10, 9)]
+        KainengOverlook_Old = 97451,
+        [Display(Description = "KainengOverlook", ResourceType = typeof(tokens)), Sort(10, 10)]
+        KainengOverlook = 107026,
+        [Display(Description = "HarvestTemple_Old", ResourceType = typeof(tokens)), Sort(10, 13)]
+        HarvestTemple_Old = 97132,
+        [Display(Description = "HarvestTemple", ResourceType = typeof(tokens)), Sort(10, 14)]
+        HarvestTemple = 106956,
+        [Display(Description = "OldLionsCourt_Old", ResourceType = typeof(tokens)), Sort(10, 17)]
+        OldLionsCourt_Old = 99165,
+        [Display(Description = "OldLionsCourt", ResourceType = typeof(tokens)), Sort(10, 18)]
+        OldLionsCourt = 106951,
 
-        [Display(Description = "AetherbladeHideoutCM", ResourceType = typeof(tokens)), Sort(10, 2)]
-        AetherbladeHideoutCM = 97269,
-        [Display(Description = "XunlaiJadeJunkyardCM", ResourceType = typeof(tokens)), Sort(10, 4)]
-        XunlaiJadeJunkyardCM = 96638,
-        [Display(Description = "KainengOverlookCM", ResourceType = typeof(tokens)), Sort(10, 6)]
-        KainengOverlookCM = 96419,
-        [Display(Description = "HarvestTempleCM", ResourceType = typeof(tokens)), Sort(10, 8)]
-        HarvestTempleCM = 95986,
-        [Display(Description = "OldLionsCourtCM", ResourceType = typeof(tokens)), Sort(10, 10)]
-        OldLionsCourtCM = 99204,
+        [Display(Description = "AetherbladeHideoutCM_Old", ResourceType = typeof(tokens)), Sort(10, 3)]
+        AetherbladeHideoutCM_Old = 97269,
+        [Display(Description = "AetherbladeHideoutCM", ResourceType = typeof(tokens)), Sort(10, 4)]
+        AetherbladeHideoutCM = 106935,
+        [Display(Description = "XunlaiJadeJunkyardCM_Old", ResourceType = typeof(tokens)), Sort(10, 7)]
+        XunlaiJadeJunkyardCM_Old = 96638,
+        [Display(Description = "XunlaiJadeJunkyardCM", ResourceType = typeof(tokens)), Sort(10, 8)]
+        XunlaiJadeJunkyardCM = 106999,
+        [Display(Description = "KainengOverlookCM_Old", ResourceType = typeof(tokens)), Sort(10, 11)]
+        KainengOverlookCM_Old = 96419,
+        [Display(Description = "KainengOverlookCM", ResourceType = typeof(tokens)), Sort(10, 12)]
+        KainengOverlookCM = 107028,
+        [Display(Description = "HarvestTempleCM_Old", ResourceType = typeof(tokens)), Sort(10, 15)]
+        HarvestTempleCM_Old = 95986,
+        [Display(Description = "HarvestTempleCM", ResourceType = typeof(tokens)), Sort(10, 16)]
+        HarvestTempleCM = 106910,
+        [Display(Description = "OldLionsCourtCM_Old", ResourceType = typeof(tokens)), Sort(10, 19)]
+        OldLionsCourtCM_Old = 99204,
+        [Display(Description = "OldLionsCourtCM", ResourceType = typeof(tokens)), Sort(10, 20)]
+        OldLionsCourtCM = 107132,
 
-        [Display(Description = "CosmicObservatory", ResourceType = typeof(tokens)), Sort(11, 1)]
-        CosmicObservatory = 100068,
-        [Display(Description = "TempleOfFebe", ResourceType = typeof(tokens)), Sort(11, 3)]
-        TempleOfFebe = 100858,
+        [Display(Description = "CosmicObservatory_Old", ResourceType = typeof(tokens)), Sort(11, 1)]
+        CosmicObservatory_Old = 100068,
+        [Display(Description = "CosmicObservatory", ResourceType = typeof(tokens)), Sort(11, 2)]
+        CosmicObservatory = 107087,
+        [Display(Description = "TempleOfFebe_Old", ResourceType = typeof(tokens)), Sort(11, 5)]
+        TempleOfFebe_Old = 100858,
+        [Display(Description = "TempleOfFebe", ResourceType = typeof(tokens)), Sort(11, 6)]
+        TempleOfFebe = 107114,
 
-        [Display(Description = "CosmicObservatoryCM", ResourceType = typeof(tokens)), Sort(11, 2)]
-        CosmicObservatoryCM = 101172,
-        [Display(Description = "TempleOfFebeCM", ResourceType = typeof(tokens)), Sort(11, 4)]
-        TempleOfFebeCM = 101542,
+        [Display(Description = "CosmicObservatoryCM_Old", ResourceType = typeof(tokens)), Sort(11, 3)]
+        CosmicObservatoryCM_Old = 101172,
+        [Display(Description = "CosmicObservatoryCM", ResourceType = typeof(tokens)), Sort(11, 4)]
+        CosmicObservatoryCM = 106940,
+        [Display(Description = "TempleOfFebeCM_Old", ResourceType = typeof(tokens)), Sort(11, 7)]
+        TempleOfFebeCM_Old = 101542,
+        [Display(Description = "TempleOfFebeCM", ResourceType = typeof(tokens)), Sort(11, 8)]
+        TempleOfFebeCM = 107065,
+
+        [Display(Description = "GuardiansGlade", ResourceType = typeof(tokens)), Sort(12, 1)]
+        GuardiansGlade = 106994,
+
+        [Display(Description = "IcebroodCoffer", ResourceType = typeof(tokens)), Sort(13, 1)]
+        IcebroodCoffer = 106909,
+        [Display(Description = "WeeklyQuickplayRaidCache", ResourceType = typeof(tokens)), Sort(13, 2)]
+        WeeklyQuickplayRaidCache = 107019,
         #endregion Strikes
     }
 }
