@@ -123,8 +123,14 @@
   <data name="AetherbladeHideout" xml:space="preserve">
     <value>Mai Trin's Coffer</value>
   </data>
+  <data name="AetherbladeHideout_Old" xml:space="preserve">
+    <value>Mai Trin's Coffer (old)</value>
+  </data>
   <data name="AetherbladeHideoutCM" xml:space="preserve">
     <value>Mai Trin's Magnificent Coffer</value>
+  </data>
+  <data name="AetherbladeHideoutCM_Old" xml:space="preserve">
+    <value>Mai Trin's Magnificent Coffer (old)</value>
   </data>
   <data name="Boneskinner" xml:space="preserve">
     <value>Boneskinner Ritual Vial</value>
@@ -138,8 +144,14 @@
   <data name="CosmicObservatory" xml:space="preserve">
     <value>Dagda's Coffer</value>
   </data>
+  <data name="CosmicObservatory_Old" xml:space="preserve">
+    <value>Dagda's Coffer (old)</value>
+  </data>
   <data name="CosmicObservatoryCM" xml:space="preserve">
     <value>Dagda's Magnificent Coffer</value>
+  </data>
+  <data name="CosmicObservatoryCM_Old" xml:space="preserve">
+    <value>Dagda's Magnificent Coffer (old)</value>
   </data>
   <data name="Deimos" xml:space="preserve">
     <value>Fragment of Saul's Burden</value>
@@ -159,14 +171,26 @@
   <data name="HarvestTemple" xml:space="preserve">
     <value>Void's Coffer</value>
   </data>
+  <data name="HarvestTemple_Old" xml:space="preserve">
+    <value>Void's Coffer (old)</value>
+  </data>
   <data name="HarvestTempleCM" xml:space="preserve">
     <value>Void's Magnificent Coffer</value>
+  </data>
+  <data name="HarvestTempleCM_Old" xml:space="preserve">
+    <value>Void's Magnificent Coffer (old)</value>
   </data>
   <data name="KainengOverlook" xml:space="preserve">
     <value>Minister Li's Coffer</value>
   </data>
+  <data name="KainengOverlook_Old" xml:space="preserve">
+    <value>Minister Li's Coffer (old)</value>
+  </data>
   <data name="KainengOverlookCM" xml:space="preserve">
     <value>Minister Li's Magnificent Coffer</value>
+  </data>
+  <data name="KainengOverlookCM_Old" xml:space="preserve">
+    <value>Minister Li's Magnificent Coffer (old)</value>
   </data>
   <data name="KeepConstruct" xml:space="preserve">
     <value>Keep Construct Rubble</value>
@@ -180,8 +204,14 @@
   <data name="OldLionsCourt" xml:space="preserve">
     <value>Assault Knights' Coffer</value>
   </data>
+  <data name="OldLionsCourt_Old" xml:space="preserve">
+    <value>Assault Knights' Coffer (old)</value>
+  </data>
   <data name="OldLionsCourtCM" xml:space="preserve">
     <value>Assault Knights' Magnificent Coffer</value>
+  </data>
+  <data name="OldLionsCourtCM_Old" xml:space="preserve">
+    <value>Assault Knights' Magnificent Coffer (old)</value>
   </data>
   <data name="Qadim" xml:space="preserve">
     <value>Qadim's Token</value>
@@ -208,10 +238,16 @@
     <value>Statue Token</value>
   </data>
   <data name="TempleOfFebe" xml:space="preserve">
-    <value>Cerus's Magnificent Coffer</value>
+    <value>Cerus's Coffer</value>
+  </data>
+  <data name="TempleOfFebe_Old" xml:space="preserve">
+    <value>Cerus's Coffer (old)</value>
   </data>
   <data name="TempleOfFebeCM" xml:space="preserve">
-    <value>Cerus's Coffer</value>
+    <value>Cerus's Magnificent Coffer</value>
+  </data>
+  <data name="TempleOfFebeCM_Old" xml:space="preserve">
+    <value>Cerus's Magnificent Coffer (old)</value>
   </data>
   <data name="TwinLargos" xml:space="preserve">
     <value>Twin Largos Token</value>
@@ -225,8 +261,14 @@
   <data name="XunlaiJadeJunkyard" xml:space="preserve">
     <value>Ankka's Coffer</value>
   </data>
+  <data name="XunlaiJadeJunkyard_Old" xml:space="preserve">
+    <value>Ankka's Coffer (old)</value>
+  </data>
   <data name="XunlaiJadeJunkyardCM" xml:space="preserve">
     <value>Ankka's Magnificent Coffer</value>
+  </data>
+  <data name="XunlaiJadeJunkyardCM_Old" xml:space="preserve">
+    <value>Ankka's Magnificent Coffer (old)</value>
   </data>
   <data name="Ura" xml:space="preserve">
     <value>Ura's Token</value>
@@ -236,5 +278,14 @@
   </data>
   <data name="Decima" xml:space="preserve">
     <value>Decima's Token</value>
+  </data>
+  <data name="GuardiansGlade" xml:space="preserve">
+    <value>Kela's Coffer</value>
+  </data>
+  <data name="IcebroodCoffer" xml:space="preserve">
+    <value>Icebrood Saga Raid Encounter Coffer</value>
+  </data>
+  <data name="WeeklyQuickplayRaidCache" xml:space="preserve">
+    <value>Weekly Quickplay Raid Cache</value>
   </data>
 </root>

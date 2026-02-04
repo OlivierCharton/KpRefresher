@@ -19,7 +19,7 @@ namespace KpRefresher.Ressources {
     // à l'aide d'un outil, tel que ResGen ou Visual Studio.
     // Pour ajouter ou supprimer un membre, modifiez votre fichier .ResX, puis réexécutez ResGen
     // avec l'option /str ou régénérez votre projet VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class tokens {
@@ -79,11 +79,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Mai Trin&apos;s Coffer (old).
+        /// </summary>
+        public static string AetherbladeHideout_Old {
+            get {
+                return ResourceManager.GetString("AetherbladeHideout_Old", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Mai Trin&apos;s Magnificent Coffer.
         /// </summary>
         public static string AetherbladeHideoutCM {
             get {
                 return ResourceManager.GetString("AetherbladeHideoutCM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Mai Trin&apos;s Magnificent Coffer (old).
+        /// </summary>
+        public static string AetherbladeHideoutCM_Old {
+            get {
+                return ResourceManager.GetString("AetherbladeHideoutCM_Old", resourceCulture);
             }
         }
         
@@ -124,11 +142,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Dagda&apos;s Coffer (old).
+        /// </summary>
+        public static string CosmicObservatory_Old {
+            get {
+                return ResourceManager.GetString("CosmicObservatory_Old", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Dagda&apos;s Magnificent Coffer.
         /// </summary>
         public static string CosmicObservatoryCM {
             get {
                 return ResourceManager.GetString("CosmicObservatoryCM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Dagda&apos;s Magnificent Coffer (old).
+        /// </summary>
+        public static string CosmicObservatoryCM_Old {
+            get {
+                return ResourceManager.GetString("CosmicObservatoryCM_Old", resourceCulture);
             }
         }
         
@@ -196,11 +232,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Kela&apos;s Coffer.
+        /// </summary>
+        public static string GuardiansGlade {
+            get {
+                return ResourceManager.GetString("GuardiansGlade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Void&apos;s Coffer.
         /// </summary>
         public static string HarvestTemple {
             get {
                 return ResourceManager.GetString("HarvestTemple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Void&apos;s Coffer (old).
+        /// </summary>
+        public static string HarvestTemple_Old {
+            get {
+                return ResourceManager.GetString("HarvestTemple_Old", resourceCulture);
             }
         }
         
@@ -214,6 +268,24 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Void&apos;s Magnificent Coffer (old).
+        /// </summary>
+        public static string HarvestTempleCM_Old {
+            get {
+                return ResourceManager.GetString("HarvestTempleCM_Old", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Icebrood Saga Raid Encounter Coffer.
+        /// </summary>
+        public static string IcebroodCoffer {
+            get {
+                return ResourceManager.GetString("IcebroodCoffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Minister Li&apos;s Coffer.
         /// </summary>
         public static string KainengOverlook {
@@ -223,11 +295,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Minister Li&apos;s Coffer (old).
+        /// </summary>
+        public static string KainengOverlook_Old {
+            get {
+                return ResourceManager.GetString("KainengOverlook_Old", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Minister Li&apos;s Magnificent Coffer.
         /// </summary>
         public static string KainengOverlookCM {
             get {
                 return ResourceManager.GetString("KainengOverlookCM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Minister Li&apos;s Magnificent Coffer (old).
+        /// </summary>
+        public static string KainengOverlookCM_Old {
+            get {
+                return ResourceManager.GetString("KainengOverlookCM_Old", resourceCulture);
             }
         }
         
@@ -268,11 +358,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Assault Knights&apos; Coffer (old).
+        /// </summary>
+        public static string OldLionsCourt_Old {
+            get {
+                return ResourceManager.GetString("OldLionsCourt_Old", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Assault Knights&apos; Magnificent Coffer.
         /// </summary>
         public static string OldLionsCourtCM {
             get {
                 return ResourceManager.GetString("OldLionsCourtCM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Assault Knights&apos; Magnificent Coffer (old).
+        /// </summary>
+        public static string OldLionsCourtCM_Old {
+            get {
+                return ResourceManager.GetString("OldLionsCourtCM_Old", resourceCulture);
             }
         }
         
@@ -349,7 +457,7 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Cerus&apos;s Magnificent Coffer.
+        ///   Recherche une chaîne localisée semblable à Cerus&apos;s Coffer.
         /// </summary>
         public static string TempleOfFebe {
             get {
@@ -358,11 +466,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Cerus&apos;s Coffer.
+        ///   Recherche une chaîne localisée semblable à Cerus&apos;s Coffer (old).
+        /// </summary>
+        public static string TempleOfFebe_Old {
+            get {
+                return ResourceManager.GetString("TempleOfFebe_Old", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cerus&apos;s Magnificent Coffer.
         /// </summary>
         public static string TempleOfFebeCM {
             get {
                 return ResourceManager.GetString("TempleOfFebeCM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cerus&apos;s Magnificent Coffer (old).
+        /// </summary>
+        public static string TempleOfFebeCM_Old {
+            get {
+                return ResourceManager.GetString("TempleOfFebeCM_Old", resourceCulture);
             }
         }
         
@@ -394,6 +520,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Weekly Quickplay Raid Cache.
+        /// </summary>
+        public static string WeeklyQuickplayRaidCache {
+            get {
+                return ResourceManager.GetString("WeeklyQuickplayRaidCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Ribbon Scrap.
         /// </summary>
         public static string Xera {
@@ -412,11 +547,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ankka&apos;s Coffer (old).
+        /// </summary>
+        public static string XunlaiJadeJunkyard_Old {
+            get {
+                return ResourceManager.GetString("XunlaiJadeJunkyard_Old", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Ankka&apos;s Magnificent Coffer.
         /// </summary>
         public static string XunlaiJadeJunkyardCM {
             get {
                 return ResourceManager.GetString("XunlaiJadeJunkyardCM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ankka&apos;s Magnificent Coffer (old).
+        /// </summary>
+        public static string XunlaiJadeJunkyardCM_Old {
+            get {
+                return ResourceManager.GetString("XunlaiJadeJunkyardCM_Old", resourceCulture);
             }
         }
     }

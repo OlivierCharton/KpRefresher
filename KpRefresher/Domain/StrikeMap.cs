@@ -17,7 +17,11 @@
 
         #region SotO
         CosmicObservatory = 1515,
-        TempleOfFebe = 1520
+        TempleOfFebe = 1520,
         #endregion SotO
+
+        #region VoE
+        GuardiansGlade = 1609,
+        #endregion VoE
     }
 }
