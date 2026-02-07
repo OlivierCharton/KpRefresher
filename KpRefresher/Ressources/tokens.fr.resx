@@ -127,10 +127,10 @@
     <value>Malle de Mai Trin (ancien)</value>
   </data>
   <data name="AetherbladeHideoutCM" xml:space="preserve">
-    <value>Malle magnifique de Mai Trin</value>
+    <value>Malle magnifiques de Mai Trin</value>
   </data>
   <data name="AetherbladeHideoutCM_Old" xml:space="preserve">
-    <value>Malle magnifique de Mai Trin (ancien)</value>
+    <value>Malle magnifiques de Mai Trin (ancien)</value>
   </data>
   <data name="Boneskinner" xml:space="preserve">
     <value>Fiole du rituel du désosseur</value>
@@ -175,10 +175,10 @@
     <value>Malle du Vide (ancien)</value>
   </data>
   <data name="HarvestTempleCM" xml:space="preserve">
-    <value>Malle magnifique du Vide</value>
+    <value>Malle magnifiques du Vide</value>
   </data>
   <data name="HarvestTempleCM_Old" xml:space="preserve">
-    <value>Malle magnifique du Vide (ancien)</value>
+    <value>Malle magnifiques du Vide (ancien)</value>
   </data>
   <data name="KainengOverlook" xml:space="preserve">
     <value>Malle du ministre Li</value>
@@ -187,10 +187,10 @@
     <value>Malle du ministre Li (ancien)</value>
   </data>
   <data name="KainengOverlookCM" xml:space="preserve">
-    <value>Malle magnifique du ministre Li</value>
+    <value>Malle magnifiques du ministre Li</value>
   </data>
   <data name="KainengOverlookCM_Old" xml:space="preserve">
-    <value>Malle magnifique du ministre Li (ancien)</value>
+    <value>Malle magnifiques du ministre Li (ancien)</value>
   </data>
   <data name="KeepConstruct" xml:space="preserve">
     <value>Gravats de Titan du fort</value>
@@ -265,10 +265,10 @@
     <value>Malle d'Ankka (ancien)</value>
   </data>
   <data name="XunlaiJadeJunkyardCM" xml:space="preserve">
-    <value>Malle magnifique d'Ankka</value>
+    <value>Malle magnifiques d'Ankka</value>
   </data>
   <data name="XunlaiJadeJunkyardCM_Old" xml:space="preserve">
-    <value>Malle magnifique d'Ankka (ancien)</value>
+    <value>Malle magnifiques d'Ankka (ancien)</value>
   </data>
   <data name="Ura" xml:space="preserve">
     <value>Coupon d'Ura</value>
@@ -287,5 +287,113 @@
   </data>
   <data name="WeeklyQuickplayRaidCache" xml:space="preserve">
     <value>Cache de raid en session rapide hebdomadaire</value>
+  </data>
+  <data name="Sandcastle" xml:space="preserve">
+    <value>Château de sable</value>
+  </data>
+  <data name="Vale_Coffer" xml:space="preserve">
+    <value>Malle du Gardien de la Vallée</value>
+  </data>
+  <data name="Gorseval_Coffer" xml:space="preserve">
+    <value>Malle de Gorseval</value>
+  </data>
+  <data name="Sabetha_Coffer" xml:space="preserve">
+    <value>Malle de Sabetha</value>
+  </data>
+  <data name="Slothasor_Coffer" xml:space="preserve">
+    <value>Malle du Paressor</value>
+  </data>
+  <data name="BanditTrio" xml:space="preserve">
+    <value>Coffre du camp de prisonniers</value>
+  </data>
+  <data name="Matthias_Coffer" xml:space="preserve">
+    <value>Malle de Matthias</value>
+  </data>
+  <data name="Escort_Coffer" xml:space="preserve">
+    <value>Malle de McLeod</value>
+  </data>
+  <data name="KeepConstruct_Coffer" xml:space="preserve">
+    <value>Malle de Titan du fort</value>
+  </data>
+  <data name="Xera_Coffer" xml:space="preserve">
+    <value>Malle de Xera</value>
+  </data>
+  <data name="Cairn_Coffer" xml:space="preserve">
+    <value>Malle de Cairn</value>
+  </data>
+  <data name="MursaatOverseer_Coffer" xml:space="preserve">
+    <value>Malle du surveillant mursaat</value>
+  </data>
+  <data name="Samarog_Coffer" xml:space="preserve">
+    <value>Malle de Samarog</value>
+  </data>
+  <data name="Deimos_Coffer" xml:space="preserve">
+    <value>Malle de Deimos</value>
+  </data>
+  <data name="Desmina_Coffer" xml:space="preserve">
+    <value>Malle de Desmina</value>
+  </data>
+  <data name="River_Coffer" xml:space="preserve">
+    <value>Malle de la Rivière des âmes</value>
+  </data>
+  <data name="Statue_Coffer" xml:space="preserve">
+    <value>Malle de statue de Grenth</value>
+  </data>
+  <data name="Dhuum_Coffer" xml:space="preserve">
+    <value>Malle de Dhuum</value>
+  </data>
+  <data name="ConjuredAmalgamate_Coffer" xml:space="preserve">
+    <value>Malle d'amalgame conjuré</value>
+  </data>
+  <data name="TwinLargos_Coffer" xml:space="preserve">
+    <value>Malle des jumeaux largos</value>
+  </data>
+  <data name="Qadim_Coffer" xml:space="preserve">
+    <value>Malle de Qadim</value>
+  </data>
+  <data name="Adina_Coffer" xml:space="preserve">
+    <value>Malle de la cardinale Adina</value>
+  </data>
+  <data name="Sabir_Coffer" xml:space="preserve">
+    <value>Malle du cardinal Sabir</value>
+  </data>
+  <data name="QTP_Coffer" xml:space="preserve">
+    <value>Malle de Qadim l'Inégalé</value>
+  </data>
+  <data name="Greer_Coffer" xml:space="preserve">
+    <value>Malle de Greer</value>
+  </data>
+  <data name="GreerCM_Coffer" xml:space="preserve">
+    <value>Malle magnifique de Greer</value>
+  </data>
+  <data name="Decima_Coffer" xml:space="preserve">
+    <value>Malle de Decima</value>
+  </data>
+  <data name="DecimaCM_Coffer" xml:space="preserve">
+    <value>Malle magnifique de Decima</value>
+  </data>
+  <data name="Ura_Coffer" xml:space="preserve">
+    <value>Malle d'Ura</value>
+  </data>
+  <data name="UraCM_Coffer" xml:space="preserve">
+    <value>Malle magnifique d'Ura</value>
+  </data>
+  <data name="Greer_Coffer_2" xml:space="preserve">
+    <value>Malle de Greer</value>
+  </data>
+  <data name="GreerCM_Coffer_2" xml:space="preserve">
+    <value>Malle magnifique de Greer</value>
+  </data>
+  <data name="Decima_Coffer_2" xml:space="preserve">
+    <value>Malle de Decima</value>
+  </data>
+  <data name="DecimaCM_Coffer_2" xml:space="preserve">
+    <value>Malle magnifique de Decima</value>
+  </data>
+  <data name="Ura_Coffer_2" xml:space="preserve">
+    <value>Malle d'Ura</value>
+  </data>
+  <data name="UraCM_Coffer_2" xml:space="preserve">
+    <value>Malle magnifique d'Ura</value>
   </data>
 </root>

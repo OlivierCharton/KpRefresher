@@ -288,4 +288,112 @@
   <data name="WeeklyQuickplayRaidCache" xml:space="preserve">
     <value>Weekly Quickplay Raid Cache</value>
   </data>
+  <data name="Sandcastle" xml:space="preserve">
+    <value>Sandcastle</value>
+  </data>
+  <data name="Vale_Coffer" xml:space="preserve">
+    <value>Vale Guardian Coffer</value>
+  </data>
+  <data name="Gorseval_Coffer" xml:space="preserve">
+    <value>Gorseval's Coffer</value>
+  </data>
+  <data name="Sabetha_Coffer" xml:space="preserve">
+    <value>Sabetha's Coffer</value>
+  </data>
+  <data name="Slothasor_Coffer" xml:space="preserve">
+    <value>Slothasor's Coffer</value>
+  </data>
+  <data name="BanditTrio" xml:space="preserve">
+    <value>Prison-Camp Chest</value>
+  </data>
+  <data name="Matthias_Coffer" xml:space="preserve">
+    <value>Matthias's Coffer</value>
+  </data>
+  <data name="Escort_Coffer" xml:space="preserve">
+    <value>McLeod's Coffer</value>
+  </data>
+  <data name="KeepConstruct_Coffer" xml:space="preserve">
+    <value>Keep Construct's Coffer</value>
+  </data>
+  <data name="Xera_Coffer" xml:space="preserve">
+    <value>Xera's Coffer</value>
+  </data>
+  <data name="Cairn_Coffer" xml:space="preserve">
+    <value>Cairn's Coffer</value>
+  </data>
+  <data name="MursaatOverseer_Coffer" xml:space="preserve">
+    <value>Mursaat Overseer's Coffer</value>
+  </data>
+  <data name="Samarog_Coffer" xml:space="preserve">
+    <value>Samarog's Coffer</value>
+  </data>
+  <data name="Deimos_Coffer" xml:space="preserve">
+    <value>Deimos's Coffer</value>
+  </data>
+  <data name="Desmina_Coffer" xml:space="preserve">
+    <value>Desmina's Coffer</value>
+  </data>
+  <data name="River_Coffer" xml:space="preserve">
+    <value>River of Souls Coffer</value>
+  </data>
+  <data name="Statue_Coffer" xml:space="preserve">
+    <value>Statue of Grenth Coffer</value>
+  </data>
+  <data name="Dhuum_Coffer" xml:space="preserve">
+    <value>Dhuum's Coffer</value>
+  </data>
+  <data name="ConjuredAmalgamate_Coffer" xml:space="preserve">
+    <value>Conjured Amalgamate's Coffer</value>
+  </data>
+  <data name="TwinLargos_Coffer" xml:space="preserve">
+    <value>Twin Largos' Coffer</value>
+  </data>
+  <data name="Qadim_Coffer" xml:space="preserve">
+    <value>Qadim's Coffer</value>
+  </data>
+  <data name="Adina_Coffer" xml:space="preserve">
+    <value>Cardinal Adina's Coffer</value>
+  </data>
+  <data name="Sabir_Coffer" xml:space="preserve">
+    <value>Cardinal Sabir's Coffer</value>
+  </data>
+  <data name="QTP_Coffer" xml:space="preserve">
+    <value>Qadim the Peerless's Coffer</value>
+  </data>
+  <data name="Greer_Coffer" xml:space="preserve">
+    <value>Greer's Coffer</value>
+  </data>
+  <data name="GreerCM_Coffer" xml:space="preserve">
+    <value>Greer's Magnificent Coffer</value>
+  </data>
+  <data name="Decima_Coffer" xml:space="preserve">
+    <value>Decima's Coffer</value>
+  </data>
+  <data name="DecimaCM_Coffer" xml:space="preserve">
+    <value>Decima's Magnificent Coffer</value>
+  </data>
+  <data name="Ura_Coffer" xml:space="preserve">
+    <value>Ura's Coffer</value>
+  </data>
+  <data name="UraCM_Coffer" xml:space="preserve">
+    <value>Ura's Magnificent Coffer</value>
+  </data>
+  <data name="Greer_Coffer_2" xml:space="preserve">
+    <value>Greer's Coffer</value>
+  </data>
+  <data name="GreerCM_Coffer_2" xml:space="preserve">
+    <value>Greer's Magnificent Coffer</value>
+  </data>
+  <data name="Decima_Coffer_2" xml:space="preserve">
+    <value>Decima's Coffer</value>
+  </data>
+  <data name="DecimaCM_Coffer_2" xml:space="preserve">
+    <value>Decima's Magnificent Coffer</value>
+  </data>
+  <data name="Ura_Coffer_2" xml:space="preserve">
+    <value>Ura's Coffer</value>
+  </data>
+  <data name="UraCM_Coffer_2" xml:space="preserve">
+    <value>Ura's Magnificent Coffer</value>
+  </data>
 </root>

@@ -70,6 +70,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cardinal Adina&apos;s Coffer.
+        /// </summary>
+        public static string Adina_Coffer {
+            get {
+                return ResourceManager.GetString("Adina_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Mai Trin&apos;s Coffer.
         /// </summary>
         public static string AetherbladeHideout {
@@ -106,6 +115,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Prison-Camp Chest.
+        /// </summary>
+        public static string BanditTrio {
+            get {
+                return ResourceManager.GetString("BanditTrio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Boneskinner Ritual Vial.
         /// </summary>
         public static string Boneskinner {
@@ -124,11 +142,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cairn&apos;s Coffer.
+        /// </summary>
+        public static string Cairn_Coffer {
+            get {
+                return ResourceManager.GetString("Cairn_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Conjured Amalgamate Token.
         /// </summary>
         public static string ConjuredAmalgamate {
             get {
                 return ResourceManager.GetString("ConjuredAmalgamate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Conjured Amalgamate&apos;s Coffer.
+        /// </summary>
+        public static string ConjuredAmalgamate_Coffer {
+            get {
+                return ResourceManager.GetString("ConjuredAmalgamate_Coffer", resourceCulture);
             }
         }
         
@@ -178,11 +214,56 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Decima&apos;s Coffer.
+        /// </summary>
+        public static string Decima_Coffer {
+            get {
+                return ResourceManager.GetString("Decima_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Decima&apos;s Coffer.
+        /// </summary>
+        public static string Decima_Coffer_2 {
+            get {
+                return ResourceManager.GetString("Decima_Coffer_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Decima&apos;s Magnificent Coffer.
+        /// </summary>
+        public static string DecimaCM_Coffer {
+            get {
+                return ResourceManager.GetString("DecimaCM_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Decima&apos;s Magnificent Coffer.
+        /// </summary>
+        public static string DecimaCM_Coffer_2 {
+            get {
+                return ResourceManager.GetString("DecimaCM_Coffer_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Fragment of Saul&apos;s Burden.
         /// </summary>
         public static string Deimos {
             get {
                 return ResourceManager.GetString("Deimos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Deimos&apos;s Coffer.
+        /// </summary>
+        public static string Deimos_Coffer {
+            get {
+                return ResourceManager.GetString("Deimos_Coffer", resourceCulture);
             }
         }
         
@@ -196,11 +277,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Desmina&apos;s Coffer.
+        /// </summary>
+        public static string Desmina_Coffer {
+            get {
+                return ResourceManager.GetString("Desmina_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Dhuum&apos;s Token.
         /// </summary>
         public static string Dhuum {
             get {
                 return ResourceManager.GetString("Dhuum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Dhuum&apos;s Coffer.
+        /// </summary>
+        public static string Dhuum_Coffer {
+            get {
+                return ResourceManager.GetString("Dhuum_Coffer", resourceCulture);
             }
         }
         
@@ -214,6 +313,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à McLeod&apos;s Coffer.
+        /// </summary>
+        public static string Escort_Coffer {
+            get {
+                return ResourceManager.GetString("Escort_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Gorseval Tentacle Piece.
         /// </summary>
         public static string Gorseval {
@@ -223,11 +331,56 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Gorseval&apos;s Coffer.
+        /// </summary>
+        public static string Gorseval_Coffer {
+            get {
+                return ResourceManager.GetString("Gorseval_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Greer&apos;s Token.
         /// </summary>
         public static string Greer {
             get {
                 return ResourceManager.GetString("Greer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Greer&apos;s Coffer.
+        /// </summary>
+        public static string Greer_Coffer {
+            get {
+                return ResourceManager.GetString("Greer_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Greer&apos;s Coffer.
+        /// </summary>
+        public static string Greer_Coffer_2 {
+            get {
+                return ResourceManager.GetString("Greer_Coffer_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Greer&apos;s Magnificent Coffer.
+        /// </summary>
+        public static string GreerCM_Coffer {
+            get {
+                return ResourceManager.GetString("GreerCM_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Greer&apos;s Magnificent Coffer.
+        /// </summary>
+        public static string GreerCM_Coffer_2 {
+            get {
+                return ResourceManager.GetString("GreerCM_Coffer_2", resourceCulture);
             }
         }
         
@@ -331,6 +484,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Keep Construct&apos;s Coffer.
+        /// </summary>
+        public static string KeepConstruct_Coffer {
+            get {
+                return ResourceManager.GetString("KeepConstruct_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à White Mantle Abomination Crystal.
         /// </summary>
         public static string Matthias {
@@ -340,11 +502,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Matthias&apos;s Coffer.
+        /// </summary>
+        public static string Matthias_Coffer {
+            get {
+                return ResourceManager.GetString("Matthias_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Recreation Room Floor Fragment.
         /// </summary>
         public static string MursaatOverseer {
             get {
                 return ResourceManager.GetString("MursaatOverseer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Mursaat Overseer&apos;s Coffer.
+        /// </summary>
+        public static string MursaatOverseer_Coffer {
+            get {
+                return ResourceManager.GetString("MursaatOverseer_Coffer", resourceCulture);
             }
         }
         
@@ -394,11 +574,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Qadim&apos;s Coffer.
+        /// </summary>
+        public static string Qadim_Coffer {
+            get {
+                return ResourceManager.GetString("Qadim_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Ether Djinn&apos;s Token.
         /// </summary>
         public static string QTP {
             get {
                 return ResourceManager.GetString("QTP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Qadim the Peerless&apos;s Coffer.
+        /// </summary>
+        public static string QTP_Coffer {
+            get {
+                return ResourceManager.GetString("QTP_Coffer", resourceCulture);
             }
         }
         
@@ -412,11 +610,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à River of Souls Coffer.
+        /// </summary>
+        public static string River_Coffer {
+            get {
+                return ResourceManager.GetString("River_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Sabetha Flamethrower Fragment Piece.
         /// </summary>
         public static string Sabetha {
             get {
                 return ResourceManager.GetString("Sabetha", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Sabetha&apos;s Coffer.
+        /// </summary>
+        public static string Sabetha_Coffer {
+            get {
+                return ResourceManager.GetString("Sabetha_Coffer", resourceCulture);
             }
         }
         
@@ -430,11 +646,38 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cardinal Sabir&apos;s Coffer.
+        /// </summary>
+        public static string Sabir_Coffer {
+            get {
+                return ResourceManager.GetString("Sabir_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Impaled Prisoner Token.
         /// </summary>
         public static string Samarog {
             get {
                 return ResourceManager.GetString("Samarog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Samarog&apos;s Coffer.
+        /// </summary>
+        public static string Samarog_Coffer {
+            get {
+                return ResourceManager.GetString("Samarog_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Sandcastle.
+        /// </summary>
+        public static string Sandcastle {
+            get {
+                return ResourceManager.GetString("Sandcastle", resourceCulture);
             }
         }
         
@@ -448,11 +691,29 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Slothasor&apos;s Coffer.
+        /// </summary>
+        public static string Slothasor_Coffer {
+            get {
+                return ResourceManager.GetString("Slothasor_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Statue Token.
         /// </summary>
         public static string Statue {
             get {
                 return ResourceManager.GetString("Statue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Statue of Grenth Coffer.
+        /// </summary>
+        public static string Statue_Coffer {
+            get {
+                return ResourceManager.GetString("Statue_Coffer", resourceCulture);
             }
         }
         
@@ -502,6 +763,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Twin Largos&apos; Coffer.
+        /// </summary>
+        public static string TwinLargos_Coffer {
+            get {
+                return ResourceManager.GetString("TwinLargos_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Ura&apos;s Token.
         /// </summary>
         public static string Ura {
@@ -511,11 +781,56 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ura&apos;s Coffer.
+        /// </summary>
+        public static string Ura_Coffer {
+            get {
+                return ResourceManager.GetString("Ura_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ura&apos;s Coffer.
+        /// </summary>
+        public static string Ura_Coffer_2 {
+            get {
+                return ResourceManager.GetString("Ura_Coffer_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ura&apos;s Magnificent Coffer.
+        /// </summary>
+        public static string UraCM_Coffer {
+            get {
+                return ResourceManager.GetString("UraCM_Coffer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ura&apos;s Magnificent Coffer.
+        /// </summary>
+        public static string UraCM_Coffer_2 {
+            get {
+                return ResourceManager.GetString("UraCM_Coffer_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Vale Guardian Fragment.
         /// </summary>
         public static string Vale {
             get {
                 return ResourceManager.GetString("Vale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Vale Guardian Coffer.
+        /// </summary>
+        public static string Vale_Coffer {
+            get {
+                return ResourceManager.GetString("Vale_Coffer", resourceCulture);
             }
         }
         
@@ -534,6 +849,15 @@ namespace KpRefresher.Ressources {
         public static string Xera {
             get {
                 return ResourceManager.GetString("Xera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Xera&apos;s Coffer.
+        /// </summary>
+        public static string Xera_Coffer {
+            get {
+                return ResourceManager.GetString("Xera_Coffer", resourceCulture);
             }
         }
         
