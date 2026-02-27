@@ -394,6 +394,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Kela&apos;s Magnificent Coffer.
+        /// </summary>
+        public static string GuardiansGladeCM {
+            get {
+                return ResourceManager.GetString("GuardiansGladeCM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Void&apos;s Coffer.
         /// </summary>
         public static string HarvestTemple {

@@ -396,4 +396,7 @@
   <data name="UraCM_Coffer_2" xml:space="preserve">
     <value>Ura's Magnificent Coffer</value>
   </data>
+  <data name="GuardiansGladeCM" xml:space="preserve">
+    <value>Kela's Magnificent Coffer</value>
+  </data>
 </root>
