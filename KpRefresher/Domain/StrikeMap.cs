@@ -22,6 +22,7 @@
 
         #region VoE
         GuardiansGlade = 1609,
+        NexusOfEternity = 1638,
         #endregion VoE
     }
 }

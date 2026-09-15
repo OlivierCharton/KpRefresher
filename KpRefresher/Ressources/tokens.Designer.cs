@@ -538,6 +538,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Vloxx&apos;s Coffer.
+        /// </summary>
+        public static string NexusOfEternity {
+            get {
+                return ResourceManager.GetString("NexusOfEternity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Assault Knights&apos; Coffer.
         /// </summary>
         public static string OldLionsCourt {

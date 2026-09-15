@@ -213,6 +213,8 @@ namespace KpRefresher.Domain
         Sandcastle = 107033,
         [Display(Description = "GuardiansGladeCM", ResourceType = typeof(tokens)), Sort(12, 3)]
         GuardiansGladeCM = 107608,
+        [Display(Description = "NexusOfEternity", ResourceType = typeof(tokens)), Sort(12, 4)]
+        NexusOfEternity = 110231,
 
 
         [Display(Description = "IcebroodCoffer", ResourceType = typeof(tokens)), Sort(13, 1)]
