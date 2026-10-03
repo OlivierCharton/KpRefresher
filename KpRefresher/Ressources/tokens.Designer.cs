@@ -547,6 +547,15 @@ namespace KpRefresher.Ressources {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Vloxx&apos;s Magnificent Coffer.
+        /// </summary>
+        public static string NexusOfEternityCM {
+            get {
+                return ResourceManager.GetString("NexusOfEternityCM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Assault Knights&apos; Coffer.
         /// </summary>
         public static string OldLionsCourt {

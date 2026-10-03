@@ -402,4 +402,7 @@
   <data name="NexusOfEternity" xml:space="preserve">
     <value>Coffre de Vloxx</value>
   </data>
+  <data name="NexusOfEternityCM" xml:space="preserve">
+    <value>Coffre magnifique de Vloxx</value>
+  </data>
 </root>
